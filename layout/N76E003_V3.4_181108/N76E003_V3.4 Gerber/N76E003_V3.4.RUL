@@ -1,0 +1,5 @@
+DRC Rules Export File for PCB: F:\workplace\count display\µÚÒ»´ú\count display\layout\N76E003_V3.4_181108\N76E003_V3.4.PcbDoc
+RuleKind=ShortCircuit|RuleName=ShortCircuit|Scope=Board|Allowed=0
+RuleKind=Clearance|RuleName=Clearance|Scope=Board|Minimum=5.91
+RuleKind=Width|RuleName=Width|Scope=Board|Minimum=5.91
+RuleKind=SolderMaskExpansion|RuleName=SolderMaskExpansion|Scope=Board|Minimum=4.00

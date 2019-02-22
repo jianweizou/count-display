@@ -1,0 +1,10 @@
+.\obj\fontdata.o: src\fontdata.c
+.\obj\fontdata.o: src\fontdata.h
+.\obj\fontdata.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\obj\fontdata.o: H\SNC7312.h
+.\obj\fontdata.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cm0.h
+.\obj\fontdata.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\obj\fontdata.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmInstr.h
+.\obj\fontdata.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\cmsis_armcc.h
+.\obj\fontdata.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmFunc.h
+.\obj\fontdata.o: H\system_snc7312.h

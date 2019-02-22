@@ -1,0 +1,93 @@
+C51 COMPILER V9.52.0.0   MAIN                                                              07/12/2015 09:58:00 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil_c51\C51\BIN\C51.EXE main.c BROWSE INCDIR(.\SRC) DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          //////////////////////////////////////////////////////////////////////////////////   
+   2          //本程序只供学习使用，未经作者许可，不得用于其它任何用途
+   3          //中景园电子
+   4          //店铺地址：http://shop73023976.taobao.com/?spm=2013.1.0.0.M4PqC2
+   5          //
+   6          //  文 件 名   : main.c
+   7          //  版 本 号   : v2.0
+   8          //  作    者   : HuangKai
+   9          //  生成日期   : 2014-0101
+  10          //  最近修改   : 
+  11          //  功能描述   : OLED 4接口演示例程(51系列)
+  12          //              说明: 
+  13          //              ----------------------------------------------------------------
+  14          //              GND    电源地
+  15          //              VCC  接5V或3.3v电源
+  16          //              D0   P1^0（SCL）
+  17          //              D1   P1^1（SDA）
+  18          /*------------------------------------------------
+  19          // 修改历史   :
+  20          // 日    期   : 
+  21          // 作    者   : HuangKai
+  22          // 修改内容   : 创建文件
+  23          //版权所有，盗版必究。
+  24          //Copyright(C) 中景园电子2014/3/16
+  25          //All rights reserved
+  26          //******************************************************************************/
+  27          #include "REG51.h"
+  28          #include "oled.h"
+  29          #include "bmp.h"
+  30          
+  31           int main(void)
+  32            { u8 t;
+  33   1          OLED_Init();      //初始化OLED  
+  34   1          OLED_Clear()    ; 
+  35   1      
+  36   1        while(1) 
+  37   1        {   
+  38   2      
+  39   2           OLED_ShowString(0,0,"0.49OLED",8);
+  40   2           OLED_ShowString(0,1,"12345678",8);
+  41   2           OLED_ShowString(0,2,"12345678",8);
+  42   2          OLED_ShowString(0,3,"12345678",8);
+  43   2      
+  44   2            delay_ms(1000);
+  45   2            OLED_Clear();
+  46   2            OLED_ShowString(0,0,"0.49OLED",8);
+  47   2           OLED_ShowString(0,1,"12345678",8);
+  48   2           OLED_ShowString(0,2,"12345678",16);
+  49   2      
+  50   2            delay_ms(1000);
+  51   2            OLED_Clear();
+  52   2          OLED_ShowCHinese(8,0,0);//中
+  53   2          OLED_ShowCHinese(24,0,1);//景
+  54   2          OLED_ShowCHinese(40,0,2);//园
+  55   2          OLED_ShowCHinese(8,2,7);//超
+C51 COMPILER V9.52.0.0   MAIN                                                              07/12/2015 09:58:00 PAGE 2   
+
+  56   2          OLED_ShowCHinese(40,2,8);//亮
+  57   2            delay_ms(1000);
+  58   2            OLED_Clear();
+  59   2          OLED_DrawBMP(0,0,64,4,BMP1);      delay_ms(1000);
+  60   2            delay_ms(1000);
+  61   2            delay_ms(1000);
+  62   2             OLED_Clear();
+  63   2      
+  64   2        }   
+  65   1        
+  66   1      }
+*** WARNING C280 IN LINE 32 OF main.c: 't': unreferenced local variable
+  67            
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    237    ----
+   CONSTANT SIZE    =    274    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

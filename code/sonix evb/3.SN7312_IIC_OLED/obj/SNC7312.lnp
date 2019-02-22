@@ -1,0 +1,14 @@
+--cpu Cortex-M0
+".\obj\loadtable.o"
+".\obj\startup_snc7312.o"
+".\Sym\SNC7312_ROM_201511271015.sym"
+".\Lib\SNC7312_Timer_V1.001.lib"
+".\obj\main.o"
+".\obj\i2c.o"
+".\obj\oled.o"
+".\obj\count.o"
+".\obj\fontdata.o"
+--library_type=microlib --strict --scatter ".\obj\SNC7312.sct"
+--no_remove --summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\SNC7312.map" -o .\obj\SNC7312.axf

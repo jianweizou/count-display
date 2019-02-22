@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+NCDrill File Report For: N76E003_V3.5.PcbDoc   2018/12/23  22:03:41
+---------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : N76E003_V3.TXT
+EIA File   : N76E003_V3.5.DRL
+
+Tool         Hole Size           Hole Type     Hole Count Plated       Tool Travel
+---------------------------------------------------------------------------
+T1        11.81mil (0.29997mm)     Round          44               3.97 Inch (100.82 mm)
+T2        23.62mil (0.59995mm)     Round          2                0.11 Inch (2.84 mm)
+T3        24mil (0.6096mm)         Round          2                0.10 Inch (2.54 mm)
+---------------------------------------------------------------------------
+Totals                                            48               4.18 Inch (106.20 mm)
+
+Total Processing Time (hh:mm:ss) : 00:00:00

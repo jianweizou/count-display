@@ -1,0 +1,1005 @@
+Component: ARM Compiler 5.06 update 3 (build 300) Tool: armlink [4d35c9]
+
+==============================================================================
+
+Section Cross References
+
+    startup_snc7312.o(RESET) refers to startup_snc7312.o(STACK) for __initial_sp
+    startup_snc7312.o(RESET) refers to startup_snc7312.o(.text) for Reset_Handler
+    startup_snc7312.o(RESET) refers to count.o(.text) for CT32B1_IRQHandler
+    startup_snc7312.o(.text) refers to entry.o(.ARM.Collect$$$$00000000) for __main
+    main.o(.text) refers to oled.o(.text) for OLED_Init
+    main.o(.text) refers to count.o(.text) for main_loop
+    oled.o(.text) refers to i2c.o(.text) for Dvice_WriteData
+    count.o(.text) refers to ct32b1_init.o(.text) for CT32B1_Init
+    count.o(.text) refers to ct32b1_irqenable.o(.text) for CT32B1_IRQEnable
+    count.o(.text) refers to ct32b1_prescale.o(.text) for CT32B1_Prescale
+    count.o(.text) refers to ct32b1_mrenable.o(.text) for CT32B1_MREnable
+    count.o(.text) refers to ct32b1_mrvalue.o(.text) for CT32B1_MRValue
+    count.o(.text) refers to ct32b1_enable.o(.text) for CT32B1_Enable
+    count.o(.text) refers to ct32b1_irqflagclear.o(.text) for CT32B1_IRQFlagClear
+    count.o(.text) refers to oled.o(.text) for Draw_BMP
+    count.o(.text) refers to count.o(.data) for curKey
+    count.o(.text) refers to fontdata.o(.data) for font_CHN
+    count.o(.text) refers to count.o(.bss) for sysinfo
+    count.o(.text) refers to idiv.o(.text) for __aeabi_idivmod
+    count.o(.text) refers to count.o(i.__ARM_common_switch8) for __ARM_common_switch8
+    ct32b1_irqflagclear.o(.text) refers to count.o(i.__ARM_common_switch8) for __ARM_common_switch8
+    entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry10a.o(.ARM.Collect$$$$0000000D) for __rt_final_cpp
+    entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry11a.o(.ARM.Collect$$$$0000000F) for __rt_final_exit
+    entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry7b.o(.ARM.Collect$$$$00000008) for _main_clock
+    entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry8b.o(.ARM.Collect$$$$0000000A) for _main_cpp_init
+    entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry9a.o(.ARM.Collect$$$$0000000B) for _main_init
+    entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry5.o(.ARM.Collect$$$$00000004) for _main_scatterload
+    entry.o(.ARM.Collect$$$$00000000) refers (Special) to entry2.o(.ARM.Collect$$$$00000001) for _main_stk
+    idiv.o(.text) refers to uidiv.o(.text) for __aeabi_uidivmod
+    entry2.o(.ARM.Collect$$$$00000001) refers to entry2.o(.ARM.Collect$$$$00002712) for __lit__00000000
+    entry2.o(.ARM.Collect$$$$00002712) refers to startup_snc7312.o(STACK) for __initial_sp
+    entry2.o(__vectab_stack_and_reset_area) refers to startup_snc7312.o(STACK) for __initial_sp
+    entry2.o(__vectab_stack_and_reset_area) refers to entry.o(.ARM.Collect$$$$00000000) for __main
+    entry5.o(.ARM.Collect$$$$00000004) refers to init.o(.text) for __scatterload
+    entry9a.o(.ARM.Collect$$$$0000000B) refers to main.o(.text) for main
+    entry9b.o(.ARM.Collect$$$$0000000C) refers to main.o(.text) for main
+    init.o(.text) refers to entry5.o(.ARM.Collect$$$$00000004) for __main_after_scatterload
+
+
+==============================================================================
+
+Adding Veneers to the image
+
+    Adding TT veneer (12 bytes, Long) for call to 'Peri_Inital' from main.o(.text).
+    Adding TT veneer (12 bytes, Long) for call to 'HXTAL_Enable' from main.o(.text).
+    Adding TT veneer (12 bytes, Long) for call to 'SPLL_Enable' from main.o(.text).
+    Adding TT veneer (12 bytes, Long) for call to 'SysClk_Setting' from main.o(.text).
+    Adding TT veneer (12 bytes, Long) for call to 'Delay1usFor96MHz' from main.o(.text).
+
+5 Veneer(s) (total 60 bytes) added to the image.
+
+==============================================================================
+
+Image Symbol Table
+
+    Local Symbols
+
+    Symbol Name                              Value     Ov Type        Size  Object(Section)
+
+    RESET                                    0x00000000   Section      192  startup_snc7312.o(RESET)
+    ../clib/../cmprslib/zerorunl2.c          0x00000000   Number         0  __dczerorl2.o ABSOLUTE
+    ../clib/microlib/division.c              0x00000000   Number         0  uidiv.o ABSOLUTE
+    ../clib/microlib/division.c              0x00000000   Number         0  idiv.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry2.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry5.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11b.o ABSOLUTE
+    CT32B1\CT32B1_Enable.c                   0x00000000   Number         0  ct32b1_enable.o ABSOLUTE
+    CT32B1\CT32B1_IRQEnable.c                0x00000000   Number         0  ct32b1_irqenable.o ABSOLUTE
+    CT32B1\CT32B1_IRQFlagClear.c             0x00000000   Number         0  ct32b1_irqflagclear.o ABSOLUTE
+    CT32B1\CT32B1_Init.c                     0x00000000   Number         0  ct32b1_init.o ABSOLUTE
+    CT32B1\CT32B1_MREnable.c                 0x00000000   Number         0  ct32b1_mrenable.o ABSOLUTE
+    CT32B1\CT32B1_MRValue.c                  0x00000000   Number         0  ct32b1_mrvalue.o ABSOLUTE
+    CT32B1\CT32B1_Prescale.c                 0x00000000   Number         0  ct32b1_prescale.o ABSOLUTE
+    CT32B1\\CT32B1_Enable.c                  0x00000000   Number         0  ct32b1_enable.o ABSOLUTE
+    CT32B1\\CT32B1_IRQEnable.c               0x00000000   Number         0  ct32b1_irqenable.o ABSOLUTE
+    CT32B1\\CT32B1_IRQFlagClear.c            0x00000000   Number         0  ct32b1_irqflagclear.o ABSOLUTE
+    CT32B1\\CT32B1_Init.c                    0x00000000   Number         0  ct32b1_init.o ABSOLUTE
+    CT32B1\\CT32B1_MREnable.c                0x00000000   Number         0  ct32b1_mrenable.o ABSOLUTE
+    CT32B1\\CT32B1_MRValue.c                 0x00000000   Number         0  ct32b1_mrvalue.o ABSOLUTE
+    CT32B1\\CT32B1_Prescale.c                0x00000000   Number         0  ct32b1_prescale.o ABSOLUTE
+    Startup\LoadTable.s                      0x00000000   Number         0  loadtable.o ABSOLUTE
+    Startup\startup_SNC7312.s                0x00000000   Number         0  startup_snc7312.o ABSOLUTE
+    dc.s                                     0x00000000   Number         0  dc.o ABSOLUTE
+    handlers.s                               0x00000000   Number         0  handlers.o ABSOLUTE
+    init.s                                   0x00000000   Number         0  init.o ABSOLUTE
+    src\OLED.c                               0x00000000   Number         0  oled.o ABSOLUTE
+    src\\OLED.c                              0x00000000   Number         0  oled.o ABSOLUTE
+    src\\count.c                             0x00000000   Number         0  count.o ABSOLUTE
+    src\\fontdata.c                          0x00000000   Number         0  fontdata.o ABSOLUTE
+    src\\i2c.c                               0x00000000   Number         0  i2c.o ABSOLUTE
+    src\\main.c                              0x00000000   Number         0  main.o ABSOLUTE
+    src\count.c                              0x00000000   Number         0  count.o ABSOLUTE
+    src\fontdata.c                           0x00000000   Number         0  fontdata.o ABSOLUTE
+    src\i2c.c                                0x00000000   Number         0  i2c.o ABSOLUTE
+    src\main.c                               0x00000000   Number         0  main.o ABSOLUTE
+    .ARM.Collect$$$$00000000                 0x000000c0   Section        0  entry.o(.ARM.Collect$$$$00000000)
+    .ARM.Collect$$$$00000001                 0x000000c0   Section        4  entry2.o(.ARM.Collect$$$$00000001)
+    .ARM.Collect$$$$00000004                 0x000000c4   Section        4  entry5.o(.ARM.Collect$$$$00000004)
+    .ARM.Collect$$$$00000008                 0x000000c8   Section        0  entry7b.o(.ARM.Collect$$$$00000008)
+    .ARM.Collect$$$$0000000A                 0x000000c8   Section        0  entry8b.o(.ARM.Collect$$$$0000000A)
+    .ARM.Collect$$$$0000000B                 0x000000c8   Section        8  entry9a.o(.ARM.Collect$$$$0000000B)
+    .ARM.Collect$$$$0000000D                 0x000000d0   Section        0  entry10a.o(.ARM.Collect$$$$0000000D)
+    .ARM.Collect$$$$0000000F                 0x000000d0   Section        0  entry11a.o(.ARM.Collect$$$$0000000F)
+    .ARM.Collect$$$$00002712                 0x000000d0   Section        4  entry2.o(.ARM.Collect$$$$00002712)
+    __lit__00000000                          0x000000d0   Data           4  entry2.o(.ARM.Collect$$$$00002712)
+    .rev16_text                              0x000000d4   Section        4  main.o(.rev16_text)
+    .rev16_text                              0x000000d8   Section        4  i2c.o(.rev16_text)
+    .rev16_text                              0x000000dc   Section        4  oled.o(.rev16_text)
+    .rev16_text                              0x000000e0   Section        4  count.o(.rev16_text)
+    .rev16_text                              0x000000e4   Section        4  fontdata.o(.rev16_text)
+    .rev16_text                              0x000000e8   Section        4  ct32b1_irqflagclear.o(.rev16_text)
+    .rev16_text                              0x000000ec   Section        4  ct32b1_mrenable.o(.rev16_text)
+    .rev16_text                              0x000000f0   Section        4  ct32b1_mrvalue.o(.rev16_text)
+    .rev16_text                              0x000000f4   Section        4  ct32b1_prescale.o(.rev16_text)
+    .rev16_text                              0x000000f8   Section        4  ct32b1_enable.o(.rev16_text)
+    .rev16_text                              0x000000fc   Section        4  ct32b1_init.o(.rev16_text)
+    .rev16_text                              0x00000100   Section        4  ct32b1_irqenable.o(.rev16_text)
+    .revsh_text                              0x00000104   Section        4  main.o(.revsh_text)
+    .revsh_text                              0x00000108   Section        4  i2c.o(.revsh_text)
+    .revsh_text                              0x0000010c   Section        4  oled.o(.revsh_text)
+    .revsh_text                              0x00000110   Section        4  count.o(.revsh_text)
+    .revsh_text                              0x00000114   Section        4  fontdata.o(.revsh_text)
+    .revsh_text                              0x00000118   Section        4  ct32b1_irqflagclear.o(.revsh_text)
+    .revsh_text                              0x0000011c   Section        4  ct32b1_mrenable.o(.revsh_text)
+    .revsh_text                              0x00000120   Section        4  ct32b1_mrvalue.o(.revsh_text)
+    .revsh_text                              0x00000124   Section        4  ct32b1_prescale.o(.revsh_text)
+    .revsh_text                              0x00000128   Section        4  ct32b1_enable.o(.revsh_text)
+    .revsh_text                              0x0000012c   Section        4  ct32b1_init.o(.revsh_text)
+    .revsh_text                              0x00000130   Section        4  ct32b1_irqenable.o(.revsh_text)
+    .text                                    0x00000134   Section       20  startup_snc7312.o(.text)
+    .text                                    0x00000148   Section        0  main.o(.text)
+    .text                                    0x0000020c   Section        0  i2c.o(.text)
+    .text                                    0x0000042c   Section        0  oled.o(.text)
+    .text                                    0x000006b0   Section        0  count.o(.text)
+    .text                                    0x0000185c   Section        0  ct32b1_irqflagclear.o(.text)
+    .text                                    0x000018a0   Section        0  ct32b1_mrenable.o(.text)
+    .text                                    0x00001984   Section        0  ct32b1_mrvalue.o(.text)
+    .text                                    0x000019bc   Section        0  ct32b1_prescale.o(.text)
+    .text                                    0x000019c8   Section        0  ct32b1_enable.o(.text)
+    .text                                    0x000019dc   Section        0  ct32b1_init.o(.text)
+    .text                                    0x00001a10   Section        0  ct32b1_irqenable.o(.text)
+    .text                                    0x00001a34   Section        0  idiv.o(.text)
+    .text                                    0x00001a5c   Section        0  uidiv.o(.text)
+    .text                                    0x00001a88   Section       36  init.o(.text)
+    .text                                    0x00001aac   Section        0  __dczerorl2.o(.text)
+    i.__ARM_common_switch8                   0x00001b40   Section        0  count.o(i.__ARM_common_switch8)
+    i.__scatterload_copy                     0x00001b5c   Section       14  handlers.o(i.__scatterload_copy)
+    i.__scatterload_null                     0x00001b6a   Section        2  handlers.o(i.__scatterload_null)
+    i.__scatterload_zeroinit                 0x00001b6c   Section       14  handlers.o(i.__scatterload_zeroinit)
+    .data                                    0x20000000   Section        1  i2c.o(.data)
+    .data                                    0x20000004   Section       32  count.o(.data)
+    .data                                    0x20000024   Section     1282  fontdata.o(.data)
+    .bss                                     0x20000528   Section       16  count.o(.bss)
+    HEAP                                     0x20000538   Section        0  startup_snc7312.o(HEAP)
+    STACK                                    0x20000538   Section     1536  startup_snc7312.o(STACK)
+    .ARM.__at_0x60002000                     0x60002000   Section       40  loadtable.o(.ARM.__at_0x60002000)
+
+    Global Symbols
+
+    Symbol Name                              Value     Ov Type        Size  Object(Section)
+
+    BuildAttributes$$THM_ISAv3M$S$PE$A:L22$X:L11$S22$IEEE1$IW$USESV6$~STKCKD$USESV7$~SHL$OSPACE$EBA8$MICROLIB$REQ8$PRES8$EABIv2 0x00000000   Number         0  anon$$obj.o ABSOLUTE
+    __ARM_use_no_argv                        0x00000000   Number         0  main.o ABSOLUTE
+    __Vectors                                0x00000000   Data           4  startup_snc7312.o(RESET)
+    __cpp_initialize__aeabi_                  - Undefined Weak Reference
+    __cxa_finalize                            - Undefined Weak Reference
+    _clock_init                               - Undefined Weak Reference
+    _microlib_exit                            - Undefined Weak Reference
+    __main                                   0x000000c1   Thumb Code     0  entry.o(.ARM.Collect$$$$00000000)
+    _main_stk                                0x000000c1   Thumb Code     0  entry2.o(.ARM.Collect$$$$00000001)
+    _main_scatterload                        0x000000c5   Thumb Code     0  entry5.o(.ARM.Collect$$$$00000004)
+    __main_after_scatterload                 0x000000c9   Thumb Code     0  entry5.o(.ARM.Collect$$$$00000004)
+    _main_clock                              0x000000c9   Thumb Code     0  entry7b.o(.ARM.Collect$$$$00000008)
+    _main_cpp_init                           0x000000c9   Thumb Code     0  entry8b.o(.ARM.Collect$$$$0000000A)
+    _main_init                               0x000000c9   Thumb Code     0  entry9a.o(.ARM.Collect$$$$0000000B)
+    __rt_final_cpp                           0x000000d1   Thumb Code     0  entry10a.o(.ARM.Collect$$$$0000000D)
+    __rt_final_exit                          0x000000d1   Thumb Code     0  entry11a.o(.ARM.Collect$$$$0000000F)
+    __asm___6_main_c_main____REV16           0x000000d5   Thumb Code     4  main.o(.rev16_text)
+    __asm___5_i2c_c_ack____REV16             0x000000d9   Thumb Code     4  i2c.o(.rev16_text)
+    __asm___6_OLED_c_3b291b77____REV16       0x000000dd   Thumb Code     4  oled.o(.rev16_text)
+    __asm___7_count_c_cde9da0e____REV16      0x000000e1   Thumb Code     4  count.o(.rev16_text)
+    __asm___10_fontdata_c_font_CHN____REV16  0x000000e5   Thumb Code     4  fontdata.o(.rev16_text)
+    __asm___21_CT32B1_IRQFlagClear_c_e63edf5e____REV16 0x000000e9   Thumb Code     4  ct32b1_irqflagclear.o(.rev16_text)
+    __asm___17_CT32B1_MREnable_c_97b1fb95____REV16 0x000000ed   Thumb Code     4  ct32b1_mrenable.o(.rev16_text)
+    __asm___16_CT32B1_MRValue_c_67ec3f2d____REV16 0x000000f1   Thumb Code     4  ct32b1_mrvalue.o(.rev16_text)
+    __asm___17_CT32B1_Prescale_c_8821c624____REV16 0x000000f5   Thumb Code     4  ct32b1_prescale.o(.rev16_text)
+    __asm___15_CT32B1_Enable_c_c4902817____REV16 0x000000f9   Thumb Code     4  ct32b1_enable.o(.rev16_text)
+    __asm___13_CT32B1_Init_c_a5753c33____REV16 0x000000fd   Thumb Code     4  ct32b1_init.o(.rev16_text)
+    __asm___18_CT32B1_IRQEnable_c_87871e32____REV16 0x00000101   Thumb Code     4  ct32b1_irqenable.o(.rev16_text)
+    __asm___6_main_c_main____REVSH           0x00000105   Thumb Code     4  main.o(.revsh_text)
+    __asm___5_i2c_c_ack____REVSH             0x00000109   Thumb Code     4  i2c.o(.revsh_text)
+    __asm___6_OLED_c_3b291b77____REVSH       0x0000010d   Thumb Code     4  oled.o(.revsh_text)
+    __asm___7_count_c_cde9da0e____REVSH      0x00000111   Thumb Code     4  count.o(.revsh_text)
+    __asm___10_fontdata_c_font_CHN____REVSH  0x00000115   Thumb Code     4  fontdata.o(.revsh_text)
+    __asm___21_CT32B1_IRQFlagClear_c_e63edf5e____REVSH 0x00000119   Thumb Code     4  ct32b1_irqflagclear.o(.revsh_text)
+    __asm___17_CT32B1_MREnable_c_97b1fb95____REVSH 0x0000011d   Thumb Code     4  ct32b1_mrenable.o(.revsh_text)
+    __asm___16_CT32B1_MRValue_c_67ec3f2d____REVSH 0x00000121   Thumb Code     4  ct32b1_mrvalue.o(.revsh_text)
+    __asm___17_CT32B1_Prescale_c_8821c624____REVSH 0x00000125   Thumb Code     4  ct32b1_prescale.o(.revsh_text)
+    __asm___15_CT32B1_Enable_c_c4902817____REVSH 0x00000129   Thumb Code     4  ct32b1_enable.o(.revsh_text)
+    __asm___13_CT32B1_Init_c_a5753c33____REVSH 0x0000012d   Thumb Code     4  ct32b1_init.o(.revsh_text)
+    __asm___18_CT32B1_IRQEnable_c_87871e32____REVSH 0x00000131   Thumb Code     4  ct32b1_irqenable.o(.revsh_text)
+    Reset_Handler                            0x00000135   Thumb Code     4  startup_snc7312.o(.text)
+    NMI_Handler                              0x00000139   Thumb Code     2  startup_snc7312.o(.text)
+    HardFault_Handler                        0x0000013b   Thumb Code     2  startup_snc7312.o(.text)
+    SVC_Handler                              0x0000013d   Thumb Code     2  startup_snc7312.o(.text)
+    PendSV_Handler                           0x0000013f   Thumb Code     2  startup_snc7312.o(.text)
+    SysTick_Handler                          0x00000141   Thumb Code     2  startup_snc7312.o(.text)
+    CIS_IRQHandler                           0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    CIS_VSYNC_IRQHandler                     0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    CT16B0_IRQHandler                        0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    CT16B1_IRQHandler                        0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    CT32B0_IRQHandler                        0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    DMA_CSC_IRQHandler                       0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    DMA_JPEG_IRQHandler                      0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    DMA_SDNF0_IRQHandler                     0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    DMA_SDNF1_IRQHandler                     0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    I2C_IRQHandler                           0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    I2S2_IRQHandler                          0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    MPU_IRQHandler                           0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    NFECC_IRQHandler                         0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    P0_IRQHandler                            0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    P1_IRQHandler                            0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    P2_IRQHandler                            0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    P3_IRQHandler                            0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    P4_WKP_IRQHandler                        0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    PPU_HBLK_IRQHandler                      0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    PPU_VBLK_IRQHandler                      0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    RTC_IRQHandler                           0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    SARADC_IRQHandler                        0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    SD_ADC_IRQHandler                        0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    SD_DAC_IRQHandler                        0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    SPI0_IRQHandler                          0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    SPI1_IRQHandler                          0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    UART0_IRQHandler                         0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    USBHOST_IRQHandler                       0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    WDT_UART1_IRQHandler                     0x00000143   Thumb Code     0  startup_snc7312.o(.text)
+    main                                     0x00000149   Thumb Code   186  main.o(.text)
+    I2C_Start                                0x0000020d   Thumb Code    74  i2c.o(.text)
+    I2C_Stop                                 0x00000257   Thumb Code    50  i2c.o(.text)
+    I2C_Send_Byte                            0x00000289   Thumb Code    80  i2c.o(.text)
+    I2C_Wait_Ack                             0x000002d9   Thumb Code   122  i2c.o(.text)
+    Dvice_WriteData                          0x00000353   Thumb Code    48  i2c.o(.text)
+    I2C_Ack                                  0x00000383   Thumb Code    54  i2c.o(.text)
+    I2C_Read_Byte                            0x000003b9   Thumb Code   110  i2c.o(.text)
+    OLED_WrCmd                               0x0000042d   Thumb Code    16  oled.o(.text)
+    OLED_WrDat                               0x0000043d   Thumb Code    16  oled.o(.text)
+    OLED_Fill                                0x0000044d   Thumb Code    58  oled.o(.text)
+    OLED_CLS                                 0x00000487   Thumb Code    56  oled.o(.text)
+    OLED_Set_Pos                             0x000004bf   Thumb Code    46  oled.o(.text)
+    Draw_BMP                                 0x000004ed   Thumb Code   114  oled.o(.text)
+    OLED_CLS_Windows                         0x0000055f   Thumb Code   106  oled.o(.text)
+    OLED_Display_On                          0x000005c9   Thumb Code    22  oled.o(.text)
+    OLED_Display_Off                         0x000005df   Thumb Code    22  oled.o(.text)
+    OLED_Init                                0x000005f5   Thumb Code   186  oled.o(.text)
+    KeyInit                                  0x000006b1   Thumb Code    24  count.o(.text)
+    Timer_5ms                                0x000006c9   Thumb Code    38  count.o(.text)
+    CT32B1_IRQHandler                        0x000006ef   Thumb Code    48  count.o(.text)
+    KeyScan                                  0x0000071f   Thumb Code   180  count.o(.text)
+    display_Language_chinese                 0x000007d3   Thumb Code    58  count.o(.text)
+    display_Language_english                 0x0000080d   Thumb Code    70  count.o(.text)
+    Select_Language                          0x00000853   Thumb Code   224  count.o(.text)
+    getdiv                                   0x00000933   Thumb Code    16  count.o(.text)
+    getremainder                             0x00000943   Thumb Code    10  count.o(.text)
+    display_date_year                        0x0000094d   Thumb Code   162  count.o(.text)
+    display_date_month                       0x000009ef   Thumb Code   112  count.o(.text)
+    display_date_day                         0x00000a5f   Thumb Code   170  count.o(.text)
+    Select_Date                              0x00000b09   Thumb Code   420  count.o(.text)
+    display_cnt_stage_arabnum                0x00000cad   Thumb Code   132  count.o(.text)
+    display_cnt_stage_tibnum                 0x00000d31   Thumb Code   168  count.o(.text)
+    Select_NumType                           0x00000dd9   Thumb Code   216  count.o(.text)
+    display_cnt_stage_date                   0x00000eb1   Thumb Code   398  count.o(.text)
+    display_cnt_stage_cnt                    0x0000103f   Thumb Code   422  count.o(.text)
+    Cnt_Stage                                0x000011e5   Thumb Code   176  count.o(.text)
+    display_rst_cnt_stage_1                  0x00001295   Thumb Code   218  count.o(.text)
+    display_rst_cnt_stage_yes                0x0000136f   Thumb Code   114  count.o(.text)
+    display_rst_cnt_stage_no                 0x000013e1   Thumb Code   116  count.o(.text)
+    Rst_Cnt_Stage                            0x00001455   Thumb Code   236  count.o(.text)
+    display_rst_sys_stage_1                  0x00001541   Thumb Code   168  count.o(.text)
+    Rst_Sys_Stage                            0x000015e9   Thumb Code   238  count.o(.text)
+    SysLoop                                  0x000016d7   Thumb Code    64  count.o(.text)
+    main_loop                                0x00001717   Thumb Code   298  count.o(.text)
+    CT32B1_IRQFlagClear                      0x0000185d   Thumb Code    62  ct32b1_irqflagclear.o(.text)
+    CT32B1_MREnable                          0x000018a1   Thumb Code   222  ct32b1_mrenable.o(.text)
+    CT32B1_MRValue                           0x00001985   Thumb Code    52  ct32b1_mrvalue.o(.text)
+    CT32B1_Prescale                          0x000019bd   Thumb Code     6  ct32b1_prescale.o(.text)
+    CT32B1_Enable                            0x000019c9   Thumb Code    14  ct32b1_enable.o(.text)
+    CT32B1_Init                              0x000019dd   Thumb Code    42  ct32b1_init.o(.text)
+    CT32B1_IRQEnable                         0x00001a11   Thumb Code    26  ct32b1_irqenable.o(.text)
+    __aeabi_idiv                             0x00001a35   Thumb Code     0  idiv.o(.text)
+    __aeabi_idivmod                          0x00001a35   Thumb Code    40  idiv.o(.text)
+    __aeabi_uidiv                            0x00001a5d   Thumb Code     0  uidiv.o(.text)
+    __aeabi_uidivmod                         0x00001a5d   Thumb Code    44  uidiv.o(.text)
+    __scatterload                            0x00001a89   Thumb Code    28  init.o(.text)
+    __scatterload_rt2                        0x00001a89   Thumb Code     0  init.o(.text)
+    __decompress                             0x00001aad   Thumb Code     0  __dczerorl2.o(.text)
+    __decompress1                            0x00001aad   Thumb Code    86  __dczerorl2.o(.text)
+    Long Thumb to Thumb Veneer to Peri_Inital 0x00001b05   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to HXTAL_Enable 0x00001b11   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to SPLL_Enable 0x00001b1d   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to SysClk_Setting 0x00001b29   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    Long Thumb to Thumb Veneer to Delay1usFor96MHz 0x00001b35   Thumb Code    12  anon$$obj.o(Veneer$$Code)
+    __ARM_common_switch8                     0x00001b41   Thumb Code    28  count.o(i.__ARM_common_switch8)
+    __scatterload_copy                       0x00001b5d   Thumb Code    14  handlers.o(i.__scatterload_copy)
+    __scatterload_null                       0x00001b6b   Thumb Code     2  handlers.o(i.__scatterload_null)
+    __scatterload_zeroinit                   0x00001b6d   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
+    Region$$Table$$Base                      0x00001b7c   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x00001b9c   Number         0  anon$$obj.o(Region$$Table)
+    ROM_DUMP                                 0x10000601   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    GET_DSP_ROM_CHECKSUM                     0x100006b9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Enter_Test_Mode                          0x100007a3   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Test_Mode                                0x100007b9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_TestResult                         0x10000813   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    RW_Test                                  0x10000895   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Delay1usFor96MHz                         0x100008fb   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_Testing                            0x10000911   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    DelaymsFor96MHzLoad                      0x10000ab5   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ResetClrRemap                            0x10000ae3   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ChgUserCode                              0x10000af7   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    IHRC_SysClk_96                           0x10000b09   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Mark_Check                         0x10000b7d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_QuickLoadPtr_Check                 0x10000b97   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Scan_Load_Table_Info               0x10000bcb   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Load2PRAM                          0x10000bf3   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDFAT_Load_Process                       0x10000d33   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDCARD_Load2PRAM                         0x10000d97   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Load_SDCard_DloGroup                     0x10001019   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    DLO_Load_SD_DloGroup                     0x10001277   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Check_HiddenInfoSector                   0x100012d1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    DLO_LoadFromFAT                          0x100013d7   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    APP_Load                                 0x100015cf   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Chk_Load_Table                     0x100015f5   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Load_DLO_Process                         0x10001671   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    LOAD_DLO                                 0x100017f7   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USBCheck                                 0x100018c1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_ReadBlocks                          0x100019a7   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_WriteBlocks                         0x10001d19   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SysClk_Setting                           0x10001d89   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Clk_Output                               0x10001da5   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    PeriClk_Setting                          0x10001dd5   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    IHRC_Enable                              0x10001de9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    IHRC_Disable                             0x10001e2b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    HXTAL_Enable                             0x10001e49   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    HXTAL_Disable                            0x10001e8f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    LXTAL_Enable                             0x10001eaf   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    LXTAL_Disable                            0x10001efd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPLL_Enable                              0x10001f19   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPLL_Disable                             0x10001faf   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Peri_Inital                              0x10001fd1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    WDT_RST_Mode                             0x10001fdb   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    WDT_INT_Mode                             0x10001fe9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    WDT_Overflow_time                        0x1000201f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    WDT_1_Sec                                0x1000202d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    WDT_Enable                               0x1000203b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    WDT_Disable                              0x10002067   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    WDT_CLR                                  0x1000206f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    WDT_CLR_IRQ                              0x10002077   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    RTC_Mode                                 0x10002085   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    RTC_Sec_Counter                          0x10002093   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    RTC_Alarm_Counter                        0x10002099   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    RTC_Enable                               0x1000209f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    RTC_Disable                              0x100020a7   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USBPLL_Config                            0x100020af   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USBDev_PowerDown                         0x100020d7   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USBDev_PowerOn                           0x10002107   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Enter_DPD                                0x1000212b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Enter_DSLEEP                             0x10002149   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Enter_SLEEP                              0x1000215b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Block_Erase                        0x1000219d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Chip_Erase                         0x100021c9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Clock_Select                       0x100021ed   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Customer_RD_Mode                   0x1000220d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Customer_WR_Mode                   0x100022c9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Deselect_Cycle                     0x10002381   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Disable                            0x100023a1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Disable_Quad_Mode                  0x100023b5   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Enable                             0x100023c9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Enable_Quad_Mode                   0x100023e1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Erase_Data_Polling                 0x100023f9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Power_Down                         0x1000242d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Read_DMA_Mode                      0x10002451   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Read_Factory_ID                    0x10002539   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Read_Status                        0x10002569   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Sector_Erase                       0x10002591   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Wake_Up                            0x100025bd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Write_Data_Polling                 0x100025e1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Write_DMA_Mode                     0x10002625   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SPIFC_Write_Status                       0x100026d1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Check_MS_RDY                        0x100026f5   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Check_CMD_DONE                      0x1000271b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Send_Finished                       0x1000276d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_CMD                                 0x10002789   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Chk_SD_Version                      0x100027ed   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Initialization_and_Identification   0x100028a7   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Data_Transfer                       0x10002b87   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_4BIT_Init                           0x10002dcb   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Disable_Function                    0x10002e5d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Erase_Function                      0x10002e79   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Read_Check_Mode                     0x10002ee9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Write_Check_Mode                    0x10002f83   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Polling_Flag                        0x1000301b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Read_Multi_Block                    0x100030b5   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Read_Multi_Block_Polling            0x10003195   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Read_Single_Block                   0x1000322d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Read_Single_Block_Polling           0x100032fd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Write_Multi_Block                   0x10003379   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Write_Multi_Block_Polling           0x10003471   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Write_Single_Block                  0x10003505   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC1_Write_Single_Block_Polling          0x100035ad   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Check_MS_RDY                        0x10003625   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Check_CMD_DONE                      0x1000364b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Send_Finished                       0x1000369d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_CMD                                 0x100036b9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Chk_SD_Version                      0x1000371d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Initialization_and_Identification   0x100037d7   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Data_Transfer                       0x10003ab7   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_4BIT_Init                           0x10003ce9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Disable_Function                    0x10003d7d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Erase_Function                      0x10003d99   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Read_Check_Mode                     0x10003e09   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Write_Check_Mode                    0x10003ea3   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Polling_Flag                        0x10003f3b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Read_Multi_Block                    0x10003fd5   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Read_Multi_Block_Polling            0x100040b5   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Read_Single_Block                   0x1000414d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Read_Single_Block_Polling           0x1000421d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Write_Multi_Block                   0x10004299   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Write_Multi_Block_Polling           0x10004391   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Write_Single_Block                  0x10004425   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDC0_Write_Single_Block_Polling          0x100044cd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_Init                                  0x10004545   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_Init2                                 0x10004573   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_InitX                                 0x100045a3   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FOpen                                 0x100045d3   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FClose                                0x100046d3   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FGetFileEntry                         0x100046f3   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FOpenID                               0x10004713   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FGetNameByID                          0x100047f1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FReadSector                           0x1000480d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FWriteSector                          0x10004843   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FRemove                               0x10004879   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FSeek                                 0x1000494b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FTell                                 0x100049f5   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FError                                0x10004a0d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_ClearErr                              0x10004a27   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_PreScanFAT                            0x10004a3f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_Exit                                  0x10004a8f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_DirOpen                               0x10004b05   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_DirClose                              0x10004c19   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_DirRead                               0x10004c39   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_DirRewind                             0x10004c59   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_DirCreate                             0x10004c85   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_DirRemove                             0x10004d8f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_DirSearchExt                          0x10004df1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_DirGetExtFile                         0x10004e97   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_DirectReadSector                      0x10004f3d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_DirectWriteSector                     0x10004f6f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_SetFileAttribute                      0x10004fa9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_GetTotalCapacity                      0x10004fe1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_PreScanRemainCapacity                 0x1000505f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_GetRemainCapacity                     0x10005153   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_RemainCapacityUpdate                  0x1000516d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_SetFileAttr                       0x100051e9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_DOpen                             0x1000527d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_DClose                            0x100053f9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_AddDotDir                         0x1000540d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_CreateDirectory                   0x1000553d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FindDir                           0x10005af1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_DCreate                           0x10005b99   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_DDelete                           0x10005c75   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_DRead                             0x10005ce1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FReadSec                          0x10006331   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FWriteSec                         0x10006425   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FATalloc                          0x10006609   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_AddDirClust                       0x10006afd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_CreateFile                        0x10006bd3   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FreeFAT                           0x10007241   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_DelEntry                          0x1000742d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FDelete                           0x10007689   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FreeInvalidCluster                0x100076b3   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FOpen                             0x100078e1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FClose                            0x10007999   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FOpenID                           0x10007a09   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FGetNameByID                      0x10007acb   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FindEOFClust                      0x10007d2d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FindDirShort                      0x10007e05   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FindDirLong                       0x10007f3b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FindFileShort                     0x100081bf   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FindFileLong                      0x10008309   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_MakeLongName                      0x100085dd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_MakeShortName                     0x100086e1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_GetFatChainClust                  0x10008aad   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_ClrFatListBuf                     0x10008b71   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_InitFatList                       0x10008b95   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_GetSecSzBit                       0x10008da1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_GetClusSzBit                      0x10008dbd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_ReadBPB                           0x10008ddf   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_ChkDevice                         0x10008f8b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_GetDirSize                        0x10008f9b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_GetDirSec                         0x1000901b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_UpdateEntry                       0x100090b9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_ShortNameChecksum                 0x10009153   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_InitDevice                        0x1000917f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_ClearBPBTable                     0x1000918b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_ClearDiskInfo                     0x100091a5   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_GetExtName                        0x100091dd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FindFile                          0x10009273   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FindPath                          0x10009387   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_UpdateClustPos                    0x1000949f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_GetDevice                         0x100094d3   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_GetClustSec                       0x10009551   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_ReadPhySec                        0x100095a1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_WritePhySec                       0x100095c1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FReadMulti                        0x100095ed   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_FWriteMulti                       0x10009775   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_LB_GetDevSize                         0x100099b5   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_LB_DevInit                            0x100099cf   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_LB_StopMultiTransmit                  0x10009a3d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_LB_Write                              0x10009aa9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_LB_Read                               0x10009aeb   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_LB_MultiRead                          0x10009b63   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_LB_MultiWrite                         0x10009bb1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_STR_strchr                            0x10009c1d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_STR_strchr_ChkDot                     0x10009c37   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_STR_strlen                            0x10009c65   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_STR_strncmp                           0x10009c79   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_STR_strcmp                            0x10009cb1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_STR_Ustrcmp                           0x10009cdb   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_STR_strncpy                           0x10009d05   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_STR_CharToWchar                       0x10009d33   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_STR_ToCapital                         0x10009d6f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_OS_GetTime                            0x10009d85   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_OS_GetDate                            0x10009e19   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_OS_GetRandom                          0x10009eab   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    BOT_Initial                              0x10009ed9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    BULK_Read_Packet                         0x10009ff5   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    BULK_Write_Packet                        0x1000a013   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    AdjustCBWCB                              0x1000a031   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ConvertEndian                            0x1000a05d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_SetCapacity                          0x1000a079   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ChangeStatusToCSW                        0x1000a091   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    EP1TimeOutCheck                          0x1000a09f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SET_BULKIN_PACKET                        0x1000a131   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    BulkInDeviceError                        0x1000a1f3   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    BulkTimeOutErr                           0x1000a21b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    BOT_Bulk_In                              0x1000a24b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ROM_Unknown_Commands                     0x1000a87d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SCSICMD_ReadCapacity                     0x1000a8af   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SCSICMD_TestUnitReady                    0x1000a8dd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SCSICMD_ReadFormatCapacities             0x1000a911   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SCSICMD_PreventAllowMediumRemoval        0x1000a98b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SCSICMD_RequestSense                     0x1000a9af   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SCSICMD_ModeSense06                      0x1000aa71   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SCSICMD_Inquiry                          0x1000aacf   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SCSICMD_Read10                           0x1000ac15   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SCSICMD_Write10                          0x1000acc1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Decode_CBW                               0x1000ad6d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    EP2TimeOutCheck                          0x1000b15f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SET_BULKOUT_PACKET                       0x1000b251   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    BulkOutDeviceError                       0x1000b2cf   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    BOT_Bulk_Out                             0x1000b2e7   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SCSICMD_ReadTocPmaAtip                   0x1000ba21   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Cmd_Xfer                                 0x1000ba61   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_Vendor_BulkIn                        0x1000ba6f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_Vendor_BulkOut                       0x1000babb   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Packet_Xfer                              0x1000bb15   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Vendor_BOT_Bulk_Out                      0x1000bbe7   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Vendor_BOT_Bulk_In                       0x1000bf2d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    MassData_Xfer                            0x1000c1d7   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Vendor_Command                           0x1000c247   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    DMAC_ISR_SEV                             0x1000c4cd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    F_POWER_ON_INIT_DMAC_ISR                 0x1000c4ef   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    F_DMAC_TRANSMIT                          0x1000c4fb   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    F_DMAC_TRANSMIT_READ                     0x1000c53b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    F_DMAC_TRANSMIT_WRITE                    0x1000c5b9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    F_GET_DATA_POOL_ADDR                     0x1000c639   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    EP0_Init                                 0x1000c655   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    GET_SETUP_CMD                            0x1000c6a7   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_EP_STALL                             0x1000c759   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_EP_CLEAR                             0x1000c7db   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Cls_Req                                  0x1000c88b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Std_Req                                  0x1000c967   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_Req                                  0x1000d193   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Ep0Out_InProc                            0x1000d28b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Ep0In_OutProc                            0x1000d3a3   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Ep0In_InProc                             0x1000d40d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    EP0_StateMachine                         0x1000d577   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_HIDInPktRdy                          0x1000d9cd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_HID_Output                           0x1000d9dd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_HIDClrPktRdy                         0x1000da0b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_Get_Protocol                         0x1000da19   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_Set_Protocol                         0x1000da21   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_Set_Idle                             0x1000da2b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_Get_Report                           0x1000da33   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_Set_Report                           0x1000da3d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    HID_Request                              0x1000da47   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    MOUSE_SERVICE                            0x1000da91   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_Suspend                              0x1000dae1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_Resume                               0x1000daff   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USBDEV_IRQHandler                        0x1000db17   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_Service                              0x1000dd25   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_GetINT                               0x1000ddb9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_Default_MSCInfo                      0x1000de35   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_MSC_Init                             0x1000de95   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_Default_HIDInfo                      0x1000dffd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_HID_Init                             0x1000e083   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_PowerDown                            0x1000e193   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    MD5Init                                  0x1000e231   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    MD5Decode                                0x1000e24b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    MD5Transform                             0x1000e27d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    MD5Update                                0x1000ea6d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    MD5Encode                                0x1000eb89   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    MD5Final                                 0x1000ebc7   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    AES_Decryption                           0x1000ec19   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    AES_Encryption                           0x1000ed75   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    XtraROM_Rst                              0x1000ee71   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    XtraROM_Enable                           0x1000eee3   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    XtraROM_Disable                          0x1000ef11   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    XtraROM_Wait_MS_RDY                      0x1000ef1f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    XtraROM_ReadID_MsReg                     0x1000ef3f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    XtraROM_Init                             0x1000eff1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    XtraROM_CMD_RDY                          0x1000f0e1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    XtraROM_ReadPhyPage                      0x1000f10d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    XtraROM_ReadPhyPageInfo                  0x1000f199   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    DSP_Issue_IRQHandler                     0x1000f205   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    DSP_Enable                               0x1000f20d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    DSP_Hold                                 0x1000f235   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    DSP_Reset                                0x1000f253   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    DSP_PRAM_Ready                           0x1000f269   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    RTC_Time_Start                           0x1000f2b1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    RTC_Time_Stop                            0x1000f351   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    RTC_Time_ROM_Caculator                   0x1000f37b   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    RTC_Time_ROM_Update                      0x1000f575   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    RTC_Time_Set                             0x1000f631   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Get_RTC_Time                             0x1000f6cd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_ENABLE                             0x1000f735   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_DISABLE                            0x1000f765   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_DLY_COUNT                          0x1000f775   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_CTRL_NORM                          0x1000f7b3   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_MR                                 0x1000f7cd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_CTRL_INIT                          0x1000f7e1   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SEND_SDRAM_CMD                           0x1000f7fd   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_ARRAY                              0x1000f8d7   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_TUNE                               0x1000f90f   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_ARF_CNT                            0x1000f939   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_INIT                               0x1000f94d   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_CTRL_PDP                           0x1000f9cb   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_CTRL_SRF                           0x1000f9e9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_READ                               0x1000fa07   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SDRAM_WRITE                              0x1000fa57   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    strcpy                                   0x1000faa9   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    strlen                                   0x1000faf5   Thumb Code     0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    _FS_ValidMode                            0x1000fe10   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    _FS_DEVICE_TYPE                          0x1000fe70   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    _FS_FAT_InvalidChars1                    0x1000fe7c   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    _FS_FAT_InvalidChars2                    0x1000fe86   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Const_cbDevDesc                          0x1000fe8d   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Const_cbConfDesc                         0x1000fe9f   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Const_cTConfDesc1                        0x1000fea8   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Const_cTConfDesc2                        0x1000fec8   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Const_cTConfDesc3                        0x1000fee8   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Const_cbDevQual                          0x1000ff08   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Const_cbOSConfDesc                       0x1000ff12   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Const_cbDevDescHID                       0x1000ff1b   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Const_cbConfDescHID                      0x1000ff2d   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Const_cTConfDesc1HID                     0x1000ff36   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Const_cTConfDesc3HID                     0x1000ff58   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Const_HIDReport                          0x1000ff71   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ack                                      0x20000000   Data           1  i2c.o(.data)
+    MONTH_DAY                                0x20000004   Data          12  count.o(.data)
+    stage_loopcnt                            0x20000010   Data           1  count.o(.data)
+    keytype                                  0x20000011   Data           1  count.o(.data)
+    curKey                                   0x20000012   Data           1  count.o(.data)
+    preKey                                   0x20000013   Data           1  count.o(.data)
+    debounce                                 0x20000014   Data           1  count.o(.data)
+    islongpress                              0x20000018   Data           4  count.o(.data)
+    is_5ms_Flag                              0x2000001c   Data           1  count.o(.data)
+    blinktime                                0x2000001d   Data           1  count.o(.data)
+    powercnt                                 0x20000020   Data           4  count.o(.data)
+    font_CHN                                 0x20000024   Data         384  fontdata.o(.data)
+    font1_0_9                                0x200001a4   Data          66  fontdata.o(.data)
+    font2_0_9                                0x200001e6   Data         176  fontdata.o(.data)
+    font_A_Z                                 0x20000296   Data         416  fontdata.o(.data)
+    t0                                       0x20000436   Data         240  fontdata.o(.data)
+    sysinfo                                  0x20000528   Data          16  count.o(.bss)
+    __heap_base                              0x20000538   Data           0  startup_snc7312.o(HEAP)
+    __heap_limit                             0x20000538   Data           0  startup_snc7312.o(HEAP)
+    __initial_sp                             0x20000b38   Data           0  startup_snc7312.o(STACK)
+    g_HiddenActiveCodeIndex                  0x20012000   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_AllHiddenSectorNum                     0x20012004   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    TC                                       0x20012008   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD1_4H                                  0x2001200c   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD1_4L                                  0x2001200e   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD1_3H                                  0x20012010   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD1_3L                                  0x20012012   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD1_2H                                  0x20012014   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD1_2L                                  0x20012016   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD1_1H                                  0x20012018   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD1_1L                                  0x2001201a   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    RCA1                                     0x2001201c   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_ucSDC1CardType                         0x2001201e   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_ucSDC1CardVer                          0x2001201f   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_uiSDC1CMDTimeOutValue                  0x20012020   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_uiSDC1TotalBlockNum                    0x20012024   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_ucSDC1PollingType                      0x20012028   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_ucSDC1PollingMode                      0x20012029   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD0_4H                                  0x2001202c   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD0_4L                                  0x2001202e   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD0_3H                                  0x20012030   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD0_3L                                  0x20012032   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD0_2H                                  0x20012034   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD0_2L                                  0x20012036   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD0_1H                                  0x20012038   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CSD0_1L                                  0x2001203a   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    RCA0                                     0x2001203c   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_ucSDC0CardType                         0x2001203e   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_ucSDC0CardVer                          0x2001203f   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_uiSDC0CMDTimeOutValue                  0x20012040   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_uiSDC0TotalBlockNum                    0x20012044   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_ucSDC0PollingType                      0x20012048   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_ucSDC0PollingMode                      0x20012049   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_SDCard0_Speed                         0x2001204a   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_SDCard1_Speed                         0x2001204c   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    OSTimeStampSW                            0x2001204e   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_AutoDelInvalidCluster                 0x20012050   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    DIR_NTRes                                0x20012052   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_SDCard0_RemainCapacity                0x20012054   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_SDCard1_RemainCapacity                0x20012058   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    _FS_OS_Random                            0x2001205c   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_uiBulkStrAddr                          0x20012060   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ulBulkTimeCnt                            0x20012064   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_Current_LUN                            0x20012068   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_MSC_BulkIO_CMD                         0x20012069   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    BULK_IN_OUT_LBA                          0x2001206c   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    BULK_IN_OUT_ADDR                         0x20012070   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_uiEP12_BUF_INDEX                       0x20012074   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    SenseKey                                 0x20012075   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ASC                                      0x2001207c   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ASCQ                                     0x20012083   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    CBW_twice                                0x2001208a   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    VendorDeviceType                         0x2001208b   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    DMAC_0004_TEMP                           0x2001208c   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    DMAC_000C_TEMP                           0x20012090   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    DMAC_STATE                               0x20012094   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_Max_LUN_Num                            0x20012098   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_USB_Func                               0x20012099   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    get_interface_flag                       0x2001209a   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    uwTransLen                               0x2001209c   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ubUC_ReqTyp                              0x2001209e   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ubUC_Req                                 0x2001209f   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ubUC_Val_L                               0x200120a0   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ubUC_Val_H                               0x200120a1   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ubUC_Idx_L                               0x200120a2   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ubUC_Idx_H                               0x200120a3   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ubUC_Len_L                               0x200120a4   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ubUC_Len_H                               0x200120a5   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    uwUC_Val                                 0x200120a6   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    uwUC_Idx                                 0x200120a8   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    uwUC_Len                                 0x200120aa   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    cbDevStus                                0x200120ac   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    cbEP0Stus                                0x200120ae   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    cbEP1Stus                                0x200120b0   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    cbEP2Stus                                0x200120b2   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    cbEP3Stus                                0x200120b4   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    config_flag                              0x200120b6   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_uiPID                                  0x200120b8   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    bBreak                                   0x200120ba   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    bUSB_Test                                0x200120bb   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    bReqErr                                  0x200120bc   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    pbUSBPtr                                 0x200120c0   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Protocol                                 0x200120c4   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    pUBC_REG                                 0x200120c8   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    pUIP_REG                                 0x200120cc   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    EP0_CtrlTr_Flag                          0x200120d0   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Enable_Bulk_Out                          0x200120d1   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    Enable_Bulk_In                           0x200120d2   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ubEP0Task                                0x200120d3   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ubEP0Int                                 0x200120d4   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    USB_STATE                                0x200120d5   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    cbStrDescIdx0                            0x200120d6   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_uiHID_IntTime                          0x200120da   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_uiHID_InterProtocol                    0x200120db   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_uiHID_InterSubclass                    0x200120dc   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_uiHID_ReportSize                       0x200120de   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    VendorInformationLUN0                    0x200120e0   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ProductRevisionLevelLUN0                 0x200120e8   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    VendorInformationLUN1                    0x200120ec   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ProductRevisionLevelLUN1                 0x200120f4   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    PADDING                                  0x200120f8   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    NFPtrRdBuf                               0x20012138   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    g_DSP_Flag                               0x2001213c   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    _FS_FileHandle                           0x20012160   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    _FS_DirHandle                            0x20012250   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_BPB                               0x20012b30   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_FAT_DISK_INFO                         0x20012bf0   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    FS_DataBuf                               0x20012c20   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    BOTInfo                                  0x20012e20   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    cbDevDesc                                0x20013050   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    cbConfDesc                               0x20013062   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    cTConfDesc1                              0x2001306c   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    cTConfDesc2                              0x2001308e   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    cTConfDesc3                              0x200130b0   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    cbDevQual                                0x200130d2   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    cbOSConfDesc                             0x200130dc   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    cbStrDescIdx1                            0x200130e6   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    HIDReport                                0x200130fc   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ProductIdentificationLUN0                0x2001311e   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+    ProductIdentificationLUN1                0x2001312e   Data           0  SNC7312_ROM_201511271015.sym ABSOLUTE
+
+
+
+==============================================================================
+
+Memory Map of the image
+
+  Image Entry point : 0x000000c1
+
+  Load Region LR_IROM1 (Base: 0x00000000, Size: 0x000020c4, Max: 0x00040000, ABSOLUTE, COMPRESSED[0x00001f6c])
+
+    Execution Region ER_IROM1 (Base: 0x00000000, Size: 0x00001b9c, Max: 0x00040000, ABSOLUTE)
+
+    Base Addr    Size         Type   Attr      Idx    E Section Name        Object
+
+    0x00000000   0x000000c0   Data   RO            4    RESET               startup_snc7312.o
+    0x000000c0   0x00000000   Code   RO          327  * .ARM.Collect$$$$00000000  mc_p.l(entry.o)
+    0x000000c0   0x00000004   Code   RO          332    .ARM.Collect$$$$00000001  mc_p.l(entry2.o)
+    0x000000c4   0x00000004   Code   RO          335    .ARM.Collect$$$$00000004  mc_p.l(entry5.o)
+    0x000000c8   0x00000000   Code   RO          337    .ARM.Collect$$$$00000008  mc_p.l(entry7b.o)
+    0x000000c8   0x00000000   Code   RO          339    .ARM.Collect$$$$0000000A  mc_p.l(entry8b.o)
+    0x000000c8   0x00000008   Code   RO          340    .ARM.Collect$$$$0000000B  mc_p.l(entry9a.o)
+    0x000000d0   0x00000000   Code   RO          342    .ARM.Collect$$$$0000000D  mc_p.l(entry10a.o)
+    0x000000d0   0x00000000   Code   RO          344    .ARM.Collect$$$$0000000F  mc_p.l(entry11a.o)
+    0x000000d0   0x00000004   Code   RO          333    .ARM.Collect$$$$00002712  mc_p.l(entry2.o)
+    0x000000d4   0x00000004   Code   RO           11    .rev16_text         main.o
+    0x000000d8   0x00000004   Code   RO           67    .rev16_text         i2c.o
+    0x000000dc   0x00000004   Code   RO           90    .rev16_text         oled.o
+    0x000000e0   0x00000004   Code   RO          110    .rev16_text         count.o
+    0x000000e4   0x00000004   Code   RO          142    .rev16_text         fontdata.o
+    0x000000e8   0x00000004   Code   RO          162    .rev16_text         SNC7312_Timer_V1.001.lib(ct32b1_irqflagclear.o)
+    0x000000ec   0x00000004   Code   RO          204    .rev16_text         SNC7312_Timer_V1.001.lib(ct32b1_mrenable.o)
+    0x000000f0   0x00000004   Code   RO          224    .rev16_text         SNC7312_Timer_V1.001.lib(ct32b1_mrvalue.o)
+    0x000000f4   0x00000004   Code   RO          244    .rev16_text         SNC7312_Timer_V1.001.lib(ct32b1_prescale.o)
+    0x000000f8   0x00000004   Code   RO          264    .rev16_text         SNC7312_Timer_V1.001.lib(ct32b1_enable.o)
+    0x000000fc   0x00000004   Code   RO          284    .rev16_text         SNC7312_Timer_V1.001.lib(ct32b1_init.o)
+    0x00000100   0x00000004   Code   RO          304    .rev16_text         SNC7312_Timer_V1.001.lib(ct32b1_irqenable.o)
+    0x00000104   0x00000004   Code   RO           12    .revsh_text         main.o
+    0x00000108   0x00000004   Code   RO           68    .revsh_text         i2c.o
+    0x0000010c   0x00000004   Code   RO           91    .revsh_text         oled.o
+    0x00000110   0x00000004   Code   RO          111    .revsh_text         count.o
+    0x00000114   0x00000004   Code   RO          143    .revsh_text         fontdata.o
+    0x00000118   0x00000004   Code   RO          163    .revsh_text         SNC7312_Timer_V1.001.lib(ct32b1_irqflagclear.o)
+    0x0000011c   0x00000004   Code   RO          205    .revsh_text         SNC7312_Timer_V1.001.lib(ct32b1_mrenable.o)
+    0x00000120   0x00000004   Code   RO          225    .revsh_text         SNC7312_Timer_V1.001.lib(ct32b1_mrvalue.o)
+    0x00000124   0x00000004   Code   RO          245    .revsh_text         SNC7312_Timer_V1.001.lib(ct32b1_prescale.o)
+    0x00000128   0x00000004   Code   RO          265    .revsh_text         SNC7312_Timer_V1.001.lib(ct32b1_enable.o)
+    0x0000012c   0x00000004   Code   RO          285    .revsh_text         SNC7312_Timer_V1.001.lib(ct32b1_init.o)
+    0x00000130   0x00000004   Code   RO          305    .revsh_text         SNC7312_Timer_V1.001.lib(ct32b1_irqenable.o)
+    0x00000134   0x00000014   Code   RO            5    .text               startup_snc7312.o
+    0x00000148   0x000000c4   Code   RO           13    .text               main.o
+    0x0000020c   0x00000220   Code   RO           69    .text               i2c.o
+    0x0000042c   0x00000282   Code   RO           92    .text               oled.o
+    0x000006ae   0x00000002   PAD
+    0x000006b0   0x000011ac   Code   RO          112    .text               count.o
+    0x0000185c   0x00000044   Code   RO          164    .text               SNC7312_Timer_V1.001.lib(ct32b1_irqflagclear.o)
+    0x000018a0   0x000000e4   Code   RO          206    .text               SNC7312_Timer_V1.001.lib(ct32b1_mrenable.o)
+    0x00001984   0x00000038   Code   RO          226    .text               SNC7312_Timer_V1.001.lib(ct32b1_mrvalue.o)
+    0x000019bc   0x0000000c   Code   RO          246    .text               SNC7312_Timer_V1.001.lib(ct32b1_prescale.o)
+    0x000019c8   0x00000014   Code   RO          266    .text               SNC7312_Timer_V1.001.lib(ct32b1_enable.o)
+    0x000019dc   0x00000034   Code   RO          286    .text               SNC7312_Timer_V1.001.lib(ct32b1_init.o)
+    0x00001a10   0x00000024   Code   RO          306    .text               SNC7312_Timer_V1.001.lib(ct32b1_irqenable.o)
+    0x00001a34   0x00000028   Code   RO          330    .text               mc_p.l(idiv.o)
+    0x00001a5c   0x0000002c   Code   RO          346    .text               mc_p.l(uidiv.o)
+    0x00001a88   0x00000024   Code   RO          348    .text               mc_p.l(init.o)
+    0x00001aac   0x00000056   Code   RO          358    .text               mc_p.l(__dczerorl2.o)
+    0x00001b02   0x00000002   PAD
+    0x00001b04   0x0000000c   Ven    RO          360    Veneer$$Code        anon$$obj.o
+    0x00001b10   0x0000000c   Ven    RO          361    Veneer$$Code        anon$$obj.o
+    0x00001b1c   0x0000000c   Ven    RO          362    Veneer$$Code        anon$$obj.o
+    0x00001b28   0x0000000c   Ven    RO          363    Veneer$$Code        anon$$obj.o
+    0x00001b34   0x0000000c   Ven    RO          364    Veneer$$Code        anon$$obj.o
+    0x00001b40   0x0000001c   Code   RO          131    i.__ARM_common_switch8  count.o
+    0x00001b5c   0x0000000e   Code   RO          352    i.__scatterload_copy  mc_p.l(handlers.o)
+    0x00001b6a   0x00000002   Code   RO          353    i.__scatterload_null  mc_p.l(handlers.o)
+    0x00001b6c   0x0000000e   Code   RO          354    i.__scatterload_zeroinit  mc_p.l(handlers.o)
+    0x00001b7a   0x00000002   PAD
+    0x00001b7c   0x00000020   Data   RO          350    Region$$Table       anon$$obj.o
+
+
+    Execution Region RW_IRAM1 (Base: 0x20000000, Size: 0x00000b38, Max: 0x00020000, ABSOLUTE, COMPRESSED[0x000003d0])
+
+    Base Addr    Size         Type   Attr      Idx    E Section Name        Object
+
+    0x20000000   0x00000001   Data   RW           70    .data               i2c.o
+    0x20000001   0x00000003   PAD
+    0x20000004   0x00000020   Data   RW          114    .data               count.o
+    0x20000024   0x00000502   Data   RW          144    .data               fontdata.o
+    0x20000526   0x00000002   PAD
+    0x20000528   0x00000010   Zero   RW          113    .bss                count.o
+    0x20000538   0x00000000   Zero   RW            3    HEAP                startup_snc7312.o
+    0x20000538   0x00000600   Zero   RW            2    STACK               startup_snc7312.o
+
+
+
+  Load Region LR$$.ARM.__at_0x60002000 (Base: 0x60002000, Size: 0x00000028, Max: 0x00000028, ABSOLUTE)
+
+    Execution Region ER$$.ARM.__at_0x60002000 (Base: 0x60002000, Size: 0x00000028, Max: 0x00000028, ABSOLUTE, UNINIT)
+
+    Base Addr    Size         Type   Attr      Idx    E Section Name        Object
+
+    0x60002000   0x00000028   Data   RO            1    .ARM.__at_0x60002000  loadtable.o
+
+
+==============================================================================
+
+Image component sizes
+
+
+      Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
+
+      4560        258          0         32         16      10820   count.o
+         8          0          0       1282          0       1495   fontdata.o
+       552          6          0          1          0       2684   i2c.o
+         0          0         40          0          0          0   loadtable.o
+       204         10          0          0          0      46647   main.o
+       650          0          0          0          0       3457   oled.o
+        20          4        192          0       1536        636   startup_snc7312.o
+
+    ----------------------------------------------------------------------
+      6056        298        264       1320       1552      65739   Object Totals
+        60         20         32          0          0          0   (incl. Generated)
+         2          0          0          5          0          0   (incl. Padding)
+
+    ----------------------------------------------------------------------
+
+      Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Library Member Name
+
+        28          6          0          0          0       1096   ct32b1_enable.o
+        60         10          0          0          0       1090   ct32b1_init.o
+        44         10          0          0          0       6883   ct32b1_irqenable.o
+        76         14          0          0          0      46006   ct32b1_irqflagclear.o
+       236          6          0          0          0       1362   ct32b1_mrenable.o
+        64          4          0          0          0       1225   ct32b1_mrvalue.o
+        20          6          0          0          0       1146   ct32b1_prescale.o
+        86          0          0          0          0          0   __dczerorl2.o
+         0          0          0          0          0          0   entry.o
+         0          0          0          0          0          0   entry10a.o
+         0          0          0          0          0          0   entry11a.o
+         8          4          0          0          0          0   entry2.o
+         4          0          0          0          0          0   entry5.o
+         0          0          0          0          0          0   entry7b.o
+         0          0          0          0          0          0   entry8b.o
+         8          4          0          0          0          0   entry9a.o
+        30          0          0          0          0          0   handlers.o
+        40          0          0          0          0         72   idiv.o
+        36          8          0          0          0         68   init.o
+        44          0          0          0          0         72   uidiv.o
+
+    ----------------------------------------------------------------------
+       788         72          0          0          0      59020   Library Totals
+         4          0          0          0          0          0   (incl. Padding)
+
+    ----------------------------------------------------------------------
+
+      Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Library Name
+
+       528         56          0          0          0      58808   SNC7312_Timer_V1.001.lib
+       256         16          0          0          0        212   mc_p.l
+
+    ----------------------------------------------------------------------
+       788         72          0          0          0      59020   Library Totals
+
+    ----------------------------------------------------------------------
+
+==============================================================================
+
+
+      Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
+
+      6844        370        264       1320       1552     123207   Grand Totals
+      6844        370        264        976       1552     123207   ELF Image Totals (compressed)
+      6844        370        264        976          0          0   ROM Totals
+
+==============================================================================
+
+    Total RO  Size (Code + RO Data)                 7108 (   6.94kB)
+    Total RW  Size (RW Data + ZI Data)              2872 (   2.80kB)
+    Total ROM Size (Code + RO Data + RW Data)       8084 (   7.89kB)
+
+==============================================================================
+

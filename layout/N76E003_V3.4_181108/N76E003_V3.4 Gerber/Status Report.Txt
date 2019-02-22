@@ -1,0 +1,13 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [Free Documents]
+   Generated File[N76E003_V3.TXT]
+   Generated File[N76E003_V3.4.DRL]
+   Generated File[N76E003_V3.4.LDP]
+   Generated File[N76E003_V3.4.DRR]
+
+
+Files Generated   : 4
+Documents Printed : 0
+
+Finished Output Generation At 18:17:59 On 2018/11/11

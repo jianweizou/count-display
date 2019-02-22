@@ -1,0 +1,184 @@
+C51 COMPILER V9.54   I2C                                                                   02/22/2019 20:34:36 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE I2C
+OBJECT MODULE PLACED IN .\Output\i2c.obj
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE Code\i2c.c ROM(COMPACT) OPTIMIZE(8,SIZE) BROWSE INCDIR(..\..\Include;..\Inc
+                    -lude) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\i2c.lst) OBJECT(.\Output\i2c.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "i2c.h"
+   5          
+   6          void I2C_Delay(void)
+   7          {
+   8   1              int a=0;
+   9   1              while(a);
+  10   1      }
+  11          
+  12          void Init_I2C(void)
+  13          {
+  14   1              P12_PushPull_Mode;      //SCL PULL HIGH
+  15   1              SCL_MODE_OUT;   //SCL output
+  16   1              SCL_DATA = 1;   //SCL 1
+  17   1      
+  18   1              P11_PushPull_Mode;      //SDA PULL HIGH         
+  19   1              SDA_MODE_OUT;   //SDA output    
+  20   1              SDA_DATA = 1;   //SDA 1 
+  21   1      }
+  22          //启动信号 
+  23          void I2C_Start()
+  24          {
+  25   1          //数据线下降沿
+  26   1          SDA_DATA = 1;
+  27   1              SCL_DATA = 1;   
+  28   1          I2C_Delay();
+  29   1          SDA_DATA = 0;
+  30   1          I2C_Delay();
+  31   1              SCL_DATA = 0;
+  32   1              I2C_Delay();
+  33   1      }
+  34          
+  35          //停止信号 
+  36          void I2C_Stop()
+  37          {
+  38   1              SDA_DATA = 0;
+  39   1      //      I2C_Delay();
+  40   1              SCL_DATA = 1;
+  41   1              I2C_Delay();
+  42   1          //数据线上升沿
+  43   1          SDA_DATA = 1;
+  44   1      //      I2C_Delay();
+  45   1      }
+  46          
+  47          //写一个字节数据
+  48          void I2C_Send_Byte(unsigned char  tx_data)
+  49          {
+  50   1          unsigned char  i;
+  51   1          for(i = 0;i < 8; i ++)
+  52   1          {   
+  53   2                              if (tx_data & 0x80)
+  54   2                                      SDA_DATA = 1;
+C51 COMPILER V9.54   I2C                                                                   02/22/2019 20:34:36 PAGE 2   
+
+  55   2                              else
+  56   2                                      SDA_DATA = 0;
+  57   2                      tx_data <<= 1;
+  58   2      
+  59   2              SCL_DATA = 1;
+  60   2              I2C_Delay();
+  61   2                      SCL_DATA = 0;
+  62   2              I2C_Delay();
+  63   2          }
+  64   1      }
+  65          
+  66          unsigned char  I2C_Wait_Ack(void)
+  67          {
+  68   1          //先将数据线要设置成输入模式,有应答则会出现下降沿
+  69   1              SDA_MODE_IN;
+  70   1              SCL_DATA = 1;
+  71   1              I2C_Delay();
+  72   1              if(SDA_DATA)
+  73   1              {
+  74   2                      I2C_Stop();
+  75   2                      SDA_MODE_OUT;
+  76   2                      SCL_DATA = 0;
+  77   2                      I2C_Delay();
+  78   2                      return 1;
+  79   2              }
+  80   1              SDA_MODE_OUT;
+  81   1              SCL_DATA = 0;
+  82   1              I2C_Delay();
+  83   1              return 0;
+  84   1      }
+  85          
+  86          //写数据
+  87          void Dvice_WriteData(unsigned char  DeciveAddr,unsigned char  DataAddr,unsigned char  Data)
+  88          {
+  89   1          I2C_Start();
+  90   1          I2C_Send_Byte(DeciveAddr);
+  91   1          I2C_Wait_Ack();
+  92   1          I2C_Send_Byte(DataAddr);
+  93   1          I2C_Wait_Ack();
+  94   1          I2C_Send_Byte(Data);
+  95   1              I2C_Wait_Ack();
+  96   1          I2C_Stop();     
+  97   1      }
+  98          
+  99          //应答
+ 100          void I2C_Ack()
+ 101          {
+ 102   1          //数据线一直保持为低电平，时钟线出现上升沿即为应答
+ 103   1          SDA_DATA = 0;
+ 104   1          SCL_DATA = 0;
+ 105   1          I2C_Delay();
+ 106   1          SCL_DATA = 1;
+ 107   1          I2C_Delay();
+ 108   1      }
+ 109          
+ 110          unsigned char  I2C_Read_Byte()
+ 111          {
+ 112   1          unsigned char  i = 0;
+ 113   1          unsigned char  receive = 0;
+ 114   1          //数据线模式切换为输入
+ 115   1              SDA_MODE_IN;
+ 116   1          for(i = 0;i < 8; i ++)
+C51 COMPILER V9.54   I2C                                                                   02/22/2019 20:34:36 PAGE 3   
+
+ 117   1          {
+ 118   2              SCL_DATA = 0;
+ 119   2              I2C_Delay();
+ 120   2                      SCL_DATA = 1;
+ 121   2                      I2C_Delay();
+ 122   2                      receive <<= 1;
+ 123   2              //判断数据线电平
+ 124   2              if(SDA_DATA)
+ 125   2              {
+ 126   3                  receive ++;
+ 127   3              }
+ 128   2          }
+ 129   1              SDA_MODE_OUT;
+ 130   1              I2C_Ack();
+ 131   1              return receive;
+ 132   1      }
+ 133          
+ 134          //unsigned char  Decive_ReadData(unsigned char  DeciveAddr,unsigned char  DataAddr,unsigned char  ReciveDa
+             -ta)
+ 135          //{
+ 136          //    unsigned char  i;
+ 137          //    I2C_Start();
+ 138          //    I2C_Send_Byte(DeciveAddr);
+ 139          //    I2C_Wait_Ack();
+ 140          //    I2C_Send_Byte(DataAddr);                     
+ 141          //    I2C_Wait_Ack();     
+ 142          //    //发送器件地址读模式
+ 143          //    I2C_Send_Byte(DeciveAddr + 1);
+ 144          //    //等待应答
+ 145          //    I2C_Wait_Ack();
+ 146          //    for(i = 0;i < 8;i ++)
+ 147          //    {
+ 148          //        ReciveData= I2C_Read_Byte();
+ 149          //        ReciveData++;
+ 150          //    }
+ 151          //    //停止信号
+ 152          
+ 153          //    I2C_Stop();
+ 154          //      return ReciveData;
+ 155          //}
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    220    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

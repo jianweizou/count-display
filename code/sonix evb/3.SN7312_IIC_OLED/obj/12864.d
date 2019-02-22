@@ -1,0 +1,11 @@
+.\obj\12864.o: src\12864.c
+.\obj\12864.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\obj\12864.o: H\SNC7312.h
+.\obj\12864.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cm0.h
+.\obj\12864.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\obj\12864.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmInstr.h
+.\obj\12864.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\cmsis_armcc.h
+.\obj\12864.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmFunc.h
+.\obj\12864.o: H\system_snc7312.h
+.\obj\12864.o: src\i2c.h
+.\obj\12864.o: src\12864.h

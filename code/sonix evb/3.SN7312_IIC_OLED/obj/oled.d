@@ -1,0 +1,11 @@
+.\obj\oled.o: src\OLED.c
+.\obj\oled.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\obj\oled.o: H\SNC7312.h
+.\obj\oled.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cm0.h
+.\obj\oled.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\obj\oled.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmInstr.h
+.\obj\oled.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\cmsis_armcc.h
+.\obj\oled.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmFunc.h
+.\obj\oled.o: H\system_snc7312.h
+.\obj\oled.o: src\i2c.h
+.\obj\oled.o: src\OLED.h

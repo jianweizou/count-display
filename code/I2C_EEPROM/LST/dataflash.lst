@@ -1,0 +1,210 @@
+C51 COMPILER V9.54   DATAFLASH                                                             06/11/2018 21:01:38 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE DATAFLASH
+OBJECT MODULE PLACED IN .\Output\dataflash.obj
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE Code\dataflash.c OPTIMIZE(8,SIZE) BROWSE INCDIR(..\..\Include;..\Include) D
+                    -EFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\dataflash.lst) OBJECT(.\Output\dataflash.obj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* Copyright(c) 2017 Nuvoton Technology Corp. All rights reserved.                                        
+             - */
+   4          /*                                                                                                        
+             - */
+   5          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   6          
+   7          //********************************************************************************************************
+             -***
+   8          //  Website: http://www.nuvoton.com
+   9          //  E-Mail : MicroC-8bit@nuvoton.com
+  10          //  Date   : Jan/21/2017
+  11          //********************************************************************************************************
+             -***
+  12          
+  13          //********************************************************************************************************
+             -***
+  14          //  File Function: N76E003 APROM program DATAFLASH (APROM) demo code
+  15          //********************************************************************************************************
+             -***
+  16          #include "dataflash.h"
+  17          
+  18          /*--------------------------------------------------------------------------------------------------------
+             --*/
+  19          /*                                                                                                        
+             - */
+  20          /* Copyright(c) 2017 Nuvoton Technology Corp. All rights reserved.                                        
+             - */
+  21          /*                                                                                                        
+             - */
+  22          /*--------------------------------------------------------------------------------------------------------
+             --*/
+  23          
+  24          //********************************************************************************************************
+             -***
+  25          //  Nuvoton Technoledge Corp. 
+  26          //  Website: http://www.nuvoton.com
+  27          //  E-Mail : MicroC-8bit@nuvoton.com
+  28          //  Date   : Apr/21/2017
+  29          //********************************************************************************************************
+             -***
+  30          
+  31          //********************************************************************************************************
+             -***
+  32          //  File Function: N76E003 APROM program DATAFLASH (APROM) demo code
+  33          //********************************************************************************************************
+             -***
+  34          
+  35          #include "N76E003.h"
+  36          #include "Common.h"
+C51 COMPILER V9.54   DATAFLASH                                                             06/11/2018 21:01:38 PAGE 2   
+
+  37          #include "Delay.h"
+  38          #include "SFR_Macro.h"
+  39          #include "Function_define.h"
+  40          #include "dataflash.h"                          
+  41          
+  42          
+  43          
+  44          //--------------------------------------------------------------------------------------------------------
+             ----/
+  45          void Trigger_IAP(void)
+  46          {   
+  47   1          set_IAPGO;                                                                                                                                  //trigger IAP
+  48   1          if((CHPCON&SET_BIT6)==SET_BIT6)             // if fail flag is set, toggle error LED and IAP stop
+  49   1              {
+  50   2                      clr_IAPFF;
+  51   2              }
+  52   1      }
+  53          /*
+  54                          WARNING:
+  55                  No matter read or writer, when IAPFF is set 1, 
+  56                  this step process is fail. DATA should be ignore.
+  57          */
+  58          //--------------------------------------------------------------------------------------------------------
+             ----/
+  59          
+  60          /*********************************************************************************************************
+             -********
+  61          Erase APROM subroutine:
+  62                  
+  63          
+  64          **********************************************************************************************************
+             -********/                
+  65          void Erase_LDROM(unsigned int datasize,unsigned int dataaddr)
+  66          {   
+  67   1          unsigned int u16Count,i;
+  68   1              if (datasize == 0)
+  69   1                      return;
+  70   1              u16Count = datasize>>7;
+  71   1              if (datasize & 0x7F)
+  72   1                      u16Count++;
+  73   1          set_IAPEN;                                                                                                  // Enable IAP function
+  74   1                      IAPFD = 0xFF;                                                                                           // IMPORTANT !! To erase function must setting IAPFD = 0xFF 
+  75   1          IAPCN = PAGE_ERASE_LD;
+  76   1          set_LDUEN;                                                                                                  //  APROM modify Enable
+  77   1              
+  78   1          for(i=0x0000;i<u16Count;i++)                //
+  79   1          {        
+  80   2              IAPAL = LOBYTE(i*PAGE_SIZE + dataaddr);
+  81   2              IAPAH = HIBYTE(i*PAGE_SIZE + dataaddr);
+  82   2              Trigger_IAP(); 
+  83   2          }
+  84   1      //    clr_LDUEN;
+  85   1      //    clr_IAPEN;
+  86   1      }
+  87          
+  88          //--------------------------------------------------------------------------------------------------------
+             ----
+  89          void Program_LDROM(unsigned int datasize,unsigned int dataaddr,unsigned char * buf)
+  90          {   
+  91   1          unsigned int u16Count;
+  92   1      
+  93   1          set_IAPEN;
+C51 COMPILER V9.54   DATAFLASH                                                             06/11/2018 21:01:38 PAGE 3   
+
+  94   1          set_LDUEN;    
+  95   1          IAPAL = LOBYTE(dataaddr);
+  96   1          IAPAH = HIBYTE(dataaddr);
+  97   1          IAPCN = BYTE_PROGRAM_LD;
+  98   1          
+  99   1          for(u16Count=0;u16Count<datasize;u16Count++)
+ 100   1          {   
+ 101   2              IAPFD = buf[u16Count];
+ 102   2              Trigger_IAP();
+ 103   2             
+ 104   2              IAPAL++;
+ 105   2              if(IAPAL == 0)
+ 106   2              {
+ 107   3                  IAPAH++;
+ 108   3              }
+ 109   2          } 
+ 110   1                      
+ 111   1          clr_LDUEN;
+ 112   1          clr_IAPEN;
+ 113   1      }
+ 114          //--------------------------------------------------------------------------------------------------------
+             ----
+ 115          void Program_LDROM_Verify(unsigned int datasize,unsigned int dataaddr,unsigned char  *buf)
+ 116          {   
+ 117   1          unsigned int u16Count;
+ 118   1      
+ 119   1          set_IAPEN;
+ 120   1          IAPAL = LOBYTE(dataaddr);
+ 121   1          IAPAH = HIBYTE(dataaddr);
+ 122   1          IAPCN = BYTE_READ_LD;
+ 123   1      
+ 124   1          for(u16Count=0;u16Count<datasize;u16Count++)
+ 125   1          {   
+ 126   2              Trigger_IAP();
+ 127   2                      buf[u16Count] = IAPFD;
+ 128   2              IAPAL++;
+ 129   2              if(IAPAL == 0)
+ 130   2              {
+ 131   3                  IAPAH++;
+ 132   3              }
+ 133   2          } 
+ 134   1      
+ 135   1          clr_IAPEN;
+ 136   1      }
+ 137          
+ 138          
+ 139          void getdata(unsigned char datasize,unsigned int data_start_addr,unsigned char * buf)
+ 140          {
+ 141   1              Program_LDROM_Verify(datasize,data_start_addr,buf);
+ 142   1      }
+ 143          //--------------------------------------------------------------------------------------------------------
+             ----
+ 144          
+ 145          //--------------------------------------------------------------------------------------------------------
+             ----
+ 146          void savedata (unsigned char datasize,unsigned int data_addr,unsigned char * buf) 
+ 147          {
+ 148   1          Erase_LDROM(datasize,data_addr);
+ 149   1          Program_LDROM(datasize,data_addr,buf);
+ 150   1      }
+ 151          
+ 152          
+C51 COMPILER V9.54   DATAFLASH                                                             06/11/2018 21:01:38 PAGE 4   
+
+ 153          //--------------------------------------------------------------------------------------------------------
+             ----
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    461    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      18
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

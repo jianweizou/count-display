@@ -1,0 +1,137 @@
+C51 COMPILER V9.54   MAIN                                                                  02/22/2019 20:34:35 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Output\main.obj
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE Code\main.c ROM(COMPACT) OPTIMIZE(8,SIZE) BROWSE INCDIR(..\..\Include;..\In
+                    -clude) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\main.lst) OBJECT(.\Output\main.obj)
+
+line level    source
+
+   1          
+   2          #include "N76E003.h"
+   3          #include "SFR_Macro.h"
+   4          #include "Function_define.h"
+   5          #include "Common.h"
+   6          #include "Delay.h"
+   7          #include "OLED.h"
+   8          #include "count.h"
+   9          #include "dataflash.h"
+  10          
+  11          #define TH0_INIT        (65536-6667)/256 //5.0ms@XTAL=12MHz, Period = (10.85/2) ms@XTAL=22.1184MHz
+  12          #define TL0_INIT        (65536-6667)%256
+  13          #define TH1_INIT        0xE0 //2.5ms@XTAL=12MHz, Period = (5.425/2) ms@XTAL=22.1184MHz
+  14          #define TL1_INIT        0x00
+  15          
+  16          bit BIT_TMP;
+  17          
+  18          extern unsigned char is_5ms_Flag;
+  19          extern unsigned char blinktime;
+  20          extern unsigned int powercnt;
+  21          extern SysStruct        sysinfo;
+  22          extern unsigned int date_time_scroll_cnt;
+  23          extern unsigned int systime_cnt;
+  24          extern unsigned int get_battery_time;
+  25          /*********************************************************************************************************
+             -***
+  26          *    TIMER 0 interrupt subroutine
+  27          **********************************************************************************************************
+             -**/
+  28          void Timer0_ISR (void) interrupt 1          //interrupt address is 0x000B
+  29          {
+  30   1          TH0 = TH0_INIT;
+  31   1          TL0 = TL0_INIT;
+  32   1              is_5ms_Flag = 1;
+  33   1              blinktime++;
+  34   1              if (blinktime > (BLINK_H+BLINK_L))
+  35   1                      blinktime = 0;
+  36   1              powercnt++;
+  37   1              date_time_scroll_cnt++;
+  38   1              systime_cnt++;
+  39   1              get_battery_time++;
+  40   1      }
+  41          
+  42          void Timer0_Init(void)
+  43          {
+  44   1              TMOD = 0XFF;
+  45   1              TIMER0_MODE1_ENABLE;                        //Timer 0  mode configuration
+  46   1          
+  47   1              clr_T0M;
+  48   1          
+  49   1              TH0 = TH0_INIT;
+  50   1              TL0 = TL0_INIT;
+  51   1          
+  52   1              set_ET0;                                    //enable Timer0 interrupt
+C51 COMPILER V9.54   MAIN                                                                  02/22/2019 20:34:35 PAGE 2   
+
+  53   1              set_EA;                                     //enable interrupts
+  54   1              
+  55   1              set_TR0;                                    //Timer0 run
+  56   1      }
+  57          
+  58          extern unsigned int adcvalue[16];
+  59          extern unsigned char adc_cnt;
+  60          
+  61          void ADC_ISR (void) interrupt 11
+  62          {
+  63   1              char index;
+  64   1              index = adc_cnt;//&0x07;
+  65   1          clr_ADCF;                               // Clear ADC interrupt flag
+  66   1              adcvalue[index] = ADCRH;
+  67   1              adcvalue[index] = adcvalue[index]<<4;
+  68   1              adcvalue[index] |= ADCRL&0x0F;
+  69   1              adc_cnt++;
+  70   1              if (adc_cnt >= 16)
+  71   1              {
+  72   2                      clr_EADC;
+  73   2              }
+  74   1      }
+  75          
+  76          void initADC(void)
+  77          {
+  78   1              unsigned char i;
+  79   1              adc_cnt = 0;
+  80   1              for(i=0;i<16;i++)
+  81   1                      adcvalue[i] = 0;
+  82   1              PWM2_P10_OUTPUT_ENABLE;                         
+  83   1              Enable_ADC_AIN3;                                                                                                                
+  84   1              PWM2_FALLINGEDGE_TRIG_ADC;      
+  85   1              PWMPH = 0x07;                                                                                                                           //Setting PWM value          
+  86   1              PWMPL = 0xFF;
+  87   1              PWM2H = 0x02;
+  88   1              PWM2L = 0xFF;
+  89   1              set_LOAD;                                                                                                                                               // PWM run
+  90   1              set_PWMRUN;
+  91   1              // Setting ADC
+  92   1              set_EADC;                                                                                                                                               // Enable ADC interrupt (if use interrupt)
+  93   1              EA = 1; 
+  94   1              while(adc_cnt < 16);
+  95   1              set_EADC;       
+  96   1      }
+  97          
+  98          void main(void)
+  99          {
+ 100   1              Set_All_GPIO_Quasi_Mode;
+ 101   1              Timer0_Init();
+ 102   1              initADC();
+ 103   1              while(1)
+ 104   1              {
+ 105   2                      main_loop();
+ 106   2              }
+ 107   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    306    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.54   MAIN                                                                  02/22/2019 20:34:35 PAGE 3   
+
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

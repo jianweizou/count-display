@@ -1,0 +1,75 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;*** <<< Use Configuration Wizard in Context Menu >>> **
+                       *
+    2 00000000         ;<h> SONiX SNC7312 Load Table Configuration
+    3 00000000         ;   <o1> Mark_String_L                     0x33313241
+    4 00000000         ;   <o2> Mark_String_H                     0x534E4337
+    5 00000000         ;   <o3.0> Enable User Code Encyption
+    6 00000000         ;   <o3.1> Enable Multiple User Code
+    7 00000000         
+    8 00000000                 AREA             |.ARM.__at_0x60002000|, DATA, R
+EADONLY
+    9 00000000         ;Linker-defined symbols to use
+   10 00000000         ;Symbols to export
+   11 00000000         
+   12 00000000         ; EXPORT UserCodeAddr0
+   13 00000000         ; EXPORT UserCodeAddr1
+   14 00000000         ; EXPORT UserCodeAddr2
+   15 00000000         ; EXPORT UserCodeAddr3
+   16 00000000         ; EXPORT UserCodeAddr4
+   17 00000000         ; EXPORT UserCodeAddr5
+   18 00000000         
+   19 00000000         MARK
+   20 00000000 33313241        DCD              0x33313241  ;'3','1','2','A'
+   21 00000004 534E4337        DCD              0x534E4337  ;'S','N','C','7' 
+   22 00000008 00000000        DCD              0x00000000  ; 
+   23 0000000C 00000000        DCD              0x00000000  ;DLO List address
+   24 00000010         ; UserCodeAddr0
+   25 00000010 60100000        DCD              0x60100000  ;PRAM0
+   26 00000014         ; UserCodeAddr1
+   27 00000014 00000000        DCD              0x00000000  ;PRAM1
+   28 00000018         ; UserCodeAddr2
+   29 00000018 00000000        DCD              0x00000000  ;PRAM2
+   30 0000001C         ; UserCodeAddr3
+   31 0000001C 00000000        DCD              0x00000000  ;PRAM3
+   32 00000020         ; UserCodeAddr4
+   33 00000020 00000000        DCD              0x00000000  ;PRAM4
+   34 00000024         ; UserCodeAddr5
+   35 00000024 00000000        DCD              0x00000000  ;PRAM5
+   36 00000028                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M0 --apcs=interw
+ork --depend=.\obj\loadtable.d -o.\obj\loadtable.o -I"F:\workplace\count displa
+y\code\sonix evb\3.SN7312_IIC_OLED\RTE" -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\C
+MSIS\Include -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\Device\ARM\ARMCM0\Include --
+predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 521" --predef
+ine="_RTE_ SETA 1" --predefine="ARMCM0 SETA 1" --list=.\loadtable.lst Startup\L
+oadTable.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.ARM.__at_0x60002000 00000000
+
+Symbol: .ARM.__at_0x60002000
+   Definitions
+      At line 8 in file Startup\LoadTable.s
+   Uses
+      None
+Comment: .ARM.__at_0x60002000 unused
+MARK 00000000
+
+Symbol: MARK
+   Definitions
+      At line 19 in file Startup\LoadTable.s
+   Uses
+      None
+Comment: MARK unused
+2 symbols
+336 symbols in table

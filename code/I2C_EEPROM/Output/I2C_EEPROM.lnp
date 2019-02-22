@@ -1,0 +1,11 @@
+".\Output\main.obj",
+".\Output\FontData.obj",
+".\Output\OLED.obj",
+".\Output\count.obj",
+".\Output\dataflash.obj",
+".\Output\i2c.obj",
+".\Output\STARTUP.obj" 
+TO ".\Output\I2C_EEPROM" 
+PRINT(".\LST\I2C_EEPROM.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 
+XDATA( 0X0000-0X02FF )

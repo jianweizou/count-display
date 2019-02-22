@@ -1,0 +1,87 @@
+C51 COMPILER V9.54   MAIN                                                                  06/11/2018 21:01:37 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Output\main.obj
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE Code\main.c OPTIMIZE(8,SIZE) BROWSE INCDIR(..\..\Include;..\Include) DEFINE
+                    -(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\main.lst) OBJECT(.\Output\main.obj)
+
+line level    source
+
+   1          
+   2          #include "N76E003.h"
+   3          #include "SFR_Macro.h"
+   4          #include "Function_define.h"
+   5          #include "Common.h"
+   6          #include "Delay.h"
+   7          #include "OLED.h"
+   8          #include "count.h"
+   9          #include "dataflash.h"
+  10          
+  11          #define TH0_INIT        (65536-6667)/256 //5.0ms@XTAL=12MHz, Period = (10.85/2) ms@XTAL=22.1184MHz
+  12          #define TL0_INIT        (65536-6667)%256
+  13          #define TH1_INIT        0xE0 //2.5ms@XTAL=12MHz, Period = (5.425/2) ms@XTAL=22.1184MHz
+  14          #define TL1_INIT        0x00
+  15          
+  16          bit BIT_TMP;
+  17          
+  18          extern unsigned char is_5ms_Flag;
+  19          extern unsigned char blinktime;
+  20          extern unsigned int powercnt;
+  21          /*********************************************************************************************************
+             -***
+  22          *    TIMER 0 interrupt subroutine
+  23          **********************************************************************************************************
+             -**/
+  24          void Timer0_ISR (void) interrupt 1          //interrupt address is 0x000B
+  25          {
+  26   1          TH0 = TH0_INIT;
+  27   1          TL0 = TL0_INIT;
+  28   1              is_5ms_Flag = 1;
+  29   1              blinktime++;
+  30   1              if (blinktime > (BLINK_H+BLINK_L))
+  31   1                      blinktime = 0;
+  32   1              powercnt++;
+  33   1      }
+  34          
+  35          void Timer0_Init(void)
+  36          {
+  37   1              TMOD = 0XFF;
+  38   1              TIMER0_MODE1_ENABLE;                        //Timer 0  mode configuration
+  39   1          
+  40   1              clr_T0M;
+  41   1          
+  42   1              TH0 = TH0_INIT;
+  43   1              TL0 = TL0_INIT;
+  44   1          
+  45   1              set_ET0;                                    //enable Timer0 interrupt
+  46   1              set_EA;                                     //enable interrupts
+  47   1              
+  48   1              set_TR0;                                    //Timer0 run
+  49   1      }
+  50          extern SysStruct        sysinfo;
+  51          void main(void)
+  52          {
+C51 COMPILER V9.54   MAIN                                                                  06/11/2018 21:01:37 PAGE 2   
+
+  53   1              Set_All_GPIO_Quasi_Mode;
+  54   1              Timer0_Init();
+  55   1              while(1)
+  56   1              {
+  57   2                      main_loop();
+  58   2              }
+  59   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     84    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

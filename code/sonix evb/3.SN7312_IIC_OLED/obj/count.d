@@ -1,0 +1,13 @@
+.\obj\count.o: src\count.c
+.\obj\count.o: src\count.h
+.\obj\count.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\obj\count.o: H\SNC7312.h
+.\obj\count.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cm0.h
+.\obj\count.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\obj\count.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmInstr.h
+.\obj\count.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\cmsis_armcc.h
+.\obj\count.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmFunc.h
+.\obj\count.o: H\system_snc7312.h
+.\obj\count.o: src\OLED.h
+.\obj\count.o: H\sn_timer.h
+.\obj\count.o: src\fontdata.h

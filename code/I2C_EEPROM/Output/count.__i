@@ -1,0 +1,1 @@
+"Code\count.c" OPTIMIZE (8,SIZE) BROWSE INCDIR(..\..\Include;..\Include) DEFINE (FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\count.lst) OBJECT(.\Output\count.obj)

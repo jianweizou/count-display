@@ -1,0 +1,2018 @@
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE COUNT
+OBJECT MODULE PLACED IN .\Output\count.obj
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE Code\count.c LARGE ROM(COMPACT) OPTIMIZE(8,SIZE) BROWSE INCDIR(..\..\Includ
+                    -e;..\Include) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\count.lst) OBJECT(.\Output\count.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "count.h"
+   4          #include "fontdata.h"
+   5          #include "Function_define.h"
+   6          #include "OLED.h"
+   7          #include "dataflash.h"
+   8          #include "ds1302.h"
+   9          extern void Timer0_Init(void);
+  10          extern void Timer1_Delay10ms(unsigned long cnt);
+  11          extern void initADC(void);
+  12          extern void Erase_LDROM(unsigned int datasize,unsigned int dataaddr);
+  13          #define POWER_WAKEUP    1
+  14          #if POWER_WAKEUP
+  15          #define KEYINPUTMODE    P17_Input_Mode;P30_Input_Mode;P04_Input_Mode
+  16          #else
+              #define KEYINPUTMODE    P17_Input_Mode
+              #endif
+  19          #define GETKEY          P17
+  20          
+  21          code unsigned char MONTH_DAY[]={31,28,31,30,31,30,31,31,30,31,30,31};
+  22          
+  23          unsigned char stage_loopcnt = 0;
+  24          
+  25          SysStruct       sysinfo;
+  26          KEYTYPE keytype;
+  27          TIME_INFO       systime_info;
+  28          unsigned char curKey,preKey;
+  29          unsigned char debounce;
+  30          unsigned int islongpress;
+  31          unsigned char is_5ms_Flag;
+  32          unsigned char blinktime;
+  33          unsigned int systime_cnt;
+  34          unsigned int powercnt;
+  35          
+  36          #if POWER_WAKEUP
+  37          unsigned int power_debounce;
+  38          unsigned char  is_enter_charging;
+  39          unsigned char las_stage;
+  40          #endif
+  41          
+  42          unsigned char date_time_flag;
+  43          unsigned int date_time_cnt;
+  44          
+  45          unsigned char isneedUpdate_ds1302;
+  46          
+  47          unsigned char baticon[]=
+  48          {
+  49          0x00,0x00,0xF8,0xF8,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0x18,0xF8,0xF0,0xE0,0x00,
+  50          0x00,0x00,0x0F,0x0F,0x0C,0x0C,0x0C,0x0C,0x0C,0x0C,0x0C,0x0C,0x0F,0x07,0x03,0x00,
+  51          };
+  52          #if POWER_WAKEUP
+  53          unsigned char chargeicon[]=
+  54          {
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 2   
+
+  55          0xFF,0xFF,0x03,0x03,0x03,0x03,0x03,0x03,0x03,0x03,0x03,0x03,0x03,0x03,0x03,0x03,
+  56          0x03,0x03,0x03,0x03,0x03,0x03,0x03,0x03,0x03,0x03,0xFF,0xFF,0xF8,0xF8,0x00,0x00,
+  57          0xFF,0xFF,0xC0,0xC0,0xC0,0xC0,0xC0,0xC0,0xC0,0xC0,0xC0,0xC0,0xC0,0xC0,0xC0,0xC0,
+  58          0xC0,0xC0,0xC0,0xC0,0xC0,0xC0,0xC0,0xC0,0xC0,0xC0,0xFF,0xFF,0x1F,0x1F,0x00,0x00,        
+  59          };
+  60          #endif
+  61          unsigned int batlevelbuf[4] = {0x840,0x8A0,0x900,0x960};
+  62          unsigned int adcvalue[16];
+  63          unsigned char adc_cnt;
+  64          unsigned char batlevel=0xFF;
+  65          unsigned char isdisplaybaticon = 0;
+  66          
+  67          unsigned char date_time[108];
+  68          
+  69          unsigned int date_time_scroll_cnt;
+  70          unsigned char date_time_croll_index = 0;
+  71          extern bit BIT_TMP;
+  72          
+  73          unsigned int get_battery_time = 0;
+  74          
+  75          void read_time_sysinfo(void);
+  76          
+  77          void KeyInit(void)
+  78          {
+  79   1              curKey = 0;
+  80   1              preKey = 1;
+  81   1              debounce = 0;
+  82   1              islongpress = 0;
+  83   1              keytype = 0;
+  84   1              KEYINPUTMODE;
+  85   1              
+  86   1              //
+  87   1              #if POWER_WAKEUP
+  88   1              power_debounce = 0;
+  89   1              is_enter_charging = 0;
+  90   1              #endif
+  91   1      }
+  92          
+  93          void KeyScan(void)
+  94          {
+  95   1              if (is_5ms_Flag)
+  96   1              {
+  97   2                      is_5ms_Flag = 0;
+  98   2                      curKey = GETKEY;
+  99   2                      if (curKey != preKey)
+ 100   2                      {
+ 101   3                              preKey = curKey;
+ 102   3                              if ((islongpress == 0)&&(debounce > 10))
+ 103   3                              {
+ 104   4                                      keytype = SHORTKEY;
+ 105   4                              }
+ 106   3                              else if (islongpress >= 10)
+ 107   3                              {
+ 108   4                                      keytype = LONGKEY_12S;
+ 109   4                              }
+ 110   3                              else if (islongpress >= 3)
+ 111   3                              {
+ 112   4                                      keytype = LONGKEY_5S;
+ 113   4                              }
+ 114   3                              else if (islongpress >= 2)
+ 115   3                              {
+ 116   4                                      keytype = LONGKEY_2S;
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 3   
+
+ 117   4                              }
+ 118   3                              debounce = 0;
+ 119   3                              islongpress = 0;
+ 120   3                              
+ 121   3                              powercnt = 0;
+ 122   3                      }
+ 123   2                      else if(curKey == 0)
+ 124   2                      {
+ 125   3                              debounce++;
+ 126   3                              if (debounce > 200)
+ 127   3                              {
+ 128   4                                      debounce = 0;
+ 129   4                                      islongpress++;
+ 130   4                              }
+ 131   3                              powercnt = 0;
+ 132   3                      }
+ 133   2                      #if POWER_WAKEUP
+ 134   2                      //5v power check
+ 135   2                      if (P30 == 0)
+ 136   2                      {
+ 137   3                              power_debounce = 0;
+ 138   3                              if (is_enter_charging == 1)
+ 139   3                              {
+ 140   4                                      is_enter_charging = 0;
+ 141   4                                      sysinfo.sysloop = las_stage;
+ 142   4                                      sysinfo.isneedinitstage = 1;
+ 143   4                                      OLED_CLS_Windows(16,1,48,3);
+ 144   4                              }
+ 145   3                      }
+ 146   2                      else
+ 147   2                      {
+ 148   3                              powercnt = 0;
+ 149   3                              power_debounce++;
+ 150   3                              if (power_debounce > 10)
+ 151   3                              {
+ 152   4                                      //enter power charging
+ 153   4                                      power_debounce = 10;
+ 154   4                                      if (is_enter_charging == 0)
+ 155   4                                      {
+ 156   5                                              is_enter_charging = 1;
+ 157   5                                              las_stage = sysinfo.sysloop;
+ 158   5                                              sysinfo.sysloop = SYS_CHARGE;
+ 159   5                                              sysinfo.isneedinitstage = 1;
+ 160   5                                      }
+ 161   4                              }
+ 162   3                      }
+ 163   2                      #endif
+ 164   2              }
+ 165   1      }
+ 166          
+ 167          void display_Language_chinese(unsigned char isdisplay)
+ 168          {
+ 169   1              if (isdisplay == 1)
+ 170   1              {
+ 171   2                      Draw_BMP(16,0,16+16,2,(unsigned char *)(font_CHN + (ZHONG)*32));
+ 172   2                      Draw_BMP(32,0,32+16,2,font_CHN + (WEN)*32);
+ 173   2              }
+ 174   1              else
+ 175   1              {
+ 176   2                      OLED_CLS_Windows(16,0,48,2);
+ 177   2              }
+ 178   1      }
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 4   
+
+ 179          void display_Language_english(unsigned char isdisplay)
+ 180          {
+ 181   1              char * en = "ENGLISH";
+ 182   1              char i;
+ 183   1              if (isdisplay == 1)
+ 184   1              {
+ 185   2                      for(i=0;i<7;i++)
+ 186   2                              Draw_BMP(4+8*i,2,4+8+8*i,4,font_A_Z + (en[i] - 'A')*16);
+ 187   2              }
+ 188   1              else
+ 189   1              {
+ 190   2                      OLED_CLS_Windows(4,2,60,4);
+ 191   2              }
+ 192   1      }
+ 193          void Select_Language(void)
+ 194          {
+ 195   1              if (sysinfo.isneedinitstage == 1)
+ 196   1              {
+ 197   2                      sysinfo.isneedinitstage = 0;
+ 198   2                      //init 
+ 199   2                      OLED_CLS_Windows(12,1,52,3);
+ 200   2                      display_Language_chinese(1);
+ 201   2                      display_Language_english(1);            
+ 202   2                      stage_loopcnt = sysinfo.language;
+ 203   2                      blinktime = (BLINK_H+BLINK_L);
+ 204   2              }
+ 205   1              if (keytype != NULLKEY)
+ 206   1              {
+ 207   2                      if (keytype == SHORTKEY)
+ 208   2                      {
+ 209   3                              if (stage_loopcnt == CHINESE)
+ 210   3                              {
+ 211   4                                      display_Language_chinese(1);
+ 212   4                                      stage_loopcnt = ENGLISH;
+ 213   4                              }
+ 214   3                              else
+ 215   3                              {
+ 216   4                                      display_Language_english(1);
+ 217   4                                      stage_loopcnt = CHINESE;        
+ 218   4                              }
+ 219   3                              sysinfo.language = stage_loopcnt;
+ 220   3                      }
+ 221   2                      else if (keytype >= LONGKEY_2S)
+ 222   2                      {
+ 223   3                              sysinfo.language = stage_loopcnt;
+ 224   3      //                      sysinfo.sysloop = SELECT_DATE;
+ 225   3                              #if Enable_systime
+                                      sysinfo.sysloop = SELECT_TIME;
+                                      #else
+ 228   3                              sysinfo.sysloop = SELECT_NUMTYPE;
+ 229   3                              #endif
+ 230   3                              stage_loopcnt = 0;
+ 231   3                              blinktime = 0;
+ 232   3                              sysinfo.isneedinitstage = 1;
+ 233   3                              display_Language_english(0);
+ 234   3                              display_Language_chinese(0);
+ 235   3                      }
+ 236   2                      keytype = NULLKEY;
+ 237   2              }
+ 238   1              //blink
+ 239   1              if (blinktime == BLINK_H)
+ 240   1              {
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 5   
+
+ 241   2                      if (sysinfo.language == CHINESE)
+ 242   2                              display_Language_chinese(0);
+ 243   2                      else
+ 244   2                              display_Language_english(0);
+ 245   2              }       
+ 246   1              else if (blinktime == (BLINK_H+BLINK_L))
+ 247   1              {
+ 248   2                      if (sysinfo.language == CHINESE)
+ 249   2                              display_Language_chinese(1);
+ 250   2                      else
+ 251   2                              display_Language_english(1);            
+ 252   2              }
+ 253   1      }
+ 254          
+ 255          
+ 256          unsigned int getdiv(unsigned long x,unsigned long y)
+ 257          {
+ 258   1              unsigned int div = 0;
+ 259   1              while(x >= y)
+ 260   1              {
+ 261   2                      div++;
+ 262   2                      x = x - y;
+ 263   2              }
+ 264   1              return div;
+ 265   1      }
+ 266          unsigned int getremainder(unsigned long x,unsigned long y)
+ 267          {
+ 268   1              while(x >= y)
+ 269   1              {
+ 270   2                      x = x - y;
+ 271   2              }
+ 272   1              return x;
+ 273   1      }
+ 274          #if Enable_sysdate
+              void display_date_year(unsigned char isdisplay)
+              {
+                      unsigned char i;
+                      unsigned int  year;
+                      
+                      if (isdisplay == 1)
+                      {
+                              year = BASEYEAR + sysinfo.sysdate.Year - 2000;
+                              Draw_BMP(16,0,16+8,2,font2_0_9 + 16*2);//2
+                              i = getdiv(year,100);
+                              year = getremainder(year,100);
+                              Draw_BMP(24,0,24+8,2,font2_0_9 + 16*i);//
+                              i = getdiv(year,10);
+                              year = getremainder(year,10);
+                              Draw_BMP(32,0,32+8,2,font2_0_9 + 16*i);//
+                              i= year;
+                              Draw_BMP(40,0,40+8,2,font2_0_9 + 16*i);//2
+                      }
+                      else
+                      {
+                              OLED_CLS_Windows(16,0,48,2);
+                      }
+                      
+              }
+              void display_date_month(unsigned char isdisplay)
+              {
+                      unsigned char month;
+                      unsigned char i;
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 6   
+
+                      
+                      if (isdisplay == 1)
+                      {
+                              month = sysinfo.sysdate.Month;
+                              i = getdiv(month,10);
+                              month = getremainder(month,10);
+                              Draw_BMP(12,2,12+8,4,font2_0_9 + 16*i);
+                              i = month;
+                              Draw_BMP(20,2,20+8,4,font2_0_9 + 16*i);
+                              Draw_BMP(28,2,28+8,4,font2_0_9 + 16*10);// '/'
+                      }
+                      else
+                      {
+                              OLED_CLS_Windows(12,2,28,4);
+                      }
+                      
+              }
+              void display_date_day(unsigned char isdisplay)
+              {
+                      unsigned char day;
+                      unsigned char i;
+                      
+                      if (isdisplay == 1)
+                      {
+                              day = sysinfo.sysdate.Day;
+                              i = getdiv(day,10);
+                              day = getremainder(day,10);
+                              Draw_BMP(36,2,36+8,4,font2_0_9 + 16*i);
+                              i = day;
+                              Draw_BMP(44,2,44+8,4,font2_0_9 + 16*i);
+                      }
+                      else
+                      {
+                              OLED_CLS_Windows(36,2,54,4);
+                      }
+                      
+              }
+              void Select_Date(void)
+              {
+                      unsigned char maxday;
+                      unsigned char year;
+                      
+                      if (sysinfo.isneedinitstage == 1)
+                      {
+                              sysinfo.isneedinitstage = 0;
+                              //init 
+                              display_Language_chinese(0);
+                              display_Language_english(0);
+                              //date
+                              display_date_year(1);
+                              display_date_month(1);
+                              display_date_day(1);
+                      }       
+                      if (keytype != NULLKEY)
+                      {
+                              if (keytype == SHORTKEY)
+                              {
+                                      
+                                      if (stage_loopcnt == YEAR)
+                                              sysinfo.sysdate.Year++;
+                                      else if (stage_loopcnt == MONTH)
+                                      {
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 7   
+
+                                              sysinfo.sysdate.Month++;
+                                              if (sysinfo.sysdate.Month > 12)
+                                                      sysinfo.sysdate.Month = 1;
+                                      }
+                                      else if (stage_loopcnt == DAY)
+                                      {
+                                              maxday = MONTH_DAY[sysinfo.sysdate.Month-1];
+                                              sysinfo.sysdate.Day++;
+                                              year = BASEYEAR + sysinfo.sysdate.Year;
+                                              if((year%4==0&&year%100!=0)||(year%400==0))
+                                              {
+                                                      if (sysinfo.sysdate.Month == 2)
+                                                              maxday = 29;
+                                              }
+                                              if (sysinfo.sysdate.Day > maxday)
+                                                      sysinfo.sysdate.Day = 1;
+                                      }
+                              }
+                              else if (keytype >= LONGKEY_2S)
+                              {
+                                      if (stage_loopcnt == DAY)
+                                      {
+                                              sysinfo.sysloop = SELECT_TIME;
+                                              sysinfo.isneedinitstage = 1;
+                                              stage_loopcnt = 0;
+                                              blinktime = 0;
+                                              display_date_year(0);
+                                              display_date_month(0);
+                                              display_date_day(0);
+                                      }
+                                      else
+                                              stage_loopcnt++;
+                                      if (stage_loopcnt == MONTH)
+                                              display_date_year(1);
+                                      if (stage_loopcnt == DAY)
+                                      {
+                                              display_date_month(1);
+                                      }
+                              }
+                              keytype = NULLKEY;
+                      }
+                      //blink
+                      if (blinktime == BLINK_H)
+                      {
+                              if (stage_loopcnt == YEAR)
+                                      display_date_year(0);
+                              else if (stage_loopcnt == MONTH)
+                                      display_date_month(0);
+                              else
+                                      display_date_day(0);
+                      }       
+                      else if (blinktime == (BLINK_H+BLINK_L))
+                      {
+                              if (stage_loopcnt == YEAR)
+                                      display_date_year(1);
+                              else if (stage_loopcnt == MONTH)
+                                      display_date_month(1);
+                              else
+                                      display_date_day(1);    
+                      }
+                      
+              }
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 8   
+
+              #endif
+ 428          #if Enable_systime
+              void display_time_hr(unsigned char isdisplay)
+              {
+                      unsigned char hr;
+                      unsigned char i;
+                      
+                      if (isdisplay == 1)
+                      {
+                              hr = sysinfo.systime.Hr;
+                              i = getdiv(hr,10);
+                              hr = getremainder(hr,10);
+                              Draw_BMP(3,1,3+8,3,font2_0_9 + 16*i);
+                              i = hr;
+                              Draw_BMP(11,1,11+8,3,font2_0_9 + 16*i);
+                              
+                              //':'
+                              Draw_BMP(19,1,23,3,colon);
+                      }
+                      else
+                      {
+                              OLED_CLS_Windows(3,1,19,3);
+                      }       
+                      
+              }
+              void display_time_min(unsigned char isdisplay)
+              {
+                      unsigned char min;
+                      unsigned char i;
+                      if (isdisplay == 1)
+                      {
+                              min = sysinfo.systime.Min;
+                              i = getdiv(min,10);
+                              min = getremainder(min,10);
+                              Draw_BMP(24,1,24+8,3,font2_0_9 + 16*i);
+                              i = min;
+                              Draw_BMP(32,1,32+8,3,font2_0_9 + 16*i);
+                              
+                              //':'
+                              Draw_BMP(40,1,44,3,colon);
+                      }
+                      else
+                      {
+                              OLED_CLS_Windows(24,1,40,3);
+                      }       
+              
+              }
+              void display_time_sec(unsigned char isdisplay)
+              {
+                      unsigned char sec;
+                      unsigned char i;
+                      if (isdisplay == 1)
+                      {
+                              sec = sysinfo.systime.Sec;
+                              i = getdiv(sec,10);
+                              sec = getremainder(sec,10);
+                              Draw_BMP(45,1,45+8,3,font2_0_9 + 16*i);
+                              i = sec;
+                              Draw_BMP(53,1,53+8,3,font2_0_9 + 16*i);
+                      }
+                      else
+                      {
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 9   
+
+                              OLED_CLS_Windows(45,1,61,3);
+                      }
+              }
+              void Select_Time(void)
+              {
+                      if (sysinfo.isneedinitstage == 1)
+                      {
+                              sysinfo.isneedinitstage = 0;
+                              //init 
+                              display_Language_chinese(0);
+                              display_Language_english(0);
+                              read_time_sysinfo();
+                              //date
+                              display_time_hr(1);
+                              display_time_min(1);
+                              display_time_sec(1);
+                      }       
+                      if (keytype != NULLKEY)
+                      {
+                              if (keytype == SHORTKEY)
+                              {
+                                      isneedUpdate_ds1302 = 1;
+                                      if (stage_loopcnt == HR)
+                                      {
+                                              sysinfo.systime.Hr++;
+                                              if (sysinfo.systime.Hr > 23)
+                                                      sysinfo.systime.Hr = 0;
+                                      }
+                                      else if (stage_loopcnt == MIN)
+                                      {
+                                              sysinfo.systime.Min++;
+                                              if (sysinfo.systime.Min > 59)
+                                                      sysinfo.systime.Min = 0;
+                                      }
+                                      else if (stage_loopcnt == SEC)
+                                      {
+                                              sysinfo.systime.Sec++;
+                                              if (sysinfo.systime.Sec > 59)
+                                                      sysinfo.systime.Sec = 0;
+                                      }
+                              }
+                              else if (keytype >= LONGKEY_2S)
+                              {
+                                      if (stage_loopcnt == SEC)
+                                      {
+                                              //
+                                              if (isneedUpdate_ds1302)
+                                              {
+                                                      isneedUpdate_ds1302 = 0;
+                                                      //write time to ds1302
+                                                      #if Enable_sysdate
+                                                      systime_info.year = sysinfo.sysdate.Year;
+                                                      systime_info.month = sysinfo.sysdate.Month;
+                                                      systime_info.date = sysinfo.sysdate.Day;
+                                                      #endif
+                                                      systime_info.hr = sysinfo.systime.Hr;
+                                                      systime_info.min = sysinfo.systime.Min;
+                                                      systime_info.sec = sysinfo.systime.Sec;
+                                                      writetimer(&systime_info);
+                                              }
+                                              sysinfo.sysloop = SELECT_NUMTYPE;
+                                              sysinfo.isneedinitstage = 1;
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 10  
+
+                                              stage_loopcnt = 0;
+                                              blinktime = 0;
+                                              display_time_hr(0);
+                                              display_time_min(0);
+                                              display_time_sec(0);
+                                      }
+                                      else
+                                              stage_loopcnt++;
+                                      if (stage_loopcnt == MIN)
+                                              display_time_hr(1);
+                                      if (stage_loopcnt == SEC)
+                                      {
+                                              display_time_min(1);
+                                      }
+                              }
+                              keytype = NULLKEY;
+                      }
+                      //blink
+                      if (blinktime == BLINK_H)
+                      {
+                              if (stage_loopcnt == HR)
+                                      display_time_hr(0);
+                              else if (stage_loopcnt == MIN)
+                                      display_time_min(0);
+                              else
+                                      display_time_sec(0);
+                      }       
+                      else if (blinktime == (BLINK_H+BLINK_L))
+                      {
+                              if (stage_loopcnt == HR)
+                                      display_time_hr(1);
+                              else if (stage_loopcnt == MIN)
+                                      display_time_min(1);
+                              else
+                                      display_time_sec(1);    
+                      }       
+              }
+              #endif
+ 589          
+ 590          void display_cnt_stage_arabnum(unsigned char isdisplay)
+ 591          {
+ 592   1              char * nor = "NORMAL";
+ 593   1              char i;
+ 594   1              if (sysinfo.language == ENGLISH)
+ 595   1              {
+ 596   2                      if (isdisplay == 1)
+ 597   2                      {
+ 598   3                              for (i=0;i<6;i++)
+ 599   3                              {
+ 600   4                                      Draw_BMP(8 + i*8,0,8+8 + i*8,2,font_A_Z + (nor[i] - 'A')*16);
+ 601   4                              }
+ 602   3                      }
+ 603   2                      else
+ 604   2                      {
+ 605   3                              OLED_CLS_Windows(8,0,56,2);
+ 606   3                      }               
+ 607   2              }
+ 608   1              else
+ 609   1              {
+ 610   2                      if (isdisplay == 1)
+ 611   2                      {
+ 612   3                              Draw_BMP(16,0,16+16,2,font_CHN + (SHU)*32);
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 11  
+
+ 613   3                              Draw_BMP(32,0,32+16,2,font_CHN + (ZI)*32);
+ 614   3                      }
+ 615   2                      else
+ 616   2                      {
+ 617   3                              OLED_CLS_Windows(16,0,48,2);
+ 618   3                      }
+ 619   2              }
+ 620   1      }
+ 621          void display_cnt_stage_tibnum(unsigned char isdisplay)
+ 622          {       
+ 623   1              char * nor = "TIBETAN";
+ 624   1              char i;
+ 625   1              if (sysinfo.language == ENGLISH)
+ 626   1              {
+ 627   2                      if (isdisplay == 1)
+ 628   2                      {
+ 629   3                              for (i=0;i<7;i++)
+ 630   3                              {
+ 631   4                                      Draw_BMP(4+ i*8,2,8+4+ i*8,4,font_A_Z + (nor[i] - 'A')*16);
+ 632   4                              }
+ 633   3                      }
+ 634   2                      else
+ 635   2                      {
+ 636   3                              OLED_CLS_Windows(4,2,60,4);
+ 637   3                      }               
+ 638   2              }
+ 639   1              else
+ 640   1              {
+ 641   2                      if (isdisplay == 1)
+ 642   2                      {
+ 643   3                              Draw_BMP(0,2,0+16,4,font_CHN + (ZANG)*32);
+ 644   3                              Draw_BMP(16,2,16+16,4,font_CHN + (WEN)*32);             
+ 645   3                              Draw_BMP(32,2,16+32,4,font_CHN + (SHU)*32);
+ 646   3                              Draw_BMP(48,2,48+16,4,font_CHN + (ZI)*32);
+ 647   3                      }
+ 648   2                      else
+ 649   2                      {
+ 650   3                              OLED_CLS_Windows(0,2,64,4);
+ 651   3                      }
+ 652   2              }
+ 653   1      }
+ 654          void Select_NumType(void)
+ 655          {
+ 656   1              if (sysinfo.isneedinitstage == 1)
+ 657   1              {
+ 658   2                      sysinfo.isneedinitstage = 0;
+ 659   2                      display_cnt_stage_arabnum(1);
+ 660   2                      display_cnt_stage_tibnum(1);
+ 661   2                      stage_loopcnt = sysinfo.numtype;
+ 662   2                      blinktime = (BLINK_H+BLINK_L);
+ 663   2              }       
+ 664   1              if (keytype != NULLKEY)
+ 665   1              {
+ 666   2                      if (keytype == SHORTKEY)
+ 667   2                      {
+ 668   3                              if (stage_loopcnt == TIBENUM)
+ 669   3                              {
+ 670   4                                      display_cnt_stage_tibnum(1);
+ 671   4                                      stage_loopcnt = ARABNUM;
+ 672   4                              }
+ 673   3                              else
+ 674   3                              {
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 12  
+
+ 675   4                                      display_cnt_stage_arabnum(1);
+ 676   4                                      stage_loopcnt = TIBENUM;
+ 677   4                              }
+ 678   3                              sysinfo.numtype = stage_loopcnt;
+ 679   3                      }
+ 680   2                      else if (keytype >= LONGKEY_2S)
+ 681   2                      {
+ 682   3                              sysinfo.sysloop = CNT_STAGE;
+ 683   3                              sysinfo.numtype = stage_loopcnt;
+ 684   3                              stage_loopcnt = 0;
+ 685   3                              blinktime = 0;
+ 686   3                              sysinfo.isneedinitstage = 1;
+ 687   3                              display_cnt_stage_arabnum(0);
+ 688   3                              display_cnt_stage_tibnum(0);                    
+ 689   3                      }
+ 690   2                      keytype = NULLKEY;
+ 691   2              }
+ 692   1              //blink
+ 693   1              if (blinktime == BLINK_H)
+ 694   1              {
+ 695   2                      if (stage_loopcnt == TIBENUM)
+ 696   2                              display_cnt_stage_tibnum(0);
+ 697   2                      else if (stage_loopcnt == ARABNUM)
+ 698   2                              display_cnt_stage_arabnum(0);
+ 699   2              }       
+ 700   1              else if (blinktime == (BLINK_H+BLINK_L))
+ 701   1              {
+ 702   2                      if (stage_loopcnt == TIBENUM)
+ 703   2                              display_cnt_stage_tibnum(1);
+ 704   2                      else if (stage_loopcnt == ARABNUM)
+ 705   2                              display_cnt_stage_arabnum(1);
+ 706   2              }       
+ 707   1      }
+ 708          #if Enable_sysdate
+              void display_cnt_stage_date(unsigned char isdisplay)
+              {
+                      unsigned int temp;
+                      unsigned char i;
+                      if (isdisplay == 1)
+                      {
+                              
+                              temp = sysinfo.sysdate.Day;
+                              i = getdiv(temp,10);
+                              temp = getremainder(temp,10);
+                              Draw_BMP(52,0,58,1,font1_0_9 + 6*i);
+                              i = temp;
+                              Draw_BMP(58,0,64,1,font1_0_9 + 6*i);
+                              
+                              // '/'
+                              Draw_BMP(46,0,52,1,font1_0_9 + 6*10);
+                              
+                              temp = sysinfo.sysdate.Month;
+                              i = getdiv(temp,10);
+                              temp = getremainder(temp,10);
+                              Draw_BMP(34,0,40,1,font1_0_9 + 6*i);
+                              i = temp;
+                              Draw_BMP(40,0,46,1,font1_0_9 + 6*i);
+              
+                              // '/'
+                              Draw_BMP(28,0,34,1,font1_0_9 + 6*10);
+                              
+                              temp = BASEYEAR + sysinfo.sysdate.Year - 2000;
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 13  
+
+                              Draw_BMP(4,0,10,1,font1_0_9 + 6*2);//2
+                              i = getdiv(temp,100);
+                              temp = getremainder(temp,100);
+                              Draw_BMP(10,0,16,1,font1_0_9 + 6*i);//
+                              i = getdiv(temp,10);
+                              temp = getremainder(temp,10);
+                              Draw_BMP(16,0,22,1,font1_0_9 + 6*i);//
+                              i= temp;
+                              Draw_BMP(22,0,28,1,font1_0_9 + 6*i);//2         
+                              
+                      }
+                      else
+                      {
+                              OLED_CLS_Windows(4,0,64,2);
+                      }
+              }
+              #endif
+ 754          #if Enable_systime
+              void display_cnt_stage_time(unsigned char isdisplay)
+              {
+                      unsigned int temp;
+                      unsigned char i;
+                      if (isdisplay == 1)
+                      {
+                              temp = sysinfo.systime.Sec;
+                              i = getdiv(temp,10);
+                              temp = getremainder(temp,10);
+                              Draw_BMP(52,0,58,1,font1_0_9 + 6*i);
+                              i = temp;
+                              Draw_BMP(58,0,64,1,font1_0_9 + 6*i);
+                              
+                              // '/'
+                              Draw_BMP(49,0,52,1,colon1);
+                              
+                              temp = sysinfo.systime.Min;
+                              i = getdiv(temp,10);
+                              temp = getremainder(temp,10);
+                              Draw_BMP(37,0,43,1,font1_0_9 + 6*i);
+                              i = temp;
+                              Draw_BMP(43,0,49,1,font1_0_9 + 6*i);
+              
+                              // '/'
+                              Draw_BMP(34,0,37,1,colon1);
+                              
+                              temp = sysinfo.systime.Hr;
+                              i = getdiv(temp,10);
+                              temp = getremainder(temp,10);
+                              Draw_BMP(22,0,28,1,font1_0_9 + 6*i);//
+                              i= temp;
+                              Draw_BMP(28,0,34,1,font1_0_9 + 6*i);//2         
+                      }
+                      else
+                      {
+                              OLED_CLS_Windows(4,0,64,2);
+                      }
+              }
+              #endif
+ 794          unsigned int val = 0;
+ 795          void display_cnt_stage_cnt(unsigned long cnt,unsigned char isdisplay)
+ 796          {
+ 797   1              
+ 798   1              unsigned char i;
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 14  
+
+ 799   1              unsigned long temp;
+ 800   1              unsigned char nextdisplay=0; 
+ 801   1              unsigned char start_index=0;
+ 802   1              if (isdisplay == 0)
+ 803   1              {
+ 804   2                      OLED_CLS_Windows(0,2,64,4);
+ 805   2                      return;
+ 806   2              }
+ 807   1              temp = cnt;
+ 808   1              if (sysinfo.numtype == ARABNUM)
+ 809   1              {
+ 810   2                      
+ 811   2                      #define CNT_START_ARABNUM       12
+ 812   2                      #define ARABNUM_SIZE    8
+ 813   2                      start_index = CNT_START_ARABNUM;
+ 814   2                      i = getdiv(temp,10000);
+ 815   2                      temp = getremainder(temp,10000);
+ 816   2                      if (i != 0)
+ 817   2                      {
+ 818   3                              Draw_BMP(start_index,2,start_index+ARABNUM_SIZE,4,font2_0_9 + 16*i);
+ 819   3                              nextdisplay = 1;
+ 820   3                              start_index+=ARABNUM_SIZE;
+ 821   3                      }
+ 822   2                      else
+ 823   2                      {
+ 824   3                              start_index+=ARABNUM_SIZE>>1;
+ 825   3                      }
+ 826   2                      
+ 827   2                      i = getdiv(temp,1000);
+ 828   2                      temp = getremainder(temp,1000);
+ 829   2                      if ((nextdisplay == 1)||(i != 0))
+ 830   2                      {
+ 831   3                              nextdisplay = 1;
+ 832   3                              Draw_BMP(start_index,2,start_index+ARABNUM_SIZE,4,font2_0_9 + 16*i);
+ 833   3                              start_index+=ARABNUM_SIZE;
+ 834   3                      }
+ 835   2                      else
+ 836   2                      {
+ 837   3                              start_index+=ARABNUM_SIZE>>1;
+ 838   3                      }
+ 839   2                      
+ 840   2                      i = getdiv(temp,100);
+ 841   2                      temp = getremainder(temp,100);
+ 842   2                      if ((nextdisplay == 1)||(i != 0))
+ 843   2                      {
+ 844   3                              nextdisplay = 1;
+ 845   3                              Draw_BMP(start_index,2,start_index+ARABNUM_SIZE,4,font2_0_9 + 16*i);
+ 846   3                              start_index+=ARABNUM_SIZE;
+ 847   3                      }
+ 848   2                      else
+ 849   2                      {
+ 850   3                              start_index+=ARABNUM_SIZE>>1;
+ 851   3                      }
+ 852   2                      
+ 853   2                      i = getdiv(temp,10);
+ 854   2                      temp = getremainder(temp,10);
+ 855   2                      if ((nextdisplay == 1)||(i != 0))
+ 856   2                      {
+ 857   3                              nextdisplay = 1;
+ 858   3                              Draw_BMP(start_index,2,start_index+ARABNUM_SIZE,4,font2_0_9 + 16*i);
+ 859   3                              start_index+=ARABNUM_SIZE;
+ 860   3                      }
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 15  
+
+ 861   2                      else
+ 862   2                      {
+ 863   3                              start_index+=ARABNUM_SIZE>>1;
+ 864   3                      }
+ 865   2                      
+ 866   2                      i = temp;
+ 867   2                      Draw_BMP(start_index,2,start_index+ARABNUM_SIZE,4,font2_0_9 + 16*i);
+ 868   2              }
+ 869   1              else
+ 870   1              {
+ 871   2                      #define CNT_START_TIBENUM       2
+ 872   2                      #define TIBENUM_SIZE    12
+ 873   2                      start_index = CNT_START_TIBENUM;
+ 874   2                      i = getdiv(temp,10000);
+ 875   2                      temp = getremainder(temp,10000);
+ 876   2                      if (i != 0)
+ 877   2                      {
+ 878   3                              Draw_BMP(start_index,2,start_index+TIBENUM_SIZE,4,t0 + 24*i);
+ 879   3                              nextdisplay = 1;
+ 880   3                              start_index+=TIBENUM_SIZE;
+ 881   3                      }
+ 882   2                      else
+ 883   2                              start_index+=TIBENUM_SIZE>>1;
+ 884   2                      
+ 885   2                      i = getdiv(temp,1000);
+ 886   2                      temp = getremainder(temp,1000);
+ 887   2                      if ((nextdisplay == 1)||(i != 0))
+ 888   2                      {
+ 889   3                              Draw_BMP(start_index,2,start_index+TIBENUM_SIZE,4,t0 + 24*i);
+ 890   3                              nextdisplay = 1;
+ 891   3                              start_index+=TIBENUM_SIZE;
+ 892   3                      }
+ 893   2                      else
+ 894   2                              start_index+=TIBENUM_SIZE>>1;
+ 895   2                      
+ 896   2                      i = getdiv(temp,100);
+ 897   2                      temp = getremainder(temp,100);
+ 898   2                      if ((nextdisplay == 1)||(i != 0))
+ 899   2                      {
+ 900   3                              Draw_BMP(start_index,2,start_index+TIBENUM_SIZE,4,t0 + 24*i);
+ 901   3                              nextdisplay = 1;
+ 902   3                              start_index+=TIBENUM_SIZE;
+ 903   3                      }
+ 904   2                      else
+ 905   2                              start_index+=TIBENUM_SIZE>>1;
+ 906   2                      
+ 907   2                      i = getdiv(temp,10);
+ 908   2                      temp = getremainder(temp,10);
+ 909   2                      if ((nextdisplay == 1)||(i != 0))
+ 910   2                      {
+ 911   3                              Draw_BMP(start_index,2,start_index+TIBENUM_SIZE,4,t0 + 24*i);
+ 912   3                              nextdisplay = 1;
+ 913   3                              start_index+=TIBENUM_SIZE;
+ 914   3                      }
+ 915   2                      else
+ 916   2                              start_index+=TIBENUM_SIZE>>1;
+ 917   2                      
+ 918   2                      i = temp;
+ 919   2                      Draw_BMP(start_index,2,start_index+TIBENUM_SIZE,4,t0 + 24*i);   
+ 920   2              }
+ 921   1      }
+ 922          
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 16  
+
+ 923          unsigned char ischangebatlevel_cnt = 0;
+ 924          
+ 925          unsigned char getbatlever(unsigned char ischarging)
+ 926          {
+ 927   1              unsigned char i,j;
+ 928   1              unsigned int curval = 0;
+ 929   1              unsigned char temp=0xFF;
+ 930   1              if (adc_cnt >= 16)
+ 931   1              {
+ 932   2                      clr_EADC;
+ 933   2                      adc_cnt = 0;
+ 934   2                      for(i=0;i<16;i++)
+ 935   2                      {
+ 936   3                              for (j = i+1;j<16;j++)
+ 937   3                              {
+ 938   4                                      curval = adcvalue[j];
+ 939   4                                      if (curval > adcvalue[i])
+ 940   4                                      {
+ 941   5                                              adcvalue[j] = adcvalue[i];
+ 942   5                                              adcvalue[i] = curval;
+ 943   5                                      }
+ 944   4                              }
+ 945   3                      }
+ 946   2                      curval = 0;
+ 947   2                      for (i = 4; i<12;i++)
+ 948   2                              curval+=adcvalue[i];
+ 949   2                      curval = curval>>3;
+ 950   2                      if (ischarging == 1)
+ 951   2                              curval -= 0x20;
+ 952   2                      
+ 953   2                      
+ 954   2                      if (val == 0)
+ 955   2                              val = curval;
+ 956   2                      else
+ 957   2                      {                       
+ 958   3                              if (curval > (val+5))
+ 959   3                              {
+ 960   4                                      val++;
+ 961   4                                      return 0xFF;
+ 962   4                                      //curval = val+5;
+ 963   4                              }
+ 964   3                              else if ((curval+5) < val)
+ 965   3                              {
+ 966   4                                      val--;
+ 967   4                                      return 0xFF;
+ 968   4                                      //curval = val-5;
+ 969   4                              }
+ 970   3      //                      curval = curval >> 1;
+ 971   3      //                      val = val >> 1;
+ 972   3                              curval = (curval +val) >> 1;
+ 973   3                              if (ischarging == 1)
+ 974   3                              {                               
+ 975   4                                      if (curval > val)
+ 976   4                                      {
+ 977   5                                              val = curval;
+ 978   5      //                                      val = val << 1;
+ 979   5                                      }
+ 980   4                              }
+ 981   3                              else
+ 982   3                              {
+ 983   4                                      if (val > curval)
+ 984   4                                      {
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 17  
+
+ 985   5                                              val = curval;
+ 986   5      //                                      val = val << 1;
+ 987   5                                      }
+ 988   4                              }
+ 989   3                              
+ 990   3                      }
+ 991   2                      
+ 992   2                      
+ 993   2                      if (isdisplaybaticon == 0)
+ 994   2                      {
+ 995   3                              if (val > batlevelbuf[3])
+ 996   3                                      temp =  4;
+ 997   3                              else if (val > batlevelbuf[2])
+ 998   3                                      temp =  3;
+ 999   3                              else if (val > batlevelbuf[1])
+1000   3                                      temp =  2;
+1001   3                              else if (val > batlevelbuf[0])
+1002   3                                      temp =  1;
+1003   3                              else 
+1004   3                                      temp =  0;
+1005   3                              ischangebatlevel_cnt = 0;
+1006   3      //                      set_EADC;
+1007   3                      }
+1008   2                      else
+1009   2                      {
+1010   3                              if (val < (batlevelbuf[0] - 0x08))
+1011   3                                      temp =  0;
+1012   3                              else if ((val > (batlevelbuf[0] + 0x08))&&(val < (batlevelbuf[1] - 0x08)))
+1013   3                              {
+1014   4                                      temp =  1;
+1015   4                              }
+1016   3                              else if ((val > (batlevelbuf[1] + 0x08))&&(val < (batlevelbuf[2] - 0x08)))
+1017   3                              {
+1018   4                                      temp =  2;
+1019   4                              }
+1020   3                              else if ((val > (batlevelbuf[2] + 0x08))&&(val < (batlevelbuf[3] - 0x08)))
+1021   3                              {
+1022   4                                      temp =  3;
+1023   4                              }
+1024   3                              else if (val > (batlevelbuf[3] + 0x08))
+1025   3                              {
+1026   4                                      temp =  4;
+1027   4                              }
+1028   3                              
+1029   3                              if (temp != batlevel)
+1030   3                              {
+1031   4                                      ischangebatlevel_cnt++;
+1032   4                                      if (ischangebatlevel_cnt < 5)
+1033   4                                      {
+1034   5                                              temp = batlevel;
+1035   5                                      }
+1036   4                                      else
+1037   4                                      {
+1038   5                                              ischangebatlevel_cnt = 0;
+1039   5                                              if (ischarging == 1)
+1040   5                                              {
+1041   6                                                      if (temp <= batlevel)
+1042   6                                                              temp = batlevel;
+1043   6                                              }
+1044   5                                              else
+1045   5                                              {
+1046   6                                                      if (temp >= batlevel)
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 18  
+
+1047   6                                                              temp = batlevel;
+1048   6                                              }
+1049   5                                      }
+1050   4                              }
+1051   3                              else
+1052   3                                      ischangebatlevel_cnt = 0;
+1053   3                      }
+1054   2      //              set_EADC;
+1055   2              }
+1056   1              return temp;
+1057   1      }
+1058          
+1059          void display_baticonlevel(unsigned char level)
+1060          {
+1061   1              unsigned char i;
+1062   1              if (level == 0)
+1063   1              {
+1064   2                      for (i = 0; i < 8;i++)
+1065   2                      {
+1066   3                              baticon[4+i] = 0x18;
+1067   3                              baticon[20+i] = 0x0C;
+1068   3                      }
+1069   2              }
+1070   1              else if(level == 1)
+1071   1              {
+1072   2                      for (i = 0; i < 2;i++)
+1073   2                      {
+1074   3                              baticon[4+i] = 0xF8;
+1075   3                              baticon[20+i] = 0x0F;
+1076   3                      }
+1077   2                      for (i = 2; i < 8;i++)
+1078   2                      {
+1079   3                              baticon[4+i] = 0x18;
+1080   3                              baticon[20+i] = 0x0C;
+1081   3                      }
+1082   2              }
+1083   1              else if(level == 2)
+1084   1              {
+1085   2                      for (i = 0; i < 4;i++)
+1086   2                      {
+1087   3                              baticon[4+i] = 0xF8;
+1088   3                              baticon[20+i] = 0x0F;
+1089   3                      }
+1090   2                      for (i = 4; i < 8;i++)
+1091   2                      {
+1092   3                              baticon[4+i] = 0x18;
+1093   3                              baticon[20+i] = 0x0C;
+1094   3                      }
+1095   2              }
+1096   1              else if(level == 3)
+1097   1              {
+1098   2                      for (i = 0; i < 6;i++)
+1099   2                      {
+1100   3                              baticon[4+i] = 0xF8;
+1101   3                              baticon[20+i] = 0x0F;
+1102   3                      }
+1103   2                      for (i = 6; i < 8;i++)
+1104   2                      {
+1105   3                              baticon[4+i] = 0x18;
+1106   3                              baticon[20+i] = 0x0C;
+1107   3                      }
+1108   2              }
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 19  
+
+1109   1              else
+1110   1              {
+1111   2                      for (i = 0; i < 8;i++)
+1112   2                      {
+1113   3                              baticon[4+i] = 0xF8;
+1114   3                              baticon[20+i] = 0x0F;
+1115   3                      }
+1116   2              }
+1117   1              isdisplaybaticon = 1;
+1118   1              Draw_BMP(0,0,16,2,baticon);
+1119   1      }
+1120          
+1121          void display_baticon(void)
+1122          {
+1123   1              unsigned char level;
+1124   1              level = getbatlever(0);
+1125   1              if (level != 0xFF)
+1126   1              {
+1127   2                      if (batlevel != level)
+1128   2                      {
+1129   3                              batlevel = level;
+1130   3                              display_baticonlevel(batlevel);
+1131   3                      }
+1132   2                      sysinfo.lastpower = level;
+1133   2                      adc_cnt = 0;
+1134   2      //              set_EADC;
+1135   2              }
+1136   1      }
+1137          
+1138          #if Enable_systime
+              void memcopy(unsigned char *src,unsigned char *dest,unsigned int len)
+              {
+                      unsigned int i;
+                      for(i=0; i<len;i++)
+                      {
+                              dest[i] = src[i];
+                      }
+              }
+              void display_date_time_scroll_init(void)
+              {
+                      unsigned int temp;
+                      unsigned char i;
+                      //2018/01/01 08:00:00
+                      #if Enable_sysdate
+                      //year
+                      memcopy((unsigned char *)(font1_0_9 + 6*2),(unsigned char*)date_time,6);
+                      temp = BASEYEAR + sysinfo.sysdate.Year - 2000;
+                      i = getdiv(temp,100);
+                      temp = getremainder(temp,100);
+                      memcopy((unsigned char *)(font1_0_9 + 6*i),(unsigned char*)(date_time+6),6);
+                      i = getdiv(temp,10);
+                      temp = getremainder(temp,10);
+                      memcopy((unsigned char *)(font1_0_9 + 6*i),(unsigned char*)(date_time+12),6);
+                      i= temp;
+                      memcopy((unsigned char *)(font1_0_9 + 6*i),(unsigned char*)(date_time+18),6);
+                      
+                      // '/'
+                      memcopy((unsigned char *)(font1_0_9 + 6*10),(unsigned char*)(date_time+24),6);
+                      
+                      //month
+                      temp = sysinfo.sysdate.Month;
+                      i = getdiv(temp,10);
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 20  
+
+                      temp = getremainder(temp,10);
+                      memcopy((unsigned char *)(font1_0_9 + 6*i),(unsigned char*)(date_time+30),6);
+                      i = temp;
+                      memcopy((unsigned char *)(font1_0_9 + 6*i),(unsigned char*)(date_time+36),6);
+              
+                      // '/'
+                      memcopy((unsigned char *)(font1_0_9 + 6*10),(unsigned char*)(date_time+42),6);
+                      
+                      //day
+                      temp = sysinfo.sysdate.Day;
+                      i = getdiv(temp,10);
+                      temp = getremainder(temp,10);
+                      memcopy((unsigned char *)(font1_0_9 + 6*i),(unsigned char*)(date_time+48),6);
+                      i = temp;
+                      memcopy((unsigned char *)(font1_0_9 + 6*i),(unsigned char*)(date_time+54),6);
+                      #endif
+                      //' '
+                      date_time[60] = 0;
+                      date_time[61] = 0;
+                      date_time[62] = 0;
+                      
+                      //hr
+                      temp = sysinfo.systime.Hr;
+                      i = getdiv(temp,10);
+                      temp = getremainder(temp,10);
+                      memcopy((unsigned char *)(font1_0_9 + 6*i),(unsigned char*)(date_time+63),6);
+                      i= temp;
+                      memcopy((unsigned char *)(font1_0_9 + 6*i),(unsigned char*)(date_time+69),6);           
+                      
+                      // ':'
+                      memcopy((unsigned char *)(colon1),(unsigned char*)(date_time+75),3);
+                      
+                      //min
+                      temp = sysinfo.systime.Min;
+                      i = getdiv(temp,10);
+                      temp = getremainder(temp,10);
+                      memcopy((unsigned char *)(font1_0_9 + 6*i),(unsigned char*)(date_time+78),6);           
+                      i = temp;
+                      memcopy((unsigned char *)(font1_0_9 + 6*i),(unsigned char*)(date_time+84),6);   
+                      
+                      // ':'
+                      memcopy((unsigned char *)(colon1),(unsigned char*)(date_time+90),3);
+              
+                      temp = sysinfo.systime.Sec;
+                      i = getdiv(temp,10);
+                      temp = getremainder(temp,10);
+                      memcopy((unsigned char *)(font1_0_9 + 6*i),(unsigned char*)(date_time+93),6);   
+                      i = temp;
+                      memcopy((unsigned char *)(font1_0_9 + 6*i),(unsigned char*)(date_time+99),6);   
+              
+                      date_time[105] = 0;
+                      date_time[106] = 0;
+                      date_time[107] = 0;
+                      
+              }
+              void display_date_time_scroll(unsigned char isdisplay)
+              {
+                      date_time_croll_index = 63;
+                      Draw_BMP(22,0,64,1,date_time + date_time_croll_index);
+                      
+                      
+              //      if (date_time_croll_index< (108 - 55))
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 21  
+
+              //              Draw_BMP(9,0,64,1,date_time + date_time_croll_index);
+              //      else
+              //      {
+              //              Draw_BMP(9,0,9+(108 - date_time_croll_index),1,date_time + date_time_croll_index);
+              //              Draw_BMP(9+(108 - date_time_croll_index),0,64,1,date_time);
+              //      }
+              ////    date_time_croll_index++;
+              //      if (date_time_croll_index >= 108)
+              //              date_time_croll_index = 0;
+              }
+              #endif
+1244          void Cnt_Stage(void)
+1245          {               
+1246   1              if (sysinfo.isneedinitstage == 1)
+1247   1              {
+1248   2                      sysinfo.isneedinitstage = 0;
+1249   2                      date_time_cnt = 0;
+1250   2                      date_time_flag = 0;
+1251   2                      blinktime = 0;
+1252   2                      isdisplaybaticon = 0;           
+1253   2      //              display_cnt_stage_date(1);
+1254   2                      initADC();
+1255   2                      date_time_croll_index = 0;
+1256   2                      #if Enable_systime
+                              read_time_sysinfo();
+                              display_date_time_scroll_init();
+                              display_date_time_scroll(1);
+                              display_baticonlevel(sysinfo.lastpower);
+                              #endif
+1262   2                      display_cnt_stage_cnt(sysinfo.totalcnt,1);
+1263   2                      if (sysinfo.lastpower == 0xFF)
+1264   2                      {
+1265   3                              isdisplaybaticon = 0;
+1266   3                              sysinfo.lastpower = getbatlever(0);                     
+1267   3                      }
+1268   2                      batlevel = sysinfo.lastpower;
+1269   2                      display_baticonlevel(sysinfo.lastpower);
+1270   2                      
+1271   2              }
+1272   1      //      if (date_time_cnt >= (BLINK_H + BLINK_L))
+1273   1      //      {
+1274   1      //              date_time_cnt = 0;
+1275   1      //              if (date_time_flag == 0)
+1276   1      //              {
+1277   1      //                      display_cnt_stage_date(0);
+1278   1      //                      date_time_flag = 1;
+1279   1      //                      display_cnt_stage_time(1);
+1280   1      //              }
+1281   1      //              else
+1282   1      //              {
+1283   1      //                      display_cnt_stage_time(0);
+1284   1      //                      date_time_flag = 0;
+1285   1      //                      display_cnt_stage_date(1);
+1286   1      //              }
+1287   1      //      }
+1288   1              display_baticon();
+1289   1              #if Enable_systime
+                      if (date_time_scroll_cnt >= 200)
+                      {
+                              date_time_scroll_cnt = 0;
+                              display_date_time_scroll(1);
+                      }
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 22  
+
+                      #endif
+1296   1      //      if (powercnt == 20)
+1297   1      //      {
+1298   1      //              powercnt = 0;
+1299   1      //              sysinfo.totalcnt++;
+1300   1      //              if (sysinfo.totalcnt > 99999)
+1301   1      //                              sysinfo.totalcnt = 0;
+1302   1      //              display_cnt_stage_cnt(sysinfo.totalcnt,1);
+1303   1      //      }
+1304   1              
+1305   1              if (keytype != NULLKEY)
+1306   1              {
+1307   2      //              sysinfo.totalcnt = val;
+1308   2      //              display_cnt_stage_cnt(sysinfo.totalcnt,1);
+1309   2                      if (keytype == SHORTKEY)
+1310   2                      {
+1311   3                              sysinfo.totalcnt++;
+1312   3                              if (sysinfo.totalcnt > 99999)
+1313   3                              {
+1314   4                                      sysinfo.totalcnt = 0;
+1315   4                                      display_cnt_stage_cnt(0,0);     
+1316   4                              }
+1317   3                              display_cnt_stage_cnt(sysinfo.totalcnt,1);
+1318   3                      }
+1319   2                      else if (keytype == LONGKEY_5S)
+1320   2                      {
+1321   3                              sysinfo.sysloop = RST_CNT;
+1322   3                              sysinfo.isneedinitstage = 1;
+1323   3                              stage_loopcnt = 0;
+1324   3                              batlevel = 0xFF;
+1325   3                              OLED_CLS_Windows(0,0,64,2);
+1326   3      //                      display_cnt_stage_date(0);
+1327   3                              display_cnt_stage_cnt(0,0);                     
+1328   3                      }
+1329   2                      else if (keytype == LONGKEY_12S)
+1330   2                      {
+1331   3                              sysinfo.sysloop = RST_SYS;
+1332   3                              sysinfo.isneedinitstage = 1;
+1333   3                              stage_loopcnt = 0;
+1334   3                              batlevel = 0xFF;
+1335   3                              OLED_CLS_Windows(0,0,64,2);
+1336   3      //                      display_cnt_stage_date(0);
+1337   3                              display_cnt_stage_cnt(0,0);                     
+1338   3                      }
+1339   2                      keytype = NULLKEY;
+1340   2              }
+1341   1      }
+1342          
+1343          
+1344          void display_rst_cnt_stage_1(unsigned char isdisplay)
+1345          {
+1346   1              char i;
+1347   1              char * en = "RST";
+1348   1              char * en1 = "CNT";
+1349   1              if (sysinfo.language == ENGLISH)
+1350   1              {
+1351   2                      if (isdisplay == 1)
+1352   2                      {
+1353   3                              for (i=0;i<3;i++)
+1354   3                              {
+1355   4                                      Draw_BMP(6+i*8,0,8+6 + i*8,2,font_A_Z + (en[i]-'A')*16);
+1356   4                                      Draw_BMP(32+ i*8,0,8+32+ i*8,2,font_A_Z + (en1[i]-'A')*16);
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 23  
+
+1357   4                              }
+1358   3                      }
+1359   2                      else
+1360   2                      {
+1361   3                              OLED_CLS_Windows(6,0,56,2);
+1362   3                      }               
+1363   2              }
+1364   1              else
+1365   1              {
+1366   2                      if (isdisplay == 1)
+1367   2                      {
+1368   3                              Draw_BMP(16,0,16+16,2,font_CHN + (GUI)*32);
+1369   3                              Draw_BMP(32,0,32+16,2,font_CHN + (LING)*32);
+1370   3                      }
+1371   2                      else
+1372   2                      {
+1373   3                              OLED_CLS_Windows(16,0,48,2);
+1374   3                      }
+1375   2              }
+1376   1      }
+1377          void display_rst_cnt_stage_yes(unsigned char isdisplay)
+1378          {
+1379   1              char i;
+1380   1              char * en = "YES";
+1381   1              if (sysinfo.language == ENGLISH)
+1382   1              {
+1383   2                      if (isdisplay == 1)
+1384   2                      {
+1385   3                              for (i=0;i<3;i++)
+1386   3                              {
+1387   4                                      Draw_BMP(10+i*8,2,8+10 + i*8,4,font_A_Z + (en[i]-'A')*16);
+1388   4                              }
+1389   3                      }
+1390   2                      else
+1391   2                      {
+1392   3                              OLED_CLS_Windows(10,2,34,4);
+1393   3                      }               
+1394   2              }
+1395   1              else    
+1396   1              {
+1397   2                      if (isdisplay == 1)
+1398   2                      {
+1399   3                              Draw_BMP(12,2,12+16,4,font_CHN + (SHI)*32);
+1400   3                      }
+1401   2                      else
+1402   2                      {
+1403   3                              OLED_CLS_Windows(12,2,28,4);
+1404   3                      }       
+1405   2              }
+1406   1      }
+1407          void display_rst_cnt_stage_no(unsigned char isdisplay)
+1408          {
+1409   1              char i;
+1410   1              char * en = "NO";
+1411   1              if (sysinfo.language == ENGLISH)
+1412   1              {
+1413   2                      if (isdisplay == 1)
+1414   2                      {
+1415   3                              for (i=0;i<2;i++)
+1416   3                              {
+1417   4                                      Draw_BMP(38+i*8,2,8+38 + i*8,4,font_A_Z + (en[i]-'A')*16);
+1418   4                              }
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 24  
+
+1419   3                      }
+1420   2                      else
+1421   2                      {
+1422   3                              OLED_CLS_Windows(38,2,54,4);
+1423   3                      }               
+1424   2              }
+1425   1              else    
+1426   1              {       
+1427   2                      if (isdisplay == 1)
+1428   2                      {
+1429   3                              Draw_BMP(36,2,36+16,4,font_CHN + (FOU)*32);
+1430   3                      }
+1431   2                      else
+1432   2                      {
+1433   3                              OLED_CLS_Windows(36,2,52,4);
+1434   3                      }
+1435   2              }       
+1436   1      }
+1437          void Rst_Cnt_Stage(void)
+1438          {
+1439   1              if (sysinfo.isneedinitstage == 1)
+1440   1              {
+1441   2                      sysinfo.isneedinitstage = 0;
+1442   2                      display_rst_cnt_stage_1(1);
+1443   2                      display_rst_cnt_stage_yes(1);
+1444   2                      display_rst_cnt_stage_no(1);
+1445   2                      blinktime = (BLINK_H+BLINK_L);
+1446   2              }
+1447   1              if (keytype != NULLKEY)
+1448   1              {
+1449   2                      if (keytype == SHORTKEY)
+1450   2                      {
+1451   3                              if (stage_loopcnt == YES)
+1452   3                              {
+1453   4                                      display_rst_cnt_stage_yes(1);
+1454   4                                      stage_loopcnt = NO;
+1455   4                              }
+1456   3                              else
+1457   3                              {
+1458   4                                      stage_loopcnt = YES;
+1459   4                                      display_rst_cnt_stage_no(1);
+1460   4                              }
+1461   3                      }
+1462   2                      else if (keytype >= LONGKEY_2S)
+1463   2                      {
+1464   3                              if (stage_loopcnt == 0)//yes
+1465   3                                      sysinfo.totalcnt = 0;
+1466   3                              sysinfo.sysloop = CNT_STAGE;
+1467   3                              stage_loopcnt = 0;
+1468   3                              blinktime = 0;
+1469   3                              batlevel = 0xff;
+1470   3                              sysinfo.isneedinitstage = 1;
+1471   3                              display_rst_cnt_stage_1(0);
+1472   3                              display_rst_cnt_stage_yes(0);
+1473   3                              display_rst_cnt_stage_no(0);                    
+1474   3                      }
+1475   2                      keytype = NULLKEY;
+1476   2              }
+1477   1              //blink
+1478   1              if (blinktime == BLINK_H)
+1479   1              {
+1480   2                      if (stage_loopcnt == YES)
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 25  
+
+1481   2                              display_rst_cnt_stage_yes(0);
+1482   2                      else if (stage_loopcnt == NO)
+1483   2                              display_rst_cnt_stage_no(0);
+1484   2              }       
+1485   1              else if (blinktime == (BLINK_H+BLINK_L))
+1486   1              {
+1487   2                      if (stage_loopcnt == YES)
+1488   2                              display_rst_cnt_stage_yes(1);
+1489   2                      else if (stage_loopcnt == NO)
+1490   2                              display_rst_cnt_stage_no(1);
+1491   2              }       
+1492   1      }
+1493          
+1494          void display_rst_sys_stage_1(unsigned char isdisplay)
+1495          {
+1496   1              char i;
+1497   1              char * en = "RST";
+1498   1              char * en1 = "DEV";
+1499   1              if (sysinfo.language == ENGLISH)
+1500   1              {
+1501   2                      if (isdisplay == 1)
+1502   2                      {
+1503   3                              for (i=0;i<3;i++)
+1504   3                              {
+1505   4                                      Draw_BMP(6+i*8,0,8+6 + i*8,2,font_A_Z + (en[i]-'A')*16);
+1506   4                                      Draw_BMP(32+ i*8,0,8+32+ i*8,2,font_A_Z + (en1[i]-'A')*16);
+1507   4                              }
+1508   3                      }
+1509   2                      else
+1510   2                      {
+1511   3                              OLED_CLS_Windows(6,0,56,2);
+1512   3                      }               
+1513   2              }
+1514   1              else
+1515   1              {       
+1516   2                      if (isdisplay == 1)
+1517   2                      {
+1518   3                              Draw_BMP(16,0,16+16,2,font_CHN + (CHONG)*32);
+1519   3                              Draw_BMP(32,0,32+16,2,font_CHN + (ZHI)*32);
+1520   3                      }
+1521   2                      else
+1522   2                      {
+1523   3                              OLED_CLS_Windows(16,0,48,2);
+1524   3                      }
+1525   2              }
+1526   1      }
+1527          
+1528          void Rst_Sys_Stage(void)
+1529          {
+1530   1              if (sysinfo.isneedinitstage == 1)
+1531   1              {
+1532   2                      sysinfo.isneedinitstage = 0;
+1533   2                      display_rst_sys_stage_1(1);
+1534   2                      display_rst_cnt_stage_yes(1);
+1535   2                      display_rst_cnt_stage_no(1);    
+1536   2                      blinktime = (BLINK_H+BLINK_L);
+1537   2              }
+1538   1              if (keytype != NULLKEY)
+1539   1              {
+1540   2                      if (keytype == SHORTKEY)
+1541   2                      {
+1542   3                              if (stage_loopcnt == YES)
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 26  
+
+1543   3                              {
+1544   4                                      display_rst_cnt_stage_yes(1);
+1545   4                                      stage_loopcnt = NO;
+1546   4                              }
+1547   3                              else
+1548   3                              {
+1549   4                                      stage_loopcnt = YES;
+1550   4                                      display_rst_cnt_stage_no(1);    
+1551   4                              }
+1552   3                      }
+1553   2                      else if (keytype >= LONGKEY_2S)
+1554   2                      {
+1555   3                              display_rst_sys_stage_1(0);
+1556   3                              display_rst_cnt_stage_yes(0);   
+1557   3                              display_rst_cnt_stage_no(0);    
+1558   3                              if (stage_loopcnt == 0)
+1559   3                              {
+1560   4                                      sysinfo.sysloop = SYSINIT;
+1561   4                              }
+1562   3                              else
+1563   3                                      sysinfo.sysloop = CNT_STAGE;
+1564   3                              stage_loopcnt = 0;
+1565   3                              sysinfo.isneedinitstage = 1;
+1566   3                              batlevel = 0xff;
+1567   3                      }
+1568   2                      keytype = NULLKEY;
+1569   2              }
+1570   1              //blink
+1571   1              if (blinktime == BLINK_H)
+1572   1              {
+1573   2                      if (stage_loopcnt == YES)
+1574   2                              display_rst_cnt_stage_yes(0);
+1575   2                      else if (stage_loopcnt == NO)
+1576   2                              display_rst_cnt_stage_no(0);
+1577   2              }       
+1578   1              else if (blinktime == (BLINK_H+BLINK_L))
+1579   1              {
+1580   2                      if (stage_loopcnt == YES)
+1581   2                              display_rst_cnt_stage_yes(1);
+1582   2                      else if (stage_loopcnt == NO)
+1583   2                              display_rst_cnt_stage_no(1);
+1584   2              }               
+1585   1      }
+1586          
+1587          #if POWER_WAKEUP
+1588          void display_baticonlevel_charging(unsigned char level)
+1589          {
+1590   1              unsigned char i;
+1591   1              if (level == 0)
+1592   1              {
+1593   2                      for (i = 0; i < 24;i++)
+1594   2                      {
+1595   3                              chargeicon[2+i] = 0x03;
+1596   3                              chargeicon[34+i] = 0xC0;
+1597   3                      }
+1598   2              }
+1599   1              else if(level == 1)
+1600   1              {
+1601   2                      for (i = 0; i < 6;i++)
+1602   2                      {
+1603   3                              chargeicon[2+i] = 0xFF;
+1604   3                              chargeicon[34+i] = 0xFF;
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 27  
+
+1605   3                      }
+1606   2                      for (i = 6; i < 24;i++)
+1607   2                      {
+1608   3                              chargeicon[2+i] = 0x03;
+1609   3                              chargeicon[34+i] = 0xC0;
+1610   3                      }
+1611   2              }
+1612   1              else if(level == 2)
+1613   1              {
+1614   2                      for (i = 0; i < 12;i++)
+1615   2                      {
+1616   3                              chargeicon[2+i] = 0xFF;
+1617   3                              chargeicon[34+i] = 0xFF;
+1618   3                      }
+1619   2                      for (i = 12; i < 24;i++)
+1620   2                      {
+1621   3                              chargeicon[2+i] = 0x03;
+1622   3                              chargeicon[34+i] = 0xC0;
+1623   3                      }
+1624   2              }
+1625   1              else if(level == 3)
+1626   1              {
+1627   2                      for (i = 0; i < 18;i++)
+1628   2                      {
+1629   3                              chargeicon[2+i] = 0xFF;
+1630   3                              chargeicon[34+i] = 0xFF;
+1631   3                      }
+1632   2                      for (i = 18; i < 24;i++)
+1633   2                      {
+1634   3                              chargeicon[2+i] = 0x03;
+1635   3                              chargeicon[34+i] = 0xC0;
+1636   3                      }
+1637   2              }
+1638   1              else
+1639   1              {
+1640   2                      for (i = 0; i < 24;i++)
+1641   2                      {
+1642   3                              chargeicon[2+i] = 0xFF;
+1643   3                              chargeicon[34+i] = 0xFF;
+1644   3                      }
+1645   2              }
+1646   1              isdisplaybaticon = 1;
+1647   1              Draw_BMP(16,1,16+32,3,chargeicon);
+1648   1      }
+1649          
+1650          
+1651          void Sys_Charge_Stage(void)
+1652          {
+1653   1              unsigned char level;
+1654   1              if (sysinfo.isneedinitstage == 1)
+1655   1              {
+1656   2                      sysinfo.isneedinitstage = 0;    
+1657   2                      OLED_CLS_Windows(0,0,64,4);
+1658   2                      initADC();              
+1659   2                      if (sysinfo.lastpower == 0xFF)
+1660   2                      {
+1661   3                              isdisplaybaticon = 0;
+1662   3                              sysinfo.lastpower = getbatlever(1);                     
+1663   3                      }
+1664   2                      batlevel = sysinfo.lastpower;
+1665   2                      display_baticonlevel_charging(sysinfo.lastpower);
+1666   2                      blinktime = 0;
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 28  
+
+1667   2              }
+1668   1              if (keytype != NULLKEY)
+1669   1              {
+1670   2                      keytype = NULLKEY;
+1671   2              }
+1672   1              //blink
+1673   1              if (blinktime == (BLINK_H+BLINK_L))
+1674   1              {                       
+1675   2      //              level = getbatlever(1);
+1676   2      //              sysinfo.totalcnt = val;
+1677   2      //              display_cnt_stage_cnt(sysinfo.totalcnt,1);
+1678   2                      level = getbatlever(1);
+1679   2                      if (level != 0xFF)
+1680   2                      {
+1681   3                              if (batlevel != level)
+1682   3                              {
+1683   4                                      batlevel = level;
+1684   4                                      //display bat
+1685   4                                      display_baticonlevel_charging(batlevel);
+1686   4                              }
+1687   3                              sysinfo.lastpower = level;
+1688   3                              adc_cnt = 0;                    
+1689   3                      }
+1690   2              }               
+1691   1      }
+1692          #endif
+1693          void SysLoop(void)
+1694          {
+1695   1              switch(sysinfo.sysloop)
+1696   1              {
+1697   2                      case SELECT_LANGUAGE:
+1698   2                              Select_Language();
+1699   2                              break;
+1700   2                      #if Enable_sysdate
+                              case SELECT_DATE:
+                                      Select_Date();
+                                      break;
+                              #endif
+1705   2                      #if Enable_systime
+                              case SELECT_TIME:
+                                      Select_Time();
+                                      break;
+                              #endif
+1710   2                      case SELECT_NUMTYPE:
+1711   2                              Select_NumType();
+1712   2                              break;
+1713   2                      case CNT_STAGE:
+1714   2                              Cnt_Stage();
+1715   2                              #if (Enable_systime || Enable_sysdate)
+                                      if (systime_cnt >= 200)
+                                      {
+                                              systime_cnt = 0;
+                                              read_time_sysinfo();
+                                              #if Enable_systime
+                                              display_date_time_scroll_init();
+                                              #endif
+                                      }               
+                                      #endif
+1725   2                              break;
+1726   2                      case RST_CNT:
+1727   2                              Rst_Cnt_Stage();
+1728   2                              break;
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 29  
+
+1729   2                      case RST_SYS:
+1730   2                              Rst_Sys_Stage();
+1731   2                              break;
+1732   2                      #if POWER_WAKEUP
+1733   2                      case SYS_CHARGE:
+1734   2                              Sys_Charge_Stage();
+1735   2                              break;
+1736   2                      #endif
+1737   2                      default:break;
+1738   2              }
+1739   1      }
+1740          void PinInterrupt_ISR (void) interrupt 7
+1741          {
+1742   1              PIF = 0;
+1743   1      }
+1744          void EXT_INT0(void) interrupt 0
+1745          {
+1746   1              
+1747   1      }
+1748          
+1749          void EXT_INT1(void) interrupt 2
+1750          {
+1751   1              
+1752   1      }
+1753          void P30_init(void){
+1754   1              P30_Input_Mode;
+1755   1              set_P3S_0;
+1756   1      //      set_IT0;
+1757   1      //      set_EX0;
+1758   1      //      
+1759   1      //      Enable_BIT0_RasingEdge_Trig;
+1760   1              PICON|=0x04;PINEN&=0xFE;PIPEN|=0x01;
+1761   1              Enable_INT_Port3;
+1762   1              set_EPI;
+1763   1              
+1764   1              set_EA;
+1765   1      }
+1766          void exti1_init(void){
+1767   1              P17_Input_Mode;
+1768   1              set_P1S_7;
+1769   1              set_EX1;
+1770   1              set_EA;
+1771   1      }
+1772          void Enter_DPD(void)
+1773          {
+1774   1              //…Ë÷√P17∞¥º¸ªΩ–—
+1775   1              P30_init();
+1776   1              exti1_init();
+1777   1              
+1778   1              set_PD;
+1779   1              
+1780   1              PICON  = PICON & 0xFE;
+1781   1                                      
+1782   1              clr_EX0;
+1783   1              clr_EX1;
+1784   1              clr_EPI;
+1785   1      }
+1786          
+1787          void main_loop(void)
+1788          {
+1789   1              clr_EPI;
+1790   1              OLED_Init();
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 30  
+
+1791   1              OLED_Clear();
+1792   1              #if (Enable_systime || Enable_sysdate)
+                      Init1302();
+                      #endif
+1795   1              KeyInit();
+1796   1              //read sys struct from ldrom
+1797   1              getdata(SysStructLen,DATA_START_ADDR,(unsigned char *)&sysinfo);
+1798   1              stage_loopcnt = 0;
+1799   1              sysinfo.isneedinitstage = 1;
+1800   1              powercnt = 0;
+1801   1              systime_cnt = 0;
+1802   1              isneedUpdate_ds1302 = 0;
+1803   1              isdisplaybaticon = 0;
+1804   1              batlevel = 0xff;
+1805   1              val = 0;
+1806   1              initADC();
+1807   1      //      sysinfo.lastpower = getbatlever(P30);           
+1808   1              while(!GETKEY);
+1809   1              while(1)
+1810   1              {
+1811   2                      KeyScan();
+1812   2                      
+1813   2                      if ((sysinfo.isinitsys != 0xA5)||(sysinfo.sysloop == SYSINIT))
+1814   2                      {
+1815   3                              //clr sysinfo
+1816   3                              sysinfo.language = CHINESE;
+1817   3                              sysinfo.numtype = ARABNUM;
+1818   3                              #if Enable_sysdate
+                                      sysinfo.sysdate.Year = 0;
+                                      sysinfo.sysdate.Month = 1;
+                                      sysinfo.sysdate.Day = 1;
+                                      #endif
+1823   3                              #if Enable_systime
+                                      sysinfo.systime.Hr = 0;
+                                      sysinfo.systime.Min = 0;
+                                      sysinfo.systime.Sec = 0;
+                                      #endif
+1828   3                              sysinfo.totalcnt = 0;
+1829   3                              sysinfo.isinitsys = 0xA5;
+1830   3                              sysinfo.sysloop = SELECT_LANGUAGE;
+1831   3                              sysinfo.lastpower = 0xFF;
+1832   3                              batlevel = 0xff;
+1833   3                              //Display power on stage
+1834   3                              OLED_Set_Pos(7,1);
+1835   3                              Draw_BMP(12,1,12+8,3,font_A_Z + ('K' - 'A')*16);
+1836   3                              Draw_BMP(20,1,20+16,3,font_CHN + (SAN)*32);
+1837   3                              Draw_BMP(36,1,36+8,3,font_A_Z + ('W' - 'A')*16);
+1838   3                              Draw_BMP(44,1,44+8,3,font_A_Z + ('A' - 'A')*16);
+1839   3                              
+1840   3                              powercnt = 0;
+1841   3                              //write time to ds1302
+1842   3                              #if Enable_sysdate
+                                      systime_info.year = sysinfo.sysdate.Year;
+                                      systime_info.month = sysinfo.sysdate.Month;
+                                      systime_info.date = sysinfo.sysdate.Day;
+                                      #else
+1847   3                              systime_info.year = 1;
+1848   3                              systime_info.month = 1;
+1849   3                              systime_info.date = 1;
+1850   3                              #endif
+1851   3                              #if Enable_systime
+                                      systime_info.hr = sysinfo.systime.Hr;
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 31  
+
+                                      systime_info.min = sysinfo.systime.Min;
+                                      systime_info.sec = sysinfo.systime.Sec;
+                                      writetimer(&systime_info);
+                                      #endif
+1857   3                              Erase_LDROM(512,0);
+1858   3                              Erase_LDROM(512,512);   
+1859   3      //                      initADC();
+1860   3      //                      sysinfo.lastpower = getbatlever(P30);
+1861   3                              while(powercnt<400);
+1862   3                              powercnt=0;
+1863   3                              sysinfo.isneedinitstage = 1;
+1864   3                              
+1865   3                              OLED_CLS_Windows(12,1,52,3);
+1866   3                      }
+1867   2                      SysLoop();
+1868   2      
+1869   2      //              if (keytype != NULLKEY)
+1870   2      //              {
+1871   2      //                      keytype = NULLKEY;
+1872   2      //                      //reinit oled
+1873   2      //                      sysinfo.isdpd = 0;
+1874   2      //                      OLED_Display_On();
+1875   2      //              }
+1876   2      //      
+1877   2                      if (get_battery_time >= 200)
+1878   2                      {
+1879   3                              set_EADC;
+1880   3                              get_battery_time = 0;
+1881   3                      }
+1882   2                      //power mode
+1883   2                      if (powercnt >= POWER_CNT1)
+1884   2                      {
+1885   3                              
+1886   3                              //close OLED
+1887   3                              OLED_Display_Off();
+1888   3                              //display off
+1889   3      //              }
+1890   3      //              else if (powercnt == POWER_CNT2)
+1891   3      //              {
+1892   3                              //OLED power down
+1893   3                              //save DATA 
+1894   3                              if ((sysinfo.sysloop == RST_CNT) ||(sysinfo.sysloop == RST_SYS))
+1895   3                                      sysinfo.sysloop = CNT_STAGE;
+1896   3                              savedata(SysStructLen,DATA_START_ADDR,(unsigned char *)&sysinfo);
+1897   3      
+1898   3                              Set_All_GPIO_Quasi_Mode;
+1899   3                              //enter dpd close device
+1900   3                              //turn off adc  timer
+1901   3                              clr_ADCEN;
+1902   3      
+1903   3                              
+1904   3                              P14_OpenDrain_Mode;
+1905   3                              P14 = 0;
+1906   3                              Enter_DPD();
+1907   3                              powercnt = 0;
+1908   3                              initADC();
+1909   3                              return;
+1910   3                      }
+1911   2              }
+1912   1      }
+1913          
+1914          
+C51 COMPILER V9.54   COUNT                                                                 01/13/2019 22:23:12 PAGE 32  
+
+1915          void read_time_sysinfo(void)
+1916          {
+1917   1              #if (Enable_systime||Enable_sysdate)
+                                      readtimer(&systime_info);
+                                      //update time
+                                      #if Enable_sysdate
+                                      sysinfo.sysdate.Year = systime_info.year;
+                                      sysinfo.sysdate.Month = systime_info.month;
+                                      sysinfo.sysdate.Day = systime_info.date;
+                                      #endif
+                                      #if Enable_systime
+                                      sysinfo.systime.Hr = systime_info.hr;
+                                      sysinfo.systime.Min = systime_info.min;
+                                      sysinfo.systime.Sec = systime_info.sec;
+                                      #endif
+                      #endif                  
+1931   1      }
+1932          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   6838    ----
+   CONSTANT SIZE    =     54    ----
+   XDATA SIZE       =    294      77
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
