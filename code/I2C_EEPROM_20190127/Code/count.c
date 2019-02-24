@@ -78,7 +78,7 @@ void KeyScan(void)
 			{
 				keytype = SHORTKEY;
 			}
-			else if (islongpress >= 10)
+			else if (islongpress >= 5)
 			{
 				keytype = LONGKEY_12S;
 			}
