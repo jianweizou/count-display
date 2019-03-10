@@ -34,10 +34,10 @@ unsigned char power_debounce;
 bit  is_enter_charging;
 unsigned char las_stage;
 #endif
-#define BAT_LEVEL_BUF_0	0x840
-#define BAT_LEVEL_BUF_1	0x8A0
-#define BAT_LEVEL_BUF_2	0x900
-#define BAT_LEVEL_BUF_3	0x960
+#define BAT_LEVEL_BUF_0	0x860
+#define BAT_LEVEL_BUF_1	0x8C0
+#define BAT_LEVEL_BUF_2	0x920
+#define BAT_LEVEL_BUF_3	0x980
 
 unsigned int adcvalue[16];
 unsigned char adc_cnt;
@@ -512,7 +512,7 @@ unsigned char getbatlever(unsigned char ischarging)
 			}
 		}
 		curval = 0;
-		for (i = 4; i<16;i++)
+		for (i = 4; i<12;i++)
 			curval+=adcvalue[i];
 		curval = curval>>3;
 		if (ischarging == 1)
@@ -534,6 +534,10 @@ unsigned char getbatlever(unsigned char ischarging)
 				val--;
 				return 0xFF;
 				//curval = val-5;
+			}
+			else if ((curval+20) < val)
+			{
+				val = curval + 20;
 			}
 //			curval = curval >> 1;
 //			val = val >> 1;
@@ -604,16 +608,16 @@ unsigned char getbatlever(unsigned char ischarging)
 				else
 				{
 					ischangebatlevel_cnt = 0;
-					if (ischarging == 1)
-					{
-						if (temp <= batlevel)
-							temp = batlevel;
-					}
-					else
-					{
-						if (temp >= batlevel)
-							temp = batlevel;
-					}
+//					if (ischarging == 1)
+//					{
+//						if (temp <= batlevel)
+//							temp = batlevel;
+//					}
+//					else
+//					{
+//						if (temp >= batlevel)
+//							temp = batlevel;
+//					}
 				}
 			}
 			else
@@ -627,6 +631,8 @@ unsigned char getbatlever(unsigned char ischarging)
 void display_baticonlevel(unsigned char level)
 {
 	unsigned char *buf;
+	if (level > 4)
+		level = 4;
 //	if (level == 0)
 //	{
 //		for (i = 0; i < 8;i++)
@@ -684,7 +690,7 @@ void display_baticonlevel(unsigned char level)
 //	}
 	buf = (unsigned char *)baticon + (level * 32);
 	isdisplaybaticon = 1;
-	Draw_BMP(0,0,16,2,baticon);
+	Draw_BMP(0,0,16,2,buf);
 }
 
 void display_baticon(void)
@@ -712,9 +718,9 @@ void Cnt_Stage(void)
 		blinktime = 0;
 		isdisplaybaticon = 0;		
 //		display_cnt_stage_date(1);
-		initADC();
+//		initADC();
 		display_cnt_stage_cnt(sysinfo.totalcnt,1);
-		if (sysinfo.lastpower == 0xFF)
+//		if (sysinfo.lastpower == 0xFF)
 		{
 			isdisplaybaticon = 0;
 			sysinfo.lastpower = getbatlever(0);			
@@ -754,7 +760,7 @@ void Cnt_Stage(void)
 			sysinfo.sysloop = RST_CNT;
 			sysinfo.isneedinitstage = 1;
 			stage_loopcnt = 0;
-			batlevel = 0xFF;
+//			batlevel = 0xFF;
 			OLED_CLS_Windows(0,0,64,2);
 //			display_cnt_stage_date(0);
 			display_cnt_stage_cnt(0,0);			
@@ -764,7 +770,7 @@ void Cnt_Stage(void)
 			sysinfo.sysloop = RST_SYS;
 			sysinfo.isneedinitstage = 1;
 			stage_loopcnt = 0;
-			batlevel = 0xFF;
+//			batlevel = 0xFF;
 			OLED_CLS_Windows(0,0,64,2);
 //			display_cnt_stage_date(0);
 			display_cnt_stage_cnt(0,0);			
@@ -899,7 +905,7 @@ void Rst_Cnt_Stage(void)
 			sysinfo.sysloop = CNT_STAGE;
 			stage_loopcnt = 0;
 			blinktime = 0;
-			batlevel = 0xff;
+//			batlevel = 0xff;
 			sysinfo.isneedinitstage = 1;
 			display_rst_cnt_stage_1(0);
 			display_rst_cnt_stage_yes(0);
@@ -996,7 +1002,7 @@ void Rst_Sys_Stage(void)
 				sysinfo.sysloop = CNT_STAGE;
 			stage_loopcnt = 0;
 			sysinfo.isneedinitstage = 1;
-			batlevel = 0xff;
+//			batlevel = 0xff;
 		}
 		keytype = NULLKEY;
 	}
@@ -1021,6 +1027,8 @@ void Rst_Sys_Stage(void)
 void display_baticonlevel_charging(unsigned char level)
 {
 	unsigned char *buf;
+	if (level > 4)
+		level = 4;
 //	if (level == 0)
 //	{
 //		for (i = 0; i < 24;i++)
@@ -1089,7 +1097,7 @@ void Sys_Charge_Stage(void)
 	{
 		sysinfo.isneedinitstage = 0;	
 		OLED_CLS_Windows(0,0,64,4);
-		initADC();		
+//		initADC();		
 		if (sysinfo.lastpower == 0xFF)
 		{
 			isdisplaybaticon = 0;
@@ -1226,8 +1234,8 @@ void main_loop(void)
 			sysinfo.totalcnt = 0;
 			sysinfo.isinitsys = 0xA5;
 			sysinfo.sysloop = SELECT_LANGUAGE;
-			sysinfo.lastpower = 0xFF;
-			batlevel = 0xff;
+//			sysinfo.lastpower = 0xFF;
+//			batlevel = 0xff;
 			//Display power on stage
 			OLED_Set_Pos(7,1);
 			Draw_BMP(12,1,12+8,3,font_A_Z + ('K' - 'A')*16);
@@ -1250,7 +1258,8 @@ void main_loop(void)
 
 		if (get_battery_time >= 200)
 		{
-			set_EADC;
+			if (EADC == 0)
+				set_EADC;
 			get_battery_time = 0;
 		}
 		//power mode
@@ -1267,12 +1276,13 @@ void main_loop(void)
 
 			Set_All_GPIO_Quasi_Mode;
 			clr_ADCEN;
-
+			clr_TR0;
 			
 			P14_OpenDrain_Mode;
 			P14 = 0;
 			Enter_DPD();
 			powercnt = 0;
+			set_TR0;
 			initADC();
 			return;
 		}

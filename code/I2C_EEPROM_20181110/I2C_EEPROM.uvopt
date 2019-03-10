@@ -143,9 +143,25 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>F:\workplace\count display\第一代\count display\code\I2C_EEPROM_20181110\Code\COUNT.C</Filename>
+          <Filename>Code\COUNT.C</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\I2C_EEPROM\COUNT\1887</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>99</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>-16770476</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>Code\COUNT.C</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\I2C_EEPROM\COUNT\99</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>

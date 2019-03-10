@@ -1,4 +1,4 @@
-C51 COMPILER V9.54   I2C                                                                   02/22/2019 20:34:36 PAGE 1   
+C51 COMPILER V9.54   I2C                                                                   03/10/2019 20:36:01 PAGE 1   
 
 
 C51 COMPILER V9.54, COMPILATION OF MODULE I2C
@@ -62,7 +62,7 @@ line level    source
   52   1          {   
   53   2                              if (tx_data & 0x80)
   54   2                                      SDA_DATA = 1;
-C51 COMPILER V9.54   I2C                                                                   02/22/2019 20:34:36 PAGE 2   
+C51 COMPILER V9.54   I2C                                                                   03/10/2019 20:36:01 PAGE 2   
 
   55   2                              else
   56   2                                      SDA_DATA = 0;
@@ -126,7 +126,7 @@ line level    source
  114   1          //数据线模式切换为输入
  115   1              SDA_MODE_IN;
  116   1          for(i = 0;i < 8; i ++)
-C51 COMPILER V9.54   I2C                                                                   02/22/2019 20:34:36 PAGE 3   
+C51 COMPILER V9.54   I2C                                                                   03/10/2019 20:36:01 PAGE 3   
 
  117   1          {
  118   2              SCL_DATA = 0;

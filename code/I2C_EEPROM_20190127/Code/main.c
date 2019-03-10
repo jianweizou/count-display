@@ -21,7 +21,7 @@ extern unsigned int powercnt;
 extern SysStruct	sysinfo;
 extern unsigned int date_time_scroll_cnt;
 extern unsigned int systime_cnt;
-extern unsigned int get_battery_time;
+extern unsigned char get_battery_time;
 /************************************************************************************************************
 *    TIMER 0 interrupt subroutine
 ************************************************************************************************************/
@@ -82,9 +82,9 @@ void initADC(void)
 	PWM2_P10_OUTPUT_ENABLE;				
 	Enable_ADC_AIN3;														
 	PWM2_FALLINGEDGE_TRIG_ADC;	
-	PWMPH = 0x07;																//Setting PWM value          
+	PWMPH = 0x0F;																//Setting PWM value          
 	PWMPL = 0xFF;
-	PWM2H = 0x02;
+	PWM2H = 0x07;
 	PWM2L = 0xFF;
 	set_LOAD;																		// PWM run
 	set_PWMRUN;

@@ -1,4 +1,4 @@
-C51 COMPILER V9.54   MAIN                                                                  02/22/2019 20:34:35 PAGE 1   
+C51 COMPILER V9.54   MAIN                                                                  03/10/2019 20:36:01 PAGE 1   
 
 
 C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
@@ -31,7 +31,7 @@ line level    source
   21          extern SysStruct        sysinfo;
   22          extern unsigned int date_time_scroll_cnt;
   23          extern unsigned int systime_cnt;
-  24          extern unsigned int get_battery_time;
+  24          extern unsigned char get_battery_time;
   25          /*********************************************************************************************************
              -***
   26          *    TIMER 0 interrupt subroutine
@@ -62,7 +62,7 @@ line level    source
   50   1              TL0 = TL0_INIT;
   51   1          
   52   1              set_ET0;                                    //enable Timer0 interrupt
-C51 COMPILER V9.54   MAIN                                                                  02/22/2019 20:34:35 PAGE 2   
+C51 COMPILER V9.54   MAIN                                                                  03/10/2019 20:36:01 PAGE 2   
 
   53   1              set_EA;                                     //enable interrupts
   54   1              
@@ -96,9 +96,9 @@ line level    source
   82   1              PWM2_P10_OUTPUT_ENABLE;                         
   83   1              Enable_ADC_AIN3;                                                                                                                
   84   1              PWM2_FALLINGEDGE_TRIG_ADC;      
-  85   1              PWMPH = 0x07;                                                                                                                           //Setting PWM value          
+  85   1              PWMPH = 0x0F;                                                                                                                           //Setting PWM value          
   86   1              PWMPL = 0xFF;
-  87   1              PWM2H = 0x02;
+  87   1              PWM2H = 0x07;
   88   1              PWM2L = 0xFF;
   89   1              set_LOAD;                                                                                                                                               // PWM run
   90   1              set_PWMRUN;
@@ -122,11 +122,11 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    306    ----
+   CODE SIZE        =    300    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-C51 COMPILER V9.54   MAIN                                                                  02/22/2019 20:34:35 PAGE 3   
+C51 COMPILER V9.54   MAIN                                                                  03/10/2019 20:36:01 PAGE 3   
 
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
