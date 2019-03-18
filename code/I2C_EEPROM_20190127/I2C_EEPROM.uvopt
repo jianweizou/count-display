@@ -134,54 +134,6 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>729</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>-16773290</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>Code\COUNT.C</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>726</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>-16773300</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>Code\COUNT.C</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>705</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>-16768919</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>Code\COUNT.C</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
           <LineNumber>693</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>-16769213</Address>
@@ -196,11 +148,11 @@
           <Expression>\\I2C_EEPROM\COUNT\693</Expression>
         </Bp>
         <Bp>
-          <Number>4</Number>
+          <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>601</LineNumber>
+          <LineNumber>1283</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>-16773966</Address>
+          <Address>-16773622</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -209,7 +161,23 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>Code\COUNT.C</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\I2C_EEPROM\COUNT\601</Expression>
+          <Expression>\\I2C_EEPROM\COUNT\1283</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>1266</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>-16773692</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>Code\COUNT.C</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\I2C_EEPROM\COUNT\1266</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -227,6 +195,11 @@
           <count>2</count>
           <WinNumber>1</WinNumber>
           <ItemText>sysinfo</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>powercnt</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

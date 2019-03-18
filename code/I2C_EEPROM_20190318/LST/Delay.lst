@@ -1,0 +1,586 @@
+C51 COMPILER V9.54   DELAY                                                                 05/19/2018 23:05:59 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE DELAY
+OBJECT MODULE PLACED IN .\Output\Delay.obj
+COMPILER INVOKED BY: D:\Program Files (x86)\keil4\C51\BIN\C51.EXE Code\Delay.c COMPACT OPTIMIZE(8,SPEED) BROWSE INCDIR(.
+                    -.\..\Include;..\Include) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\Delay.lst) OBJECT(.\Output\Delay.obj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* Copyright(c) 2016 Nuvoton Technology Corp. All rights reserved.                                        
+             - */
+   4          /*                                                                                                        
+             - */
+   5          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   6          
+   7          //********************************************************************************************************
+             -***
+   8          //  Nuvoton Technoledge Corp. 
+   9          //  Website: http://www.nuvoton.com
+  10          //  E-Mail : MicroC-8bit@nuvoton.com
+  11          //  Date   : Apr/21/2016
+  12          //********************************************************************************************************
+             -***
+  13          
+  14          #include "N76E003.h"
+  15          #include "Common.h"
+  16          #include "Delay.h"
+  17          #include "SFR_Macro.h"
+  18          #include "Function_define.h"
+  19          #include <N76E003.H>
+*** ERROR C231 IN LINE 7 OF ..\Include\N76E003.H: 'P0': redefinition
+*** ERROR C231 IN LINE 8 OF ..\Include\N76E003.H: 'SP': redefinition
+*** ERROR C231 IN LINE 9 OF ..\Include\N76E003.H: 'DPL': redefinition
+*** ERROR C231 IN LINE 10 OF ..\Include\N76E003.H: 'DPH': redefinition
+*** ERROR C231 IN LINE 11 OF ..\Include\N76E003.H: 'RCTRIM0': redefinition
+*** ERROR C231 IN LINE 12 OF ..\Include\N76E003.H: 'RCTRIM1': redefinition
+*** ERROR C231 IN LINE 13 OF ..\Include\N76E003.H: 'RWK': redefinition
+*** ERROR C231 IN LINE 14 OF ..\Include\N76E003.H: 'PCON': redefinition
+*** ERROR C231 IN LINE 16 OF ..\Include\N76E003.H: 'TCON': redefinition
+*** ERROR C231 IN LINE 17 OF ..\Include\N76E003.H: 'TMOD': redefinition
+*** ERROR C231 IN LINE 18 OF ..\Include\N76E003.H: 'TL0': redefinition
+*** ERROR C231 IN LINE 19 OF ..\Include\N76E003.H: 'TL1': redefinition
+*** ERROR C231 IN LINE 20 OF ..\Include\N76E003.H: 'TH0': redefinition
+*** ERROR C231 IN LINE 21 OF ..\Include\N76E003.H: 'TH1': redefinition
+*** ERROR C231 IN LINE 22 OF ..\Include\N76E003.H: 'CKCON': redefinition
+*** ERROR C231 IN LINE 23 OF ..\Include\N76E003.H: 'WKCON': redefinition
+*** ERROR C231 IN LINE 25 OF ..\Include\N76E003.H: 'P1': redefinition
+*** ERROR C231 IN LINE 26 OF ..\Include\N76E003.H: 'SFRS': redefinition
+*** ERROR C231 IN LINE 27 OF ..\Include\N76E003.H: 'CAPCON0': redefinition
+*** ERROR C231 IN LINE 28 OF ..\Include\N76E003.H: 'CAPCON1': redefinition
+*** ERROR C231 IN LINE 29 OF ..\Include\N76E003.H: 'CAPCON2': redefinition
+*** ERROR C231 IN LINE 30 OF ..\Include\N76E003.H: 'CKDIV': redefinition
+*** ERROR C231 IN LINE 31 OF ..\Include\N76E003.H: 'CKSWT': redefinition
+*** ERROR C231 IN LINE 32 OF ..\Include\N76E003.H: 'CKEN': redefinition
+*** ERROR C231 IN LINE 34 OF ..\Include\N76E003.H: 'SCON': redefinition
+*** ERROR C231 IN LINE 35 OF ..\Include\N76E003.H: 'SBUF': redefinition
+*** ERROR C231 IN LINE 36 OF ..\Include\N76E003.H: 'SBUF_1': redefinition
+*** ERROR C231 IN LINE 37 OF ..\Include\N76E003.H: 'EIE': redefinition
+C51 COMPILER V9.54   DELAY                                                                 05/19/2018 23:05:59 PAGE 2   
+
+*** ERROR C231 IN LINE 38 OF ..\Include\N76E003.H: 'EIE1': redefinition
+*** ERROR C231 IN LINE 39 OF ..\Include\N76E003.H: 'CHPCON': redefinition
+*** ERROR C231 IN LINE 41 OF ..\Include\N76E003.H: 'P2': redefinition
+*** ERROR C231 IN LINE 42 OF ..\Include\N76E003.H: 'AUXR1': redefinition
+*** ERROR C231 IN LINE 43 OF ..\Include\N76E003.H: 'BODCON0': redefinition
+*** ERROR C231 IN LINE 44 OF ..\Include\N76E003.H: 'IAPTRG': redefinition
+*** ERROR C231 IN LINE 45 OF ..\Include\N76E003.H: 'IAPUEN': redefinition
+*** ERROR C231 IN LINE 46 OF ..\Include\N76E003.H: 'IAPAL': redefinition
+*** ERROR C231 IN LINE 47 OF ..\Include\N76E003.H: 'IAPAH': redefinition
+*** ERROR C231 IN LINE 49 OF ..\Include\N76E003.H: 'IE': redefinition
+*** ERROR C231 IN LINE 50 OF ..\Include\N76E003.H: 'SADDR': redefinition
+*** ERROR C231 IN LINE 51 OF ..\Include\N76E003.H: 'WDCON': redefinition
+*** ERROR C231 IN LINE 52 OF ..\Include\N76E003.H: 'BODCON1': redefinition
+*** ERROR C231 IN LINE 53 OF ..\Include\N76E003.H: 'P3M1': redefinition
+*** ERROR C231 IN LINE 54 OF ..\Include\N76E003.H: 'P3S': redefinition
+*** ERROR C231 IN LINE 55 OF ..\Include\N76E003.H: 'P3M2': redefinition
+*** ERROR C231 IN LINE 56 OF ..\Include\N76E003.H: 'P3SR': redefinition
+*** ERROR C231 IN LINE 57 OF ..\Include\N76E003.H: 'IAPFD': redefinition
+*** ERROR C231 IN LINE 58 OF ..\Include\N76E003.H: 'IAPCN': redefinition
+*** ERROR C231 IN LINE 60 OF ..\Include\N76E003.H: 'P3': redefinition
+*** ERROR C231 IN LINE 61 OF ..\Include\N76E003.H: 'P0M1': redefinition
+*** ERROR C231 IN LINE 62 OF ..\Include\N76E003.H: 'P0S': redefinition
+*** ERROR C231 IN LINE 63 OF ..\Include\N76E003.H: 'P0M2': redefinition
+*** ERROR C231 IN LINE 64 OF ..\Include\N76E003.H: 'P0SR': redefinition
+*** ERROR C231 IN LINE 65 OF ..\Include\N76E003.H: 'P1M1': redefinition
+*** ERROR C231 IN LINE 66 OF ..\Include\N76E003.H: 'P1S': redefinition
+*** ERROR C231 IN LINE 67 OF ..\Include\N76E003.H: 'P1M2': redefinition
+*** ERROR C231 IN LINE 68 OF ..\Include\N76E003.H: 'P1SR': redefinition
+*** ERROR C231 IN LINE 69 OF ..\Include\N76E003.H: 'P2S': redefinition
+*** ERROR C231 IN LINE 70 OF ..\Include\N76E003.H: 'IPH': redefinition
+*** ERROR C231 IN LINE 71 OF ..\Include\N76E003.H: 'PWMINTC': redefinition
+*** ERROR C231 IN LINE 73 OF ..\Include\N76E003.H: 'IP': redefinition
+*** ERROR C231 IN LINE 74 OF ..\Include\N76E003.H: 'SADEN': redefinition
+*** ERROR C231 IN LINE 75 OF ..\Include\N76E003.H: 'SADEN_1': redefinition
+*** ERROR C231 IN LINE 76 OF ..\Include\N76E003.H: 'SADDR_1': redefinition
+*** ERROR C231 IN LINE 77 OF ..\Include\N76E003.H: 'I2DAT': redefinition
+*** ERROR C231 IN LINE 78 OF ..\Include\N76E003.H: 'I2STAT': redefinition
+*** ERROR C231 IN LINE 79 OF ..\Include\N76E003.H: 'I2CLK': redefinition
+*** ERROR C231 IN LINE 80 OF ..\Include\N76E003.H: 'I2TOC': redefinition
+*** ERROR C231 IN LINE 82 OF ..\Include\N76E003.H: 'I2CON': redefinition
+*** ERROR C231 IN LINE 83 OF ..\Include\N76E003.H: 'I2ADDR': redefinition
+*** ERROR C231 IN LINE 84 OF ..\Include\N76E003.H: 'ADCRL': redefinition
+*** ERROR C231 IN LINE 85 OF ..\Include\N76E003.H: 'ADCRH': redefinition
+*** ERROR C231 IN LINE 86 OF ..\Include\N76E003.H: 'T3CON': redefinition
+*** ERROR C231 IN LINE 87 OF ..\Include\N76E003.H: 'PWM4H': redefinition
+*** ERROR C231 IN LINE 88 OF ..\Include\N76E003.H: 'RL3': redefinition
+*** ERROR C231 IN LINE 89 OF ..\Include\N76E003.H: 'PWM5H': redefinition
+*** ERROR C231 IN LINE 90 OF ..\Include\N76E003.H: 'RH3': redefinition
+*** ERROR C231 IN LINE 91 OF ..\Include\N76E003.H: 'PIOCON1': redefinition
+*** ERROR C231 IN LINE 92 OF ..\Include\N76E003.H: 'TA': redefinition
+*** ERROR C231 IN LINE 94 OF ..\Include\N76E003.H: 'T2CON': redefinition
+*** ERROR C231 IN LINE 95 OF ..\Include\N76E003.H: 'T2MOD': redefinition
+*** ERROR C231 IN LINE 96 OF ..\Include\N76E003.H: 'RCMP2L': redefinition
+*** ERROR C231 IN LINE 97 OF ..\Include\N76E003.H: 'RCMP2H': redefinition
+*** ERROR C231 IN LINE 98 OF ..\Include\N76E003.H: 'TL2': redefinition
+*** ERROR C231 IN LINE 99 OF ..\Include\N76E003.H: 'PWM4L': redefinition
+*** ERROR C231 IN LINE 100 OF ..\Include\N76E003.H: 'TH2': redefinition
+*** ERROR C231 IN LINE 101 OF ..\Include\N76E003.H: 'PWM5L': redefinition
+*** ERROR C231 IN LINE 102 OF ..\Include\N76E003.H: 'ADCMPL': redefinition
+*** ERROR C231 IN LINE 103 OF ..\Include\N76E003.H: 'ADCMPH': redefinition
+*** ERROR C231 IN LINE 105 OF ..\Include\N76E003.H: 'PSW': redefinition
+*** ERROR C231 IN LINE 106 OF ..\Include\N76E003.H: 'PWMPH': redefinition
+C51 COMPILER V9.54   DELAY                                                                 05/19/2018 23:05:59 PAGE 3   
+
+*** ERROR C231 IN LINE 107 OF ..\Include\N76E003.H: 'PWM0H': redefinition
+*** ERROR C231 IN LINE 108 OF ..\Include\N76E003.H: 'PWM1H': redefinition
+*** ERROR C231 IN LINE 109 OF ..\Include\N76E003.H: 'PWM2H': redefinition
+*** ERROR C231 IN LINE 110 OF ..\Include\N76E003.H: 'PWM3H': redefinition
+*** ERROR C231 IN LINE 111 OF ..\Include\N76E003.H: 'PNP': redefinition
+*** ERROR C231 IN LINE 112 OF ..\Include\N76E003.H: 'FBD': redefinition
+*** ERROR C231 IN LINE 114 OF ..\Include\N76E003.H: 'PWMCON0': redefinition
+*** ERROR C231 IN LINE 115 OF ..\Include\N76E003.H: 'PWMPL': redefinition
+*** ERROR C231 IN LINE 116 OF ..\Include\N76E003.H: 'PWM0L': redefinition
+*** ERROR C231 IN LINE 117 OF ..\Include\N76E003.H: 'PWM1L': redefinition
+*** ERROR C231 IN LINE 118 OF ..\Include\N76E003.H: 'PWM2L': redefinition
+*** ERROR C231 IN LINE 119 OF ..\Include\N76E003.H: 'PWM3L': redefinition
+*** ERROR C231 IN LINE 120 OF ..\Include\N76E003.H: 'PIOCON0': redefinition
+*** ERROR C231 IN LINE 121 OF ..\Include\N76E003.H: 'PWMCON1': redefinition
+*** ERROR C231 IN LINE 123 OF ..\Include\N76E003.H: 'ACC': redefinition
+*** ERROR C231 IN LINE 124 OF ..\Include\N76E003.H: 'ADCCON1': redefinition
+*** ERROR C231 IN LINE 125 OF ..\Include\N76E003.H: 'ADCCON2': redefinition
+*** ERROR C231 IN LINE 126 OF ..\Include\N76E003.H: 'ADCDLY': redefinition
+*** ERROR C231 IN LINE 127 OF ..\Include\N76E003.H: 'C0L': redefinition
+*** ERROR C231 IN LINE 128 OF ..\Include\N76E003.H: 'C0H': redefinition
+*** ERROR C231 IN LINE 129 OF ..\Include\N76E003.H: 'C1L': redefinition
+*** ERROR C231 IN LINE 130 OF ..\Include\N76E003.H: 'C1H': redefinition
+*** ERROR C231 IN LINE 132 OF ..\Include\N76E003.H: 'ADCCON0': redefinition
+*** ERROR C231 IN LINE 133 OF ..\Include\N76E003.H: 'PICON': redefinition
+*** ERROR C231 IN LINE 134 OF ..\Include\N76E003.H: 'PINEN': redefinition
+*** ERROR C231 IN LINE 135 OF ..\Include\N76E003.H: 'PIPEN': redefinition
+*** ERROR C231 IN LINE 136 OF ..\Include\N76E003.H: 'PIF': redefinition
+*** ERROR C231 IN LINE 137 OF ..\Include\N76E003.H: 'C2L': redefinition
+*** ERROR C231 IN LINE 138 OF ..\Include\N76E003.H: 'C2H': redefinition
+*** ERROR C231 IN LINE 139 OF ..\Include\N76E003.H: 'EIP': redefinition
+*** ERROR C231 IN LINE 141 OF ..\Include\N76E003.H: 'B': redefinition
+*** ERROR C231 IN LINE 142 OF ..\Include\N76E003.H: 'CAPCON3': redefinition
+*** ERROR C231 IN LINE 143 OF ..\Include\N76E003.H: 'CAPCON4': redefinition
+*** ERROR C231 IN LINE 144 OF ..\Include\N76E003.H: 'SPCR': redefinition
+*** ERROR C231 IN LINE 145 OF ..\Include\N76E003.H: 'SPCR2': redefinition
+*** ERROR C231 IN LINE 146 OF ..\Include\N76E003.H: 'SPSR': redefinition
+*** ERROR C231 IN LINE 147 OF ..\Include\N76E003.H: 'SPDR': redefinition
+*** ERROR C231 IN LINE 148 OF ..\Include\N76E003.H: 'AINDIDS': redefinition
+*** ERROR C231 IN LINE 149 OF ..\Include\N76E003.H: 'EIPH': redefinition
+*** ERROR C231 IN LINE 151 OF ..\Include\N76E003.H: 'SCON_1': redefinition
+*** ERROR C231 IN LINE 152 OF ..\Include\N76E003.H: 'PDTEN': redefinition
+*** ERROR C231 IN LINE 153 OF ..\Include\N76E003.H: 'PDTCNT': redefinition
+*** ERROR C231 IN LINE 154 OF ..\Include\N76E003.H: 'PMEN': redefinition
+*** ERROR C231 IN LINE 155 OF ..\Include\N76E003.H: 'PMD': redefinition
+*** ERROR C231 IN LINE 156 OF ..\Include\N76E003.H: 'EIP1': redefinition
+*** ERROR C231 IN LINE 157 OF ..\Include\N76E003.H: 'EIPH1': redefinition
+*** ERROR C231 IN LINE 161 OF ..\Include\N76E003.H: 'SM0_1': redefinition
+*** ERROR C231 IN LINE 162 OF ..\Include\N76E003.H: 'FE_1': redefinition
+*** ERROR C231 IN LINE 163 OF ..\Include\N76E003.H: 'SM1_1': redefinition
+*** ERROR C231 IN LINE 164 OF ..\Include\N76E003.H: 'SM2_1': redefinition
+*** ERROR C231 IN LINE 165 OF ..\Include\N76E003.H: 'REN_1': redefinition
+*** ERROR C231 IN LINE 166 OF ..\Include\N76E003.H: 'TB8_1': redefinition
+*** ERROR C231 IN LINE 167 OF ..\Include\N76E003.H: 'RB8_1': redefinition
+*** ERROR C231 IN LINE 168 OF ..\Include\N76E003.H: 'TI_1': redefinition
+*** ERROR C231 IN LINE 169 OF ..\Include\N76E003.H: 'RI_1': redefinition
+*** ERROR C231 IN LINE 172 OF ..\Include\N76E003.H: 'ADCF': redefinition
+*** ERROR C231 IN LINE 173 OF ..\Include\N76E003.H: 'ADCS': redefinition
+*** ERROR C231 IN LINE 174 OF ..\Include\N76E003.H: 'ETGSEL1': redefinition
+*** ERROR C231 IN LINE 175 OF ..\Include\N76E003.H: 'ETGSEL0': redefinition
+*** ERROR C231 IN LINE 176 OF ..\Include\N76E003.H: 'ADCHS3': redefinition
+*** ERROR C231 IN LINE 177 OF ..\Include\N76E003.H: 'ADCHS2': redefinition
+*** ERROR C231 IN LINE 178 OF ..\Include\N76E003.H: 'ADCHS1': redefinition
+C51 COMPILER V9.54   DELAY                                                                 05/19/2018 23:05:59 PAGE 4   
+
+*** ERROR C231 IN LINE 179 OF ..\Include\N76E003.H: 'ADCHS0': redefinition
+*** ERROR C231 IN LINE 182 OF ..\Include\N76E003.H: 'PWMRUN': redefinition
+*** ERROR C231 IN LINE 183 OF ..\Include\N76E003.H: 'LOAD': redefinition
+*** ERROR C231 IN LINE 184 OF ..\Include\N76E003.H: 'PWMF': redefinition
+*** ERROR C231 IN LINE 185 OF ..\Include\N76E003.H: 'CLRPWM': redefinition
+*** ERROR C231 IN LINE 189 OF ..\Include\N76E003.H: 'CY': redefinition
+*** ERROR C231 IN LINE 190 OF ..\Include\N76E003.H: 'AC': redefinition
+*** ERROR C231 IN LINE 191 OF ..\Include\N76E003.H: 'F0': redefinition
+*** ERROR C231 IN LINE 192 OF ..\Include\N76E003.H: 'RS1': redefinition
+*** ERROR C231 IN LINE 193 OF ..\Include\N76E003.H: 'RS0': redefinition
+*** ERROR C231 IN LINE 194 OF ..\Include\N76E003.H: 'OV': redefinition
+*** ERROR C231 IN LINE 195 OF ..\Include\N76E003.H: 'P': redefinition
+*** ERROR C231 IN LINE 198 OF ..\Include\N76E003.H: 'TF2': redefinition
+*** ERROR C231 IN LINE 199 OF ..\Include\N76E003.H: 'TR2': redefinition
+*** ERROR C231 IN LINE 200 OF ..\Include\N76E003.H: 'CM_RL2': redefinition
+*** ERROR C231 IN LINE 203 OF ..\Include\N76E003.H: 'I2CEN': redefinition
+*** ERROR C231 IN LINE 204 OF ..\Include\N76E003.H: 'STA': redefinition
+*** ERROR C231 IN LINE 205 OF ..\Include\N76E003.H: 'STO': redefinition
+*** ERROR C231 IN LINE 206 OF ..\Include\N76E003.H: 'SI': redefinition
+*** ERROR C231 IN LINE 207 OF ..\Include\N76E003.H: 'AA': redefinition
+*** ERROR C231 IN LINE 208 OF ..\Include\N76E003.H: 'I2CPX': redefinition
+*** ERROR C231 IN LINE 211 OF ..\Include\N76E003.H: 'PADC': redefinition
+*** ERROR C231 IN LINE 212 OF ..\Include\N76E003.H: 'PBOD': redefinition
+*** ERROR C231 IN LINE 213 OF ..\Include\N76E003.H: 'PS': redefinition
+*** ERROR C231 IN LINE 214 OF ..\Include\N76E003.H: 'PT1': redefinition
+*** ERROR C231 IN LINE 215 OF ..\Include\N76E003.H: 'PX1': redefinition
+*** ERROR C231 IN LINE 216 OF ..\Include\N76E003.H: 'PT0': redefinition
+*** ERROR C231 IN LINE 217 OF ..\Include\N76E003.H: 'PX0': redefinition
+*** ERROR C231 IN LINE 220 OF ..\Include\N76E003.H: 'P30': redefinition
+*** ERROR C231 IN LINE 224 OF ..\Include\N76E003.H: 'EA': redefinition
+*** ERROR C231 IN LINE 225 OF ..\Include\N76E003.H: 'EADC': redefinition
+*** ERROR C231 IN LINE 226 OF ..\Include\N76E003.H: 'EBOD': redefinition
+*** ERROR C231 IN LINE 227 OF ..\Include\N76E003.H: 'ES': redefinition
+*** ERROR C231 IN LINE 228 OF ..\Include\N76E003.H: 'ET1': redefinition
+*** ERROR C231 IN LINE 229 OF ..\Include\N76E003.H: 'EX1': redefinition
+*** ERROR C231 IN LINE 230 OF ..\Include\N76E003.H: 'ET0': redefinition
+*** ERROR C231 IN LINE 231 OF ..\Include\N76E003.H: 'EX0': redefinition
+*** ERROR C231 IN LINE 234 OF ..\Include\N76E003.H: 'P20': redefinition
+*** ERROR C231 IN LINE 237 OF ..\Include\N76E003.H: 'SM0': redefinition
+*** ERROR C231 IN LINE 238 OF ..\Include\N76E003.H: 'FE': redefinition
+*** ERROR C231 IN LINE 239 OF ..\Include\N76E003.H: 'SM1': redefinition
+*** ERROR C231 IN LINE 240 OF ..\Include\N76E003.H: 'SM2': redefinition
+*** ERROR C231 IN LINE 241 OF ..\Include\N76E003.H: 'REN': redefinition
+*** ERROR C231 IN LINE 242 OF ..\Include\N76E003.H: 'TB8': redefinition
+*** ERROR C231 IN LINE 243 OF ..\Include\N76E003.H: 'RB8': redefinition
+*** ERROR C231 IN LINE 244 OF ..\Include\N76E003.H: 'TI': redefinition
+*** ERROR C231 IN LINE 245 OF ..\Include\N76E003.H: 'RI': redefinition
+*** ERROR C231 IN LINE 248 OF ..\Include\N76E003.H: 'P17': redefinition
+*** ERROR C231 IN LINE 249 OF ..\Include\N76E003.H: 'P16': redefinition
+*** ERROR C231 IN LINE 250 OF ..\Include\N76E003.H: 'TXD_1': redefinition
+*** ERROR C231 IN LINE 251 OF ..\Include\N76E003.H: 'P15': redefinition
+*** ERROR C231 IN LINE 252 OF ..\Include\N76E003.H: 'P14': redefinition
+*** ERROR C231 IN LINE 253 OF ..\Include\N76E003.H: 'SDA': redefinition
+*** ERROR C231 IN LINE 254 OF ..\Include\N76E003.H: 'P13': redefinition
+*** ERROR C231 IN LINE 255 OF ..\Include\N76E003.H: 'SCL': redefinition
+*** ERROR C231 IN LINE 256 OF ..\Include\N76E003.H: 'P12': redefinition
+*** ERROR C231 IN LINE 257 OF ..\Include\N76E003.H: 'P11': redefinition
+*** ERROR C231 IN LINE 258 OF ..\Include\N76E003.H: 'P10': redefinition
+*** ERROR C231 IN LINE 261 OF ..\Include\N76E003.H: 'TF1': redefinition
+*** ERROR C231 IN LINE 262 OF ..\Include\N76E003.H: 'TR1': redefinition
+*** ERROR C231 IN LINE 263 OF ..\Include\N76E003.H: 'TF0': redefinition
+*** ERROR C231 IN LINE 264 OF ..\Include\N76E003.H: 'TR0': redefinition
+C51 COMPILER V9.54   DELAY                                                                 05/19/2018 23:05:59 PAGE 5   
+
+*** ERROR C231 IN LINE 265 OF ..\Include\N76E003.H: 'IE1': redefinition
+*** ERROR C231 IN LINE 266 OF ..\Include\N76E003.H: 'IT1': redefinition
+*** ERROR C231 IN LINE 267 OF ..\Include\N76E003.H: 'IE0': redefinition
+*** ERROR C231 IN LINE 268 OF ..\Include\N76E003.H: 'IT0': redefinition
+*** ERROR C231 IN LINE 272 OF ..\Include\N76E003.H: 'P07': redefinition
+*** ERROR C231 IN LINE 273 OF ..\Include\N76E003.H: 'RXD': redefinition
+*** ERROR C231 IN LINE 274 OF ..\Include\N76E003.H: 'P06': redefinition
+*** ERROR C231 IN LINE 275 OF ..\Include\N76E003.H: 'TXD': redefinition
+*** ERROR C231 IN LINE 276 OF ..\Include\N76E003.H: 'P05': redefinition
+*** ERROR C231 IN LINE 277 OF ..\Include\N76E003.H: 'P04': redefinition
+*** ERROR C231 IN LINE 278 OF ..\Include\N76E003.H: 'STADC': redefinition
+*** ERROR C231 IN LINE 279 OF ..\Include\N76E003.H: 'P03': redefinition
+*** ERROR C231 IN LINE 280 OF ..\Include\N76E003.H: 'P02': redefinition
+*** ERROR C231 IN LINE 281 OF ..\Include\N76E003.H: 'RXD_1': redefinition
+*** ERROR C231 IN LINE 282 OF ..\Include\N76E003.H: 'P01': redefinition
+*** ERROR C231 IN LINE 283 OF ..\Include\N76E003.H: 'MISO': redefinition
+*** ERROR C231 IN LINE 284 OF ..\Include\N76E003.H: 'P00': redefinition
+*** ERROR C231 IN LINE 285 OF ..\Include\N76E003.H: 'MOSI': redefinition
+  20          #include "count.h"
+*** ERROR C231 IN LINE 7 OF ..\Include\N76E003.h: 'P0': redefinition
+*** ERROR C231 IN LINE 8 OF ..\Include\N76E003.h: 'SP': redefinition
+*** ERROR C231 IN LINE 9 OF ..\Include\N76E003.h: 'DPL': redefinition
+*** ERROR C231 IN LINE 10 OF ..\Include\N76E003.h: 'DPH': redefinition
+*** ERROR C231 IN LINE 11 OF ..\Include\N76E003.h: 'RCTRIM0': redefinition
+*** ERROR C231 IN LINE 12 OF ..\Include\N76E003.h: 'RCTRIM1': redefinition
+*** ERROR C231 IN LINE 13 OF ..\Include\N76E003.h: 'RWK': redefinition
+*** ERROR C231 IN LINE 14 OF ..\Include\N76E003.h: 'PCON': redefinition
+*** ERROR C231 IN LINE 16 OF ..\Include\N76E003.h: 'TCON': redefinition
+*** ERROR C231 IN LINE 17 OF ..\Include\N76E003.h: 'TMOD': redefinition
+*** ERROR C231 IN LINE 18 OF ..\Include\N76E003.h: 'TL0': redefinition
+*** ERROR C231 IN LINE 19 OF ..\Include\N76E003.h: 'TL1': redefinition
+*** ERROR C231 IN LINE 20 OF ..\Include\N76E003.h: 'TH0': redefinition
+*** ERROR C231 IN LINE 21 OF ..\Include\N76E003.h: 'TH1': redefinition
+*** ERROR C231 IN LINE 22 OF ..\Include\N76E003.h: 'CKCON': redefinition
+*** ERROR C231 IN LINE 23 OF ..\Include\N76E003.h: 'WKCON': redefinition
+*** ERROR C231 IN LINE 25 OF ..\Include\N76E003.h: 'P1': redefinition
+*** ERROR C231 IN LINE 26 OF ..\Include\N76E003.h: 'SFRS': redefinition
+*** ERROR C231 IN LINE 27 OF ..\Include\N76E003.h: 'CAPCON0': redefinition
+*** ERROR C231 IN LINE 28 OF ..\Include\N76E003.h: 'CAPCON1': redefinition
+*** ERROR C231 IN LINE 29 OF ..\Include\N76E003.h: 'CAPCON2': redefinition
+*** ERROR C231 IN LINE 30 OF ..\Include\N76E003.h: 'CKDIV': redefinition
+*** ERROR C231 IN LINE 31 OF ..\Include\N76E003.h: 'CKSWT': redefinition
+*** ERROR C231 IN LINE 32 OF ..\Include\N76E003.h: 'CKEN': redefinition
+*** ERROR C231 IN LINE 34 OF ..\Include\N76E003.h: 'SCON': redefinition
+*** ERROR C231 IN LINE 35 OF ..\Include\N76E003.h: 'SBUF': redefinition
+*** ERROR C231 IN LINE 36 OF ..\Include\N76E003.h: 'SBUF_1': redefinition
+*** ERROR C231 IN LINE 37 OF ..\Include\N76E003.h: 'EIE': redefinition
+*** ERROR C231 IN LINE 38 OF ..\Include\N76E003.h: 'EIE1': redefinition
+*** ERROR C231 IN LINE 39 OF ..\Include\N76E003.h: 'CHPCON': redefinition
+*** ERROR C231 IN LINE 41 OF ..\Include\N76E003.h: 'P2': redefinition
+*** ERROR C231 IN LINE 42 OF ..\Include\N76E003.h: 'AUXR1': redefinition
+*** ERROR C231 IN LINE 43 OF ..\Include\N76E003.h: 'BODCON0': redefinition
+*** ERROR C231 IN LINE 44 OF ..\Include\N76E003.h: 'IAPTRG': redefinition
+*** ERROR C231 IN LINE 45 OF ..\Include\N76E003.h: 'IAPUEN': redefinition
+*** ERROR C231 IN LINE 46 OF ..\Include\N76E003.h: 'IAPAL': redefinition
+*** ERROR C231 IN LINE 47 OF ..\Include\N76E003.h: 'IAPAH': redefinition
+*** ERROR C231 IN LINE 49 OF ..\Include\N76E003.h: 'IE': redefinition
+*** ERROR C231 IN LINE 50 OF ..\Include\N76E003.h: 'SADDR': redefinition
+*** ERROR C231 IN LINE 51 OF ..\Include\N76E003.h: 'WDCON': redefinition
+*** ERROR C231 IN LINE 52 OF ..\Include\N76E003.h: 'BODCON1': redefinition
+*** ERROR C231 IN LINE 53 OF ..\Include\N76E003.h: 'P3M1': redefinition
+*** ERROR C231 IN LINE 54 OF ..\Include\N76E003.h: 'P3S': redefinition
+C51 COMPILER V9.54   DELAY                                                                 05/19/2018 23:05:59 PAGE 6   
+
+*** ERROR C231 IN LINE 55 OF ..\Include\N76E003.h: 'P3M2': redefinition
+*** ERROR C231 IN LINE 56 OF ..\Include\N76E003.h: 'P3SR': redefinition
+*** ERROR C231 IN LINE 57 OF ..\Include\N76E003.h: 'IAPFD': redefinition
+*** ERROR C231 IN LINE 58 OF ..\Include\N76E003.h: 'IAPCN': redefinition
+*** ERROR C231 IN LINE 60 OF ..\Include\N76E003.h: 'P3': redefinition
+*** ERROR C231 IN LINE 61 OF ..\Include\N76E003.h: 'P0M1': redefinition
+*** ERROR C231 IN LINE 62 OF ..\Include\N76E003.h: 'P0S': redefinition
+*** ERROR C231 IN LINE 63 OF ..\Include\N76E003.h: 'P0M2': redefinition
+*** ERROR C231 IN LINE 64 OF ..\Include\N76E003.h: 'P0SR': redefinition
+*** ERROR C231 IN LINE 65 OF ..\Include\N76E003.h: 'P1M1': redefinition
+*** ERROR C231 IN LINE 66 OF ..\Include\N76E003.h: 'P1S': redefinition
+*** ERROR C231 IN LINE 67 OF ..\Include\N76E003.h: 'P1M2': redefinition
+*** ERROR C231 IN LINE 68 OF ..\Include\N76E003.h: 'P1SR': redefinition
+*** ERROR C231 IN LINE 69 OF ..\Include\N76E003.h: 'P2S': redefinition
+*** ERROR C231 IN LINE 70 OF ..\Include\N76E003.h: 'IPH': redefinition
+*** ERROR C231 IN LINE 71 OF ..\Include\N76E003.h: 'PWMINTC': redefinition
+*** ERROR C231 IN LINE 73 OF ..\Include\N76E003.h: 'IP': redefinition
+*** ERROR C231 IN LINE 74 OF ..\Include\N76E003.h: 'SADEN': redefinition
+*** ERROR C231 IN LINE 75 OF ..\Include\N76E003.h: 'SADEN_1': redefinition
+*** ERROR C231 IN LINE 76 OF ..\Include\N76E003.h: 'SADDR_1': redefinition
+*** ERROR C231 IN LINE 77 OF ..\Include\N76E003.h: 'I2DAT': redefinition
+*** ERROR C231 IN LINE 78 OF ..\Include\N76E003.h: 'I2STAT': redefinition
+*** ERROR C231 IN LINE 79 OF ..\Include\N76E003.h: 'I2CLK': redefinition
+*** ERROR C231 IN LINE 80 OF ..\Include\N76E003.h: 'I2TOC': redefinition
+*** ERROR C231 IN LINE 82 OF ..\Include\N76E003.h: 'I2CON': redefinition
+*** ERROR C231 IN LINE 83 OF ..\Include\N76E003.h: 'I2ADDR': redefinition
+*** ERROR C231 IN LINE 84 OF ..\Include\N76E003.h: 'ADCRL': redefinition
+*** ERROR C231 IN LINE 85 OF ..\Include\N76E003.h: 'ADCRH': redefinition
+*** ERROR C231 IN LINE 86 OF ..\Include\N76E003.h: 'T3CON': redefinition
+*** ERROR C231 IN LINE 87 OF ..\Include\N76E003.h: 'PWM4H': redefinition
+*** ERROR C231 IN LINE 88 OF ..\Include\N76E003.h: 'RL3': redefinition
+*** ERROR C231 IN LINE 89 OF ..\Include\N76E003.h: 'PWM5H': redefinition
+*** ERROR C231 IN LINE 90 OF ..\Include\N76E003.h: 'RH3': redefinition
+*** ERROR C231 IN LINE 91 OF ..\Include\N76E003.h: 'PIOCON1': redefinition
+*** ERROR C231 IN LINE 92 OF ..\Include\N76E003.h: 'TA': redefinition
+*** ERROR C231 IN LINE 94 OF ..\Include\N76E003.h: 'T2CON': redefinition
+*** ERROR C231 IN LINE 95 OF ..\Include\N76E003.h: 'T2MOD': redefinition
+*** ERROR C231 IN LINE 96 OF ..\Include\N76E003.h: 'RCMP2L': redefinition
+*** ERROR C231 IN LINE 97 OF ..\Include\N76E003.h: 'RCMP2H': redefinition
+*** ERROR C231 IN LINE 98 OF ..\Include\N76E003.h: 'TL2': redefinition
+*** ERROR C231 IN LINE 99 OF ..\Include\N76E003.h: 'PWM4L': redefinition
+*** ERROR C231 IN LINE 100 OF ..\Include\N76E003.h: 'TH2': redefinition
+*** ERROR C231 IN LINE 101 OF ..\Include\N76E003.h: 'PWM5L': redefinition
+*** ERROR C231 IN LINE 102 OF ..\Include\N76E003.h: 'ADCMPL': redefinition
+*** ERROR C231 IN LINE 103 OF ..\Include\N76E003.h: 'ADCMPH': redefinition
+*** ERROR C231 IN LINE 105 OF ..\Include\N76E003.h: 'PSW': redefinition
+*** ERROR C231 IN LINE 106 OF ..\Include\N76E003.h: 'PWMPH': redefinition
+*** ERROR C231 IN LINE 107 OF ..\Include\N76E003.h: 'PWM0H': redefinition
+*** ERROR C231 IN LINE 108 OF ..\Include\N76E003.h: 'PWM1H': redefinition
+*** ERROR C231 IN LINE 109 OF ..\Include\N76E003.h: 'PWM2H': redefinition
+*** ERROR C231 IN LINE 110 OF ..\Include\N76E003.h: 'PWM3H': redefinition
+*** ERROR C231 IN LINE 111 OF ..\Include\N76E003.h: 'PNP': redefinition
+*** ERROR C231 IN LINE 112 OF ..\Include\N76E003.h: 'FBD': redefinition
+*** ERROR C231 IN LINE 114 OF ..\Include\N76E003.h: 'PWMCON0': redefinition
+*** ERROR C231 IN LINE 115 OF ..\Include\N76E003.h: 'PWMPL': redefinition
+*** ERROR C231 IN LINE 116 OF ..\Include\N76E003.h: 'PWM0L': redefinition
+*** ERROR C231 IN LINE 117 OF ..\Include\N76E003.h: 'PWM1L': redefinition
+*** ERROR C231 IN LINE 118 OF ..\Include\N76E003.h: 'PWM2L': redefinition
+*** ERROR C231 IN LINE 119 OF ..\Include\N76E003.h: 'PWM3L': redefinition
+*** ERROR C231 IN LINE 120 OF ..\Include\N76E003.h: 'PIOCON0': redefinition
+*** ERROR C231 IN LINE 121 OF ..\Include\N76E003.h: 'PWMCON1': redefinition
+*** ERROR C231 IN LINE 123 OF ..\Include\N76E003.h: 'ACC': redefinition
+C51 COMPILER V9.54   DELAY                                                                 05/19/2018 23:05:59 PAGE 7   
+
+*** ERROR C231 IN LINE 124 OF ..\Include\N76E003.h: 'ADCCON1': redefinition
+*** ERROR C231 IN LINE 125 OF ..\Include\N76E003.h: 'ADCCON2': redefinition
+*** ERROR C231 IN LINE 126 OF ..\Include\N76E003.h: 'ADCDLY': redefinition
+*** ERROR C231 IN LINE 127 OF ..\Include\N76E003.h: 'C0L': redefinition
+*** ERROR C231 IN LINE 128 OF ..\Include\N76E003.h: 'C0H': redefinition
+*** ERROR C231 IN LINE 129 OF ..\Include\N76E003.h: 'C1L': redefinition
+*** ERROR C231 IN LINE 130 OF ..\Include\N76E003.h: 'C1H': redefinition
+*** ERROR C231 IN LINE 132 OF ..\Include\N76E003.h: 'ADCCON0': redefinition
+*** ERROR C231 IN LINE 133 OF ..\Include\N76E003.h: 'PICON': redefinition
+*** ERROR C231 IN LINE 134 OF ..\Include\N76E003.h: 'PINEN': redefinition
+*** ERROR C231 IN LINE 135 OF ..\Include\N76E003.h: 'PIPEN': redefinition
+*** ERROR C231 IN LINE 136 OF ..\Include\N76E003.h: 'PIF': redefinition
+*** ERROR C231 IN LINE 137 OF ..\Include\N76E003.h: 'C2L': redefinition
+*** ERROR C231 IN LINE 138 OF ..\Include\N76E003.h: 'C2H': redefinition
+*** ERROR C231 IN LINE 139 OF ..\Include\N76E003.h: 'EIP': redefinition
+*** ERROR C231 IN LINE 141 OF ..\Include\N76E003.h: 'B': redefinition
+*** ERROR C231 IN LINE 142 OF ..\Include\N76E003.h: 'CAPCON3': redefinition
+*** ERROR C231 IN LINE 143 OF ..\Include\N76E003.h: 'CAPCON4': redefinition
+*** ERROR C231 IN LINE 144 OF ..\Include\N76E003.h: 'SPCR': redefinition
+*** ERROR C231 IN LINE 145 OF ..\Include\N76E003.h: 'SPCR2': redefinition
+*** ERROR C231 IN LINE 146 OF ..\Include\N76E003.h: 'SPSR': redefinition
+*** ERROR C231 IN LINE 147 OF ..\Include\N76E003.h: 'SPDR': redefinition
+*** ERROR C231 IN LINE 148 OF ..\Include\N76E003.h: 'AINDIDS': redefinition
+*** ERROR C231 IN LINE 149 OF ..\Include\N76E003.h: 'EIPH': redefinition
+*** ERROR C231 IN LINE 151 OF ..\Include\N76E003.h: 'SCON_1': redefinition
+*** ERROR C231 IN LINE 152 OF ..\Include\N76E003.h: 'PDTEN': redefinition
+*** ERROR C231 IN LINE 153 OF ..\Include\N76E003.h: 'PDTCNT': redefinition
+*** ERROR C231 IN LINE 154 OF ..\Include\N76E003.h: 'PMEN': redefinition
+*** ERROR C231 IN LINE 155 OF ..\Include\N76E003.h: 'PMD': redefinition
+*** ERROR C231 IN LINE 156 OF ..\Include\N76E003.h: 'EIP1': redefinition
+*** ERROR C231 IN LINE 157 OF ..\Include\N76E003.h: 'EIPH1': redefinition
+*** ERROR C231 IN LINE 161 OF ..\Include\N76E003.h: 'SM0_1': redefinition
+*** ERROR C231 IN LINE 162 OF ..\Include\N76E003.h: 'FE_1': redefinition
+*** ERROR C231 IN LINE 163 OF ..\Include\N76E003.h: 'SM1_1': redefinition
+*** ERROR C231 IN LINE 164 OF ..\Include\N76E003.h: 'SM2_1': redefinition
+*** ERROR C231 IN LINE 165 OF ..\Include\N76E003.h: 'REN_1': redefinition
+*** ERROR C231 IN LINE 166 OF ..\Include\N76E003.h: 'TB8_1': redefinition
+*** ERROR C231 IN LINE 167 OF ..\Include\N76E003.h: 'RB8_1': redefinition
+*** ERROR C231 IN LINE 168 OF ..\Include\N76E003.h: 'TI_1': redefinition
+*** ERROR C231 IN LINE 169 OF ..\Include\N76E003.h: 'RI_1': redefinition
+*** ERROR C231 IN LINE 172 OF ..\Include\N76E003.h: 'ADCF': redefinition
+*** ERROR C231 IN LINE 173 OF ..\Include\N76E003.h: 'ADCS': redefinition
+*** ERROR C231 IN LINE 174 OF ..\Include\N76E003.h: 'ETGSEL1': redefinition
+*** ERROR C231 IN LINE 175 OF ..\Include\N76E003.h: 'ETGSEL0': redefinition
+*** ERROR C231 IN LINE 176 OF ..\Include\N76E003.h: 'ADCHS3': redefinition
+*** ERROR C231 IN LINE 177 OF ..\Include\N76E003.h: 'ADCHS2': redefinition
+*** ERROR C231 IN LINE 178 OF ..\Include\N76E003.h: 'ADCHS1': redefinition
+*** ERROR C231 IN LINE 179 OF ..\Include\N76E003.h: 'ADCHS0': redefinition
+*** ERROR C231 IN LINE 182 OF ..\Include\N76E003.h: 'PWMRUN': redefinition
+*** ERROR C231 IN LINE 183 OF ..\Include\N76E003.h: 'LOAD': redefinition
+*** ERROR C231 IN LINE 184 OF ..\Include\N76E003.h: 'PWMF': redefinition
+*** ERROR C231 IN LINE 185 OF ..\Include\N76E003.h: 'CLRPWM': redefinition
+*** ERROR C231 IN LINE 189 OF ..\Include\N76E003.h: 'CY': redefinition
+*** ERROR C231 IN LINE 190 OF ..\Include\N76E003.h: 'AC': redefinition
+*** ERROR C231 IN LINE 191 OF ..\Include\N76E003.h: 'F0': redefinition
+*** ERROR C231 IN LINE 192 OF ..\Include\N76E003.h: 'RS1': redefinition
+*** ERROR C231 IN LINE 193 OF ..\Include\N76E003.h: 'RS0': redefinition
+*** ERROR C231 IN LINE 194 OF ..\Include\N76E003.h: 'OV': redefinition
+*** ERROR C231 IN LINE 195 OF ..\Include\N76E003.h: 'P': redefinition
+*** ERROR C231 IN LINE 198 OF ..\Include\N76E003.h: 'TF2': redefinition
+*** ERROR C231 IN LINE 199 OF ..\Include\N76E003.h: 'TR2': redefinition
+*** ERROR C231 IN LINE 200 OF ..\Include\N76E003.h: 'CM_RL2': redefinition
+C51 COMPILER V9.54   DELAY                                                                 05/19/2018 23:05:59 PAGE 8   
+
+*** ERROR C231 IN LINE 203 OF ..\Include\N76E003.h: 'I2CEN': redefinition
+*** ERROR C231 IN LINE 204 OF ..\Include\N76E003.h: 'STA': redefinition
+*** ERROR C231 IN LINE 205 OF ..\Include\N76E003.h: 'STO': redefinition
+*** ERROR C231 IN LINE 206 OF ..\Include\N76E003.h: 'SI': redefinition
+*** ERROR C231 IN LINE 207 OF ..\Include\N76E003.h: 'AA': redefinition
+*** ERROR C231 IN LINE 208 OF ..\Include\N76E003.h: 'I2CPX': redefinition
+*** ERROR C231 IN LINE 211 OF ..\Include\N76E003.h: 'PADC': redefinition
+*** ERROR C231 IN LINE 212 OF ..\Include\N76E003.h: 'PBOD': redefinition
+*** ERROR C231 IN LINE 213 OF ..\Include\N76E003.h: 'PS': redefinition
+*** ERROR C231 IN LINE 214 OF ..\Include\N76E003.h: 'PT1': redefinition
+*** ERROR C231 IN LINE 215 OF ..\Include\N76E003.h: 'PX1': redefinition
+*** ERROR C231 IN LINE 216 OF ..\Include\N76E003.h: 'PT0': redefinition
+*** ERROR C231 IN LINE 217 OF ..\Include\N76E003.h: 'PX0': redefinition
+*** ERROR C231 IN LINE 220 OF ..\Include\N76E003.h: 'P30': redefinition
+*** ERROR C231 IN LINE 224 OF ..\Include\N76E003.h: 'EA': redefinition
+*** ERROR C231 IN LINE 225 OF ..\Include\N76E003.h: 'EADC': redefinition
+*** ERROR C231 IN LINE 226 OF ..\Include\N76E003.h: 'EBOD': redefinition
+*** ERROR C231 IN LINE 227 OF ..\Include\N76E003.h: 'ES': redefinition
+*** ERROR C231 IN LINE 228 OF ..\Include\N76E003.h: 'ET1': redefinition
+*** ERROR C231 IN LINE 229 OF ..\Include\N76E003.h: 'EX1': redefinition
+*** ERROR C231 IN LINE 230 OF ..\Include\N76E003.h: 'ET0': redefinition
+*** ERROR C231 IN LINE 231 OF ..\Include\N76E003.h: 'EX0': redefinition
+*** ERROR C231 IN LINE 234 OF ..\Include\N76E003.h: 'P20': redefinition
+*** ERROR C231 IN LINE 237 OF ..\Include\N76E003.h: 'SM0': redefinition
+*** ERROR C231 IN LINE 238 OF ..\Include\N76E003.h: 'FE': redefinition
+*** ERROR C231 IN LINE 239 OF ..\Include\N76E003.h: 'SM1': redefinition
+*** ERROR C231 IN LINE 240 OF ..\Include\N76E003.h: 'SM2': redefinition
+*** ERROR C231 IN LINE 241 OF ..\Include\N76E003.h: 'REN': redefinition
+*** ERROR C231 IN LINE 242 OF ..\Include\N76E003.h: 'TB8': redefinition
+*** ERROR C231 IN LINE 243 OF ..\Include\N76E003.h: 'RB8': redefinition
+*** ERROR C231 IN LINE 244 OF ..\Include\N76E003.h: 'TI': redefinition
+*** ERROR C231 IN LINE 245 OF ..\Include\N76E003.h: 'RI': redefinition
+*** ERROR C231 IN LINE 248 OF ..\Include\N76E003.h: 'P17': redefinition
+*** ERROR C231 IN LINE 249 OF ..\Include\N76E003.h: 'P16': redefinition
+*** ERROR C231 IN LINE 250 OF ..\Include\N76E003.h: 'TXD_1': redefinition
+*** ERROR C231 IN LINE 251 OF ..\Include\N76E003.h: 'P15': redefinition
+*** ERROR C231 IN LINE 252 OF ..\Include\N76E003.h: 'P14': redefinition
+*** ERROR C231 IN LINE 253 OF ..\Include\N76E003.h: 'SDA': redefinition
+*** ERROR C231 IN LINE 254 OF ..\Include\N76E003.h: 'P13': redefinition
+*** ERROR C231 IN LINE 255 OF ..\Include\N76E003.h: 'SCL': redefinition
+*** ERROR C231 IN LINE 256 OF ..\Include\N76E003.h: 'P12': redefinition
+*** ERROR C231 IN LINE 257 OF ..\Include\N76E003.h: 'P11': redefinition
+*** ERROR C231 IN LINE 258 OF ..\Include\N76E003.h: 'P10': redefinition
+*** ERROR C231 IN LINE 261 OF ..\Include\N76E003.h: 'TF1': redefinition
+*** ERROR C231 IN LINE 262 OF ..\Include\N76E003.h: 'TR1': redefinition
+*** ERROR C231 IN LINE 263 OF ..\Include\N76E003.h: 'TF0': redefinition
+*** ERROR C231 IN LINE 264 OF ..\Include\N76E003.h: 'TR0': redefinition
+*** ERROR C231 IN LINE 265 OF ..\Include\N76E003.h: 'IE1': redefinition
+*** ERROR C231 IN LINE 266 OF ..\Include\N76E003.h: 'IT1': redefinition
+*** ERROR C231 IN LINE 267 OF ..\Include\N76E003.h: 'IE0': redefinition
+*** ERROR C231 IN LINE 268 OF ..\Include\N76E003.h: 'IT0': redefinition
+*** ERROR C231 IN LINE 272 OF ..\Include\N76E003.h: 'P07': redefinition
+*** ERROR C231 IN LINE 273 OF ..\Include\N76E003.h: 'RXD': redefinition
+*** ERROR C231 IN LINE 274 OF ..\Include\N76E003.h: 'P06': redefinition
+*** ERROR C231 IN LINE 275 OF ..\Include\N76E003.h: 'TXD': redefinition
+*** ERROR C231 IN LINE 276 OF ..\Include\N76E003.h: 'P05': redefinition
+*** ERROR C231 IN LINE 277 OF ..\Include\N76E003.h: 'P04': redefinition
+*** ERROR C231 IN LINE 278 OF ..\Include\N76E003.h: 'STADC': redefinition
+*** ERROR C231 IN LINE 279 OF ..\Include\N76E003.h: 'P03': redefinition
+*** ERROR C231 IN LINE 280 OF ..\Include\N76E003.h: 'P02': redefinition
+*** ERROR C231 IN LINE 281 OF ..\Include\N76E003.h: 'RXD_1': redefinition
+*** ERROR C231 IN LINE 282 OF ..\Include\N76E003.h: 'P01': redefinition
+C51 COMPILER V9.54   DELAY                                                                 05/19/2018 23:05:59 PAGE 9   
+
+*** ERROR C231 IN LINE 283 OF ..\Include\N76E003.h: 'MISO': redefinition
+*** ERROR C231 IN LINE 284 OF ..\Include\N76E003.h: 'P00': redefinition
+*** ERROR C231 IN LINE 285 OF ..\Include\N76E003.h: 'MOSI': redefinition
+*** ERROR C231 IN LINE 1 OF ..\Include\Common.h: 'BIT': redefinition
+*** ERROR C231 IN LINE 2 OF ..\Include\Common.h: 'UINT8': redefinition
+*** ERROR C231 IN LINE 3 OF ..\Include\Common.h: 'UINT16': redefinition
+*** ERROR C141 IN LINE 4 OF ..\Include\Common.h: syntax error near 'UINT32'
+*** ERROR C231 IN LINE 6 OF ..\Include\Common.h: 'uint8_t': redefinition
+*** ERROR C231 IN LINE 7 OF ..\Include\Common.h: 'uint16_t': redefinition
+*** ERROR C141 IN LINE 8 OF ..\Include\Common.h: syntax error near 'uint32_t'
+  21          
+  22          
+  23          #define TH0_INIT        0xFC //5.0ms@XTAL=12MHz, Period = (10.85/2) ms@XTAL=22.1184MHz
+  24          #define TL0_INIT        0x0F
+  25          #define TH1_INIT        0xE0 //2.5ms@XTAL=12MHz, Period = (5.425/2) ms@XTAL=22.1184MHz
+  26          #define TL1_INIT        0x00
+  27          
+  28          extern unsigned char is_5ms_Flag;
+  29          extern unsigned char blinktime;
+  30          extern unsigned int powercnt;
+  31          /*********************************************************************************************************
+             -***
+  32          *    TIMER 0 interrupt subroutine
+  33          **********************************************************************************************************
+             -**/
+  34          void Timer0_ISR (void) interrupt 1          //interrupt address is 0x000B
+  35          {
+  36   1          TH0 = TH0_INIT;
+  37   1          TL0 = TL0_INIT;
+  38   1              is_5ms_Flag = 1;
+  39   1               blinktime++;
+  40   1               if (blinktime > (BLINK_H+BLINK_L))
+  41   1                       blinktime = 0;
+  42   1               powercnt++;
+  43   1      }
+  44          
+  45          void Timer0_Init(void)
+  46          {
+  47   1              TMOD = 0XFF;
+  48   1              TIMER0_MODE0_ENABLE;                        //Timer 0  mode configuration
+  49   1          
+  50   1              clr_T0M;
+  51   1          
+  52   1              TH0 = TH0_INIT;
+  53   1              TL0 = TL0_INIT;
+  54   1          
+  55   1              set_ET0;                                    //enable Timer0 interrupt
+  56   1              set_EA;                                     //enable interrupts
+  57   1              
+  58   1              set_TR0;                                    //Timer0 run
+  59   1      }
+  60          
+  61          
+  62          void Timer1_Delay10ms(unsigned long cnt)
+  63          {
+  64   1          clr_T1M;                                                                                                                                            //T1M=0, Timer1 Clock = Fsys/12
+  65   1          TMOD |= 0x10;                                                                                                                               //Timer1 is 16-bit mode
+  66   1          set_TR1;                                                                                                                                            //Start Timer1
+  67   1          while (cnt != 0)
+  68   1          {
+  69   2              TL1 = LOBYTE(TIMER_DIV12_VALUE_10ms);           //Find  define in "Function_define.h" "TIMER VALUE"
+  70   2              TH1 = HIBYTE(TIMER_DIV12_VALUE_10ms);
+C51 COMPILER V9.54   DELAY                                                                 05/19/2018 23:05:59 PAGE 10  
+
+  71   2              while (TF1 != 1);                                                                                               //Check Timer1 Time-Out Flag
+  72   2              clr_TF1;
+  73   2              cnt --;
+  74   2          }
+  75   1          clr_TR1;                                                    //Stop Timer1
+  76   1      }
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  471 ERROR(S)

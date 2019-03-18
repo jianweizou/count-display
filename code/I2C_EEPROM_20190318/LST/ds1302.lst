@@ -1,0 +1,279 @@
+C51 COMPILER V9.54   DS1302                                                                01/14/2019 20:51:44 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE DS1302
+OBJECT MODULE PLACED IN .\Output\ds1302.obj
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE Code\ds1302.c COMPACT ROM(COMPACT) OPTIMIZE(8,SIZE) BROWSE INCDIR(..\..\Inc
+                    -lude;..\Include) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\ds1302.lst) OBJECT(.\Output\ds1302.obj)
+
+line level    source
+
+   1          #include "N76E003.h"
+   2          #include "SFR_Macro.h"
+   3          #include "Function_define.h"
+   4          #include "ds1302.h"
+   5          /*
+   6          ds1302 CLOCK/CALENDAR 数据是BCD格式，请注意格式转换。
+   7          */
+   8          
+   9          void Delay1us(unsigned char x)
+  10          {
+  11   1              while(x--);
+  12   1      }
+  13          #define SCLK_OUT        P03_PushPull_Mode
+  14          #define SDA_OUT         P01_PushPull_Mode
+  15          #define SDA_IN          P01_PushPull_Mode;P01_Input_Mode
+  16          #define CE_OUT          P00_PushPull_Mode
+  17          
+  18          #define SCLK_H          P03=1
+  19          #define SCLK_L          P03=0
+  20          #define SDA_H           P01=1
+  21          #define SDA_L           P01=0
+  22          #define CE_H            P00=1
+  23          #define CE_L            P00=0
+  24          
+  25          #define GET_SDA         P01
+  26          
+  27          void writebyte(unsigned char x)
+  28          {
+  29   1              unsigned char i;
+  30   1              SCLK_L;
+  31   1              Delay1us(2);
+  32   1              
+  33   1              for(i=0;i<8;i++)
+  34   1              {
+  35   2                      if (x&0x01)
+  36   2                              SDA_H;
+  37   2                      else
+  38   2                              SDA_L;
+  39   2                      Delay1us(1);
+  40   2                      SCLK_H;
+  41   2                      Delay1us(1);
+  42   2                      SCLK_L;
+  43   2                      x = x>>1;
+  44   2              }       
+  45   1      }
+  46          
+  47          unsigned char readbyte(void)
+  48          {
+  49   1              unsigned char i,dt;
+  50   1              //sda input
+  51   1              SDA_IN;
+  52   1              Delay1us(2);
+  53   1              for(i=0;i<8;i++)
+  54   1              {
+C51 COMPILER V9.54   DS1302                                                                01/14/2019 20:51:44 PAGE 2   
+
+  55   2                      dt = dt >> 1;
+  56   2                      if (GET_SDA == 1)
+  57   2                      {
+  58   3                              dt |= 0x80;
+  59   3                      }
+  60   2                      SCLK_H;
+  61   2                      Delay1us(1);
+  62   2                      SCLK_L;
+  63   2                      Delay1us(1);
+  64   2              }
+  65   1              SDA_OUT;
+  66   1              return dt;
+  67   1      }
+  68          
+  69          void ds1302writebyte(unsigned char cmd,unsigned char dt)
+  70          {
+  71   1              CE_L;
+  72   1              SCLK_L;
+  73   1              CE_H;
+  74   1              writebyte(cmd);
+  75   1              writebyte(dt);
+  76   1              SCLK_H;
+  77   1              CE_L;
+  78   1      }
+  79          
+  80          unsigned char ds1302readbyte(unsigned char cmd)
+  81          {
+  82   1              unsigned char dt;
+  83   1              CE_L;
+  84   1              SCLK_L;
+  85   1              CE_H;
+  86   1              writebyte(cmd);
+  87   1              dt = readbyte();
+  88   1              SCLK_H;
+  89   1              CE_L;
+  90   1              return dt;
+  91   1      }
+  92          
+  93          
+  94          void ds1302_dpd(unsigned char dpd)
+  95          {
+  96   1              unsigned char t;
+  97   1              ds1302writebyte(0x8E,0x00);
+  98   1              t = ds1302readbyte(0x81);
+  99   1              if (dpd)
+ 100   1                      t |= 0x80;
+ 101   1              else
+ 102   1                      t &= 0x7F;
+ 103   1              ds1302writebyte(0x80,t);
+ 104   1              ds1302writebyte(0x8E,0x80);
+ 105   1      }
+ 106          
+ 107          void Init1302(void)
+ 108          {
+ 109   1              SCLK_OUT;
+ 110   1              SDA_OUT;
+ 111   1              CE_OUT;
+ 112   1              
+ 113   1              SCLK_L;
+ 114   1              SDA_L;
+ 115   1              CE_L;   
+ 116   1              
+C51 COMPILER V9.54   DS1302                                                                01/14/2019 20:51:44 PAGE 3   
+
+ 117   1      //      ds1302_dpd(0);
+ 118   1              if (ds1302readbyte(0xC1) == 0xA8)
+ 119   1                      return; 
+ 120   1              ds1302writebyte(0x8E,0x00);
+ 121   1      //      ds1302writebyte(0x90,0x0D);
+ 122   1              ds1302writebyte(0x80,0x00);
+ 123   1              ds1302writebyte(0x82,0x20);
+ 124   1              ds1302writebyte(0x84,0x07);
+ 125   1              ds1302writebyte(0x86,0x25);
+ 126   1              ds1302writebyte(0x88,0x12);
+ 127   1              ds1302writebyte(0x8A,0x10);
+ 128   1              ds1302writebyte(0x8C,0x06);
+ 129   1              
+ 130   1              ds1302writebyte(0x90,0x00);
+ 131   1      //      ds1302writebyte(0xC0,0xf0);
+ 132   1              
+ 133   1              ds1302writebyte(0xC0,0xA8);
+ 134   1              
+ 135   1              ds1302writebyte(0x8E,0x80);
+ 136   1              
+ 137   1      }
+ 138          
+ 139          unsigned char bcd_hex(unsigned char x)
+ 140          {
+ 141   1              unsigned char temp;
+ 142   1              temp = x & 0xF0;
+ 143   1              temp = temp >>4;
+ 144   1              temp = temp *10;
+ 145   1              temp += x& 0x0F;
+ 146   1              return temp;
+ 147   1      }
+ 148          
+ 149          unsigned char hex_bcd(unsigned char x)
+ 150          {
+ 151   1              unsigned char temp;
+ 152   1              temp = 0;
+ 153   1              while(1)
+ 154   1              {
+ 155   2                      if (x >= 10)
+ 156   2                      {
+ 157   3                              temp += 0x10;
+ 158   3                              x = x - 10;
+ 159   3                      }
+ 160   2                      else
+ 161   2                      {
+ 162   3                              temp |= x;
+ 163   3                              break;
+ 164   3                      }
+ 165   2              }
+ 166   1              return temp;
+ 167   1      }
+ 168          
+ 169          void readtimer(TIME_INFO* time)
+ 170          {
+ 171   1              //BCD
+ 172   1              time->sec = ds1302readbyte(0x81);
+ 173   1              time->min = ds1302readbyte(0x83);
+ 174   1              time->hr =  ds1302readbyte(0x85);
+ 175   1              time->date = ds1302readbyte(0x87);
+ 176   1              time->month = ds1302readbyte(0x89);
+ 177   1              time->day = ds1302readbyte(0x8B);
+ 178   1              time->year = ds1302readbyte(0x8D)+YEAR_BASE;    
+C51 COMPILER V9.54   DS1302                                                                01/14/2019 20:51:44 PAGE 4   
+
+ 179   1              
+ 180   1              time->sec = bcd_hex(time->sec);
+ 181   1              time->min = bcd_hex(time->min);
+ 182   1              time->hr = bcd_hex(time->hr);
+ 183   1              time->date = bcd_hex(time->date);
+ 184   1              time->month = bcd_hex(time->month);
+ 185   1              time->day = bcd_hex(time->day);
+ 186   1              time->year = bcd_hex(time->year);
+ 187   1      }
+ 188          
+ 189          void writetimer(TIME_INFO* time)
+ 190          {
+ 191   1              unsigned char temp;
+ 192   1              ds1302writebyte(0x8E,0x00);
+ 193   1              ds1302writebyte(0xC0,0xFF);
+ 194   1              
+ 195   1              temp = hex_bcd(time->sec);
+ 196   1              ds1302writebyte(0x80,temp);
+ 197   1              temp = hex_bcd(time->min);
+ 198   1              ds1302writebyte(0x82,temp);
+ 199   1              temp = hex_bcd(time->hr);
+ 200   1              ds1302writebyte(0x84,temp);
+ 201   1              temp = hex_bcd(time->date);
+ 202   1              ds1302writebyte(0x86,temp);
+ 203   1              temp = hex_bcd(time->month);
+ 204   1              ds1302writebyte(0x88,temp);
+ 205   1              
+ 206   1      //      ds1302writebyte(0x8A,time->day);
+ 207   1              
+ 208   1              temp = hex_bcd(time->year);
+ 209   1              ds1302writebyte(0x8C,temp);
+ 210   1              
+ 211   1              ds1302writebyte(0xC0,0xA8);
+ 212   1              
+ 213   1              ds1302writebyte(0x8E,0x80);     
+ 214   1      }
+ 215          
+ 216          
+ 217          void ds1303_update_hr(unsigned char hr)
+ 218          {
+ 219   1              unsigned char temp;
+ 220   1              ds1302writebyte(0x8E,0x00);
+ 221   1              
+ 222   1              temp = hex_bcd(hr);
+ 223   1              ds1302writebyte(0x84,temp);
+ 224   1              
+ 225   1              ds1302writebyte(0x8E,0x80);     
+ 226   1      }
+ 227          void ds1303_update_min(unsigned char min)
+ 228          {
+ 229   1              unsigned char temp;
+ 230   1              ds1302writebyte(0x8E,0x00);
+ 231   1              
+ 232   1              temp = hex_bcd(min);
+ 233   1              ds1302writebyte(0x82,temp);
+ 234   1              
+ 235   1              ds1302writebyte(0x8E,0x80);     
+ 236   1      }
+ 237          void ds1303_update_sec(unsigned char sec)
+ 238          {
+ 239   1              unsigned char temp;
+ 240   1              ds1302writebyte(0x8E,0x00);
+C51 COMPILER V9.54   DS1302                                                                01/14/2019 20:51:44 PAGE 5   
+
+ 241   1              
+ 242   1              temp = hex_bcd(sec);
+ 243   1              ds1302writebyte(0x80,temp);
+ 244   1              
+ 245   1              ds1302writebyte(0x8E,0x80);     
+ 246   1      }
+ 247          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    730    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----       3
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
