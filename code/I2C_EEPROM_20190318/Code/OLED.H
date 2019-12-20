@@ -11,4 +11,4 @@ void OLED_Display_Off(void);
 void OLED_Clear(void);
 void OLED_Set_Pos(unsigned char x, unsigned char y);
 void OLED_CLS_Windows(unsigned char x0,unsigned char y0,unsigned char x1,unsigned char y1);
-void Draw_BMP(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1,unsigned char * BMP);
+void Draw_BMP(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1,unsigned char * BMP,unsigned char inverse);

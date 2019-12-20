@@ -1,10 +1,10 @@
-C51 COMPILER V9.54   OLED                                                                  03/19/2019 20:16:31 PAGE 1   
+C51 COMPILER V9.54   OLED                                                                  12/20/2019 18:51:13 PAGE 1   
 
 
 C51 COMPILER V9.54, COMPILATION OF MODULE OLED
 OBJECT MODULE PLACED IN .\Output\OLED.obj
-COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE Code\OLED.c ROM(COMPACT) OPTIMIZE(8,SIZE) BROWSE INCDIR(..\..\Include;..\In
-                    -clude) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\OLED.lst) OBJECT(.\Output\OLED.obj)
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE Code\OLED.c COMPACT ROM(COMPACT) OPTIMIZE(8,SIZE) BROWSE INCDIR(..\..\Inclu
+                    -de;..\Include) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\OLED.lst) TABS(2) OBJECT(.\Output\OLED.obj)
 
 line level    source
 
@@ -13,143 +13,281 @@ line level    source
    3          #include "OLED.h"
    4          #include "Delay.h"
    5          #include "dataflash.h"
-   6          
-   7          extern void Init_I2C(void);
-   8          extern void IIC_WriteMultiBytes(unsigned char device,unsigned char cmd_data,unsigned char *buf,unsigned ch
+   6          #include "i2c.h"
+   7          #if (IIC_SELECT == 0)
+              extern void Init_I2C(void);
+              extern void IIC_WriteMultiBytes(unsigned char device,unsigned char cmd_data,unsigned char *buf,unsigned ch
              -ar len);
-   9          extern void IIC_WriteSingleByte(unsigned char device ,unsigned char cmd_data,unsigned char val);
-  10          extern void Dvice_WriteData(unsigned char  DeciveAddr,unsigned char  DataAddr,unsigned char);
-  11          #define OLED_WR_Byte(val,cmd_data)      Dvice_WriteData(0x78,cmd_data,val)//IIC_WriteSingleByte(0x78,cmd_data,v
+              extern void IIC_WriteSingleByte(unsigned char device ,unsigned char cmd_data,unsigned char val);
+              extern void Dvice_WriteData(unsigned char  DeciveAddr,unsigned char  DataAddr,unsigned char);
+              #define OLED_WR_Byte(val,cmd_data)  Dvice_WriteData(0x78,cmd_data,val)//IIC_WriteSingleByte(0x78,cmd_data,v
              -al)
-  12          extern unsigned int powercnt;
-  13          unsigned char OLED_Init(void)
-  14          {
-  15   1              P14_PushPull_Mode;
-  16   1              P14 = 0;
-  17   1              powercnt = 0;
-  18   1              while(powercnt<2);
-  19   1              P14 = 1;
-  20   1      
-  21   1              /* Initial I2C function */
-  22   1          Init_I2C(); 
-  23   1              powercnt = 0;
-  24   1              while(powercnt<2);
-  25   1              
-  26   1              OLED_WR_Byte(0xAE,OLED_CMD);//--display off
-  27   1              OLED_WR_Byte(0x00,OLED_CMD);//---set low column address
-  28   1              OLED_WR_Byte(0x12,OLED_CMD);//---set high column address
-  29   1              OLED_WR_Byte(0x00,OLED_CMD);//--set start line address  Set Mapping RAM Display Start Line (0x00~0x3F)
-  30   1              OLED_WR_Byte(0xB0,OLED_CMD);//--set page address
-  31   1              OLED_WR_Byte(0x81,OLED_CMD); // contract control
-  32   1              OLED_WR_Byte(0xFF,OLED_CMD);//--128   
-  33   1              OLED_WR_Byte(0xA1,OLED_CMD);//set segment remap 
-  34   1              OLED_WR_Byte(0xA6,OLED_CMD);//--normal / reverse
-  35   1              OLED_WR_Byte(0xA8,OLED_CMD);//--set multiplex ratio(1 to 64)
-  36   1              OLED_WR_Byte(0x1F,OLED_CMD);//--1/32 duty
-  37   1              OLED_WR_Byte(0xC8,OLED_CMD);//Com scan direction
-  38   1              OLED_WR_Byte(0xD3,OLED_CMD);//-set display offset
-  39   1              OLED_WR_Byte(0x00,OLED_CMD);//
-  40   1              OLED_WR_Byte(0xD5,OLED_CMD);//set osc division
-  41   1              OLED_WR_Byte(0x80,OLED_CMD);//
-  42   1              OLED_WR_Byte(0xD9,OLED_CMD);//set pre-charge period
-  43   1              OLED_WR_Byte(0x1F,OLED_CMD);//
-  44   1              OLED_WR_Byte(0xDA,OLED_CMD);//set COM pins
-  45   1              OLED_WR_Byte(0x12,OLED_CMD);//
-  46   1              OLED_WR_Byte(0xDB,OLED_CMD);//set vcomh
-  47   1              OLED_WR_Byte(0x40,OLED_CMD);//
-  48   1              OLED_WR_Byte(0x8D,OLED_CMD);//set charge pump enable
-  49   1              OLED_WR_Byte(0x14,OLED_CMD);//
-  50   1              OLED_WR_Byte(0xAF,OLED_CMD);//--turn on oled panel      
-  51   1              return 0;
-  52   1      }
-C51 COMPILER V9.54   OLED                                                                  03/19/2019 20:16:31 PAGE 2   
+              extern unsigned int powercnt;
+              unsigned char OLED_Init(void)
+              {
+                P14_PushPull_Mode;
+                P14 = 0;
+                powercnt = 0;
+                while(powercnt<2);
+                P14 = 1;
+              
+                /* Initial I2C function */
+                  Init_I2C(); 
+                powercnt = 0;
+                while(powercnt<2);
+                
+                OLED_WR_Byte(0xAE,OLED_CMD);//--display off
+                OLED_WR_Byte(0x00,OLED_CMD);//---set low column address
+                OLED_WR_Byte(0x12,OLED_CMD);//---set high column address
+                OLED_WR_Byte(0x00,OLED_CMD);//--set start line address  Set Mapping RAM Display Start Line (0x00~0x3F)
+                OLED_WR_Byte(0xB0,OLED_CMD);//--set page address
+                OLED_WR_Byte(0x81,OLED_CMD); // contract control
+                OLED_WR_Byte(0xFF,OLED_CMD);//--128   
+                OLED_WR_Byte(0xA1,OLED_CMD);//set segment remap 
+                OLED_WR_Byte(0xA6,OLED_CMD);//--normal / reverse
+                OLED_WR_Byte(0xA8,OLED_CMD);//--set multiplex ratio(1 to 64)
+                OLED_WR_Byte(0x1F,OLED_CMD);//--1/32 duty
+                OLED_WR_Byte(0xC8,OLED_CMD);//Com scan direction
+                OLED_WR_Byte(0xD3,OLED_CMD);//-set display offset
+                OLED_WR_Byte(0x00,OLED_CMD);//
+                OLED_WR_Byte(0xD5,OLED_CMD);//set osc division
+                OLED_WR_Byte(0x80,OLED_CMD);//
+                OLED_WR_Byte(0xD9,OLED_CMD);//set pre-charge period
+                OLED_WR_Byte(0x1F,OLED_CMD);//
+                OLED_WR_Byte(0xDA,OLED_CMD);//set COM pins
+                OLED_WR_Byte(0x12,OLED_CMD);//
+                OLED_WR_Byte(0xDB,OLED_CMD);//set vcomh
+                OLED_WR_Byte(0x40,OLED_CMD);//
+                OLED_WR_Byte(0x8D,OLED_CMD);//set charge pump enable
+                OLED_WR_Byte(0x14,OLED_CMD);//
+                OLED_WR_Byte(0xAF,OLED_CMD);//--turn on oled panel  
+                return 0;
+C51 COMPILER V9.54   OLED                                                                  12/20/2019 18:51:13 PAGE 2   
 
-  53          
-  54          
-  55          void OLED_Set_Pos(unsigned char x, unsigned char y) 
-  56          {
-  57   1              unsigned char x0;
-  58   1              x0=x+32;
-  59   1              OLED_WR_Byte(0xb0+y,OLED_CMD);
-  60   1              OLED_WR_Byte(((x0&0xf0)>>4)|0x10,OLED_CMD);
-  61   1              OLED_WR_Byte((x0&0x0f),OLED_CMD); 
-  62   1      }         
-  63            
-  64          void OLED_Display_On(void)
-  65          {
-  66   1              OLED_WR_Byte(0X8D,OLED_CMD);  //SET DCDC??
-  67   1              OLED_WR_Byte(0X14,OLED_CMD);  //DCDC ON
-  68   1              OLED_WR_Byte(0XAF,OLED_CMD);  //DISPLAY ON
-  69   1      }
-  70            
-  71          void OLED_Display_Off(void)
-  72          {
-  73   1              OLED_WR_Byte(0X8D,OLED_CMD);  //SET DCDC??
-  74   1              OLED_WR_Byte(0X10,OLED_CMD);  //DCDC OFF
-  75   1              OLED_WR_Byte(0XAE,OLED_CMD);  //DISPLAY OFF
-  76   1      }                                        
-  77          void OLED_Clear(void)  
-  78          {  
-  79   1              unsigned char i,n;                  
-  80   1              for(i=0;i<4;i++)  
-  81   1              {  
-  82   2                      OLED_WR_Byte (0xb0+i,OLED_CMD);
-  83   2                      OLED_WR_Byte (0x00,OLED_CMD);     
-  84   2                      OLED_WR_Byte (0x12,OLED_CMD);    
-  85   2                      for(n=32;n<96;n++)
-  86   2                              OLED_WR_Byte(0,OLED_DATA); 
-  87   2              } 
-  88   1      }
-  89          
-  90          
-  91          void OLED_CLS_Windows(unsigned char x0,unsigned char y0,unsigned char x1,unsigned char y1)
-  92          {
-  93   1              unsigned int j=0;
-  94   1              unsigned char x,y;
-  95   1      
-  96   1              if(y1%8==0)
-  97   1                      y=y1/8;      
-  98   1              else 
-  99   1                      y=y1/8+1;
- 100   1              for(y=y0;y<y1;y++)
- 101   1              {
- 102   2                      OLED_Set_Pos(x0,y);
- 103   2                      for(x=x0;x<x1;x++)
- 104   2                  {      
- 105   3                              OLED_WR_Byte(0x00,OLED_DATA);
- 106   3                  }
- 107   2              }       
- 108   1      }
- 109          
- 110          
- 111          void Draw_BMP(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1,unsigned char * BMP)
- 112          {
- 113   1              unsigned int j=0;
- 114   1              unsigned char x,y;
-C51 COMPILER V9.54   OLED                                                                  03/19/2019 20:16:31 PAGE 3   
+              }
+              
+              
+              void OLED_Set_Pos(unsigned char x, unsigned char y) 
+              {
+                unsigned char x0;
+                x0=x+32;
+                OLED_WR_Byte(0xb0+y,OLED_CMD);
+                OLED_WR_Byte(((x0&0xf0)>>4)|0x10,OLED_CMD);
+                OLED_WR_Byte((x0&0x0f),OLED_CMD); 
+              }       
+                
+              void OLED_Display_On(void)
+              {
+                OLED_WR_Byte(0X8D,OLED_CMD);  //SET DCDC??
+                OLED_WR_Byte(0X14,OLED_CMD);  //DCDC ON
+                OLED_WR_Byte(0XAF,OLED_CMD);  //DISPLAY ON
+              }
+                
+              void OLED_Display_Off(void)
+              {
+                OLED_WR_Byte(0X8D,OLED_CMD);  //SET DCDC??
+                OLED_WR_Byte(0X10,OLED_CMD);  //DCDC OFF
+                OLED_WR_Byte(0XAE,OLED_CMD);  //DISPLAY OFF
+              }            
+              void OLED_Clear(void)  
+              {  
+                unsigned char i,n;        
+                for(i=0;i<4;i++)  
+                {  
+                  OLED_WR_Byte (0xb0+i,OLED_CMD);
+                  OLED_WR_Byte (0x00,OLED_CMD);     
+                  OLED_WR_Byte (0x12,OLED_CMD);    
+                  for(n=32;n<96;n++)
+                    OLED_WR_Byte(0,OLED_DATA); 
+                } 
+              }
+              
+              
+              void OLED_CLS_Windows(unsigned char x0,unsigned char y0,unsigned char x1,unsigned char y1)
+              {
+                unsigned int j=0;
+                unsigned char x,y;
+              
+                if(y1%8==0)
+                  y=y1/8;      
+                else 
+                  y=y1/8+1;
+                for(y=y0;y<y1;y++)
+                {
+                  OLED_Set_Pos(x0,y);
+                  for(x=x0;x<x1;x++)
+                    {      
+                    OLED_WR_Byte(0x00,OLED_DATA);
+                    }
+                } 
+              }
+              
+              
+              void Draw_BMP(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1,unsigned char * BMP,u
+             -nsigned char inverse)
+              {
+C51 COMPILER V9.54   OLED                                                                  12/20/2019 18:51:13 PAGE 3   
 
- 115   1      
- 116   1              if(y1%8==0)
- 117   1                      y=y1/8;      
- 118   1              else 
- 119   1                      y=y1/8+1;
- 120   1              for(y=y0;y<y1;y++)
- 121   1              {
- 122   2                      OLED_Set_Pos(x0,y);
- 123   2                      for(x=x0;x<x1;x++)
- 124   2                  {      
- 125   3                              OLED_WR_Byte(BMP[j++],OLED_DATA);
- 126   3                  }
- 127   2              }
- 128   1      }
+                unsigned int j=0;
+                unsigned char x,y;
+              
+                if(y1%8==0)
+                  y=y1/8;      
+                else 
+                  y=y1/8+1;
+                for(y=y0;y<y1;y++)
+                {
+                  OLED_Set_Pos(x0,y);
+                  for(x=x0;x<x1;x++)
+                  {  
+                    if(inverse)
+                      OLED_WR_Byte(BMP[j++]^0xFF,OLED_DATA);
+                    else
+                      OLED_WR_Byte(BMP[j++],OLED_DATA);
+                  }
+                }
+              }
+              
+              #else
+ 135          
+ 136          extern unsigned int powercnt;
+ 137          extern int Init_I2C(void);
+ 138          extern int I2C_SoftWare_Master_Write_One_Byte(int DeviceAddr,char cmd, char value);
+ 139          #define OLED_WR_Byte(val,cmd_data)  I2C_SoftWare_Master_Write_One_Byte(0x3C,cmd_data,val)
+ 140          
+ 141          unsigned char OLED_Init(void)
+ 142          {
+ 143   1        P14_PushPull_Mode;
+ 144   1        P14 = 0;
+ 145   1        powercnt = 0;
+ 146   1        while(powercnt<2);
+ 147   1        P14 = 1;
+ 148   1      
+ 149   1        /* Initial I2C function */
+ 150   1          Init_I2C(); 
+ 151   1        powercnt = 0;
+ 152   1        while(powercnt<2);
+ 153   1        
+ 154   1        OLED_WR_Byte(0xAE,OLED_CMD);//--display off
+ 155   1        OLED_WR_Byte(0x00,OLED_CMD);//---set low column address
+ 156   1        OLED_WR_Byte(0x12,OLED_CMD);//---set high column address
+ 157   1        OLED_WR_Byte(0x00,OLED_CMD);//--set start line address  Set Mapping RAM Display Start Line (0x00~0x3F)
+ 158   1        OLED_WR_Byte(0xB0,OLED_CMD);//--set page address
+ 159   1        OLED_WR_Byte(0x81,OLED_CMD); // contract control
+ 160   1        OLED_WR_Byte(0xFF,OLED_CMD);//--128   
+ 161   1        OLED_WR_Byte(0xA1,OLED_CMD);//set segment remap 
+ 162   1        OLED_WR_Byte(0xA6,OLED_CMD);//--normal / reverse
+ 163   1        OLED_WR_Byte(0xA8,OLED_CMD);//--set multiplex ratio(1 to 64)
+ 164   1        OLED_WR_Byte(0x1F,OLED_CMD);//--1/32 duty
+ 165   1        OLED_WR_Byte(0xC8,OLED_CMD);//Com scan direction
+ 166   1        OLED_WR_Byte(0xD3,OLED_CMD);//-set display offset
+ 167   1        OLED_WR_Byte(0x00,OLED_CMD);//
+ 168   1        OLED_WR_Byte(0xD5,OLED_CMD);//set osc division
+ 169   1        OLED_WR_Byte(0x80,OLED_CMD);//
+ 170   1        OLED_WR_Byte(0xD9,OLED_CMD);//set pre-charge period
+ 171   1        OLED_WR_Byte(0x1F,OLED_CMD);//
+ 172   1        OLED_WR_Byte(0xDA,OLED_CMD);//set COM pins
+ 173   1        OLED_WR_Byte(0x12,OLED_CMD);//
+ 174   1        OLED_WR_Byte(0xDB,OLED_CMD);//set vcomh
+ 175   1        OLED_WR_Byte(0x40,OLED_CMD);//
+C51 COMPILER V9.54   OLED                                                                  12/20/2019 18:51:13 PAGE 4   
+
+ 176   1        OLED_WR_Byte(0x8D,OLED_CMD);//set charge pump enable
+ 177   1        OLED_WR_Byte(0x14,OLED_CMD);//
+ 178   1        OLED_WR_Byte(0xAF,OLED_CMD);//--turn on oled panel  
+ 179   1        return 0;
+ 180   1      }
+ 181          
+ 182          
+ 183          void OLED_Set_Pos(unsigned char x, unsigned char y) 
+ 184          {
+ 185   1        unsigned char x0;
+ 186   1        x0=x+32;
+ 187   1        OLED_WR_Byte(0xb0+y,OLED_CMD);
+ 188   1        OLED_WR_Byte(((x0&0xf0)>>4)|0x10,OLED_CMD);
+ 189   1        OLED_WR_Byte((x0&0x0f),OLED_CMD); 
+ 190   1      }       
+ 191            
+ 192          void OLED_Display_On(void)
+ 193          {
+ 194   1        OLED_WR_Byte(0X8D,OLED_CMD);  //SET DCDC??
+ 195   1        OLED_WR_Byte(0X14,OLED_CMD);  //DCDC ON
+ 196   1        OLED_WR_Byte(0XAF,OLED_CMD);  //DISPLAY ON
+ 197   1      }
+ 198            
+ 199          void OLED_Display_Off(void)
+ 200          {
+ 201   1        OLED_WR_Byte(0X8D,OLED_CMD);  //SET DCDC??
+ 202   1        OLED_WR_Byte(0X10,OLED_CMD);  //DCDC OFF
+ 203   1        OLED_WR_Byte(0XAE,OLED_CMD);  //DISPLAY OFF
+ 204   1      }            
+ 205          void OLED_Clear(void)  
+ 206          {  
+ 207   1        unsigned char i,n;        
+ 208   1        for(i=0;i<4;i++)  
+ 209   1        {  
+ 210   2          OLED_WR_Byte (0xb0+i,OLED_CMD);
+ 211   2          OLED_WR_Byte (0x00,OLED_CMD);     
+ 212   2          OLED_WR_Byte (0x12,OLED_CMD);    
+ 213   2          for(n=32;n<96;n++)
+ 214   2            OLED_WR_Byte(0,OLED_DATA); 
+ 215   2        } 
+ 216   1      }
+ 217          
+ 218          
+ 219          void OLED_CLS_Windows(unsigned char x0,unsigned char y0,unsigned char x1,unsigned char y1)
+ 220          {
+ 221   1        unsigned int j=0;
+ 222   1        unsigned char x,y;
+ 223   1      
+ 224   1        if(y1%8==0)
+ 225   1          y=y1/8;      
+ 226   1        else 
+ 227   1          y=y1/8+1;
+ 228   1        for(y=y0;y<y1;y++)
+ 229   1        {
+ 230   2          OLED_Set_Pos(x0,y);
+ 231   2          for(x=x0;x<x1;x++)
+ 232   2            {      
+ 233   3            OLED_WR_Byte(0x00,OLED_DATA);
+ 234   3            }
+ 235   2        } 
+ 236   1      }
+ 237          
+C51 COMPILER V9.54   OLED                                                                  12/20/2019 18:51:13 PAGE 5   
+
+ 238          
+ 239          void Draw_BMP(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1,unsigned char * BMP,u
+             -nsigned char inverse)
+ 240          {
+ 241   1        unsigned int j=0;
+ 242   1        unsigned char x,y;
+ 243   1      
+ 244   1        if(y1%8==0)
+ 245   1          y=y1/8;      
+ 246   1        else 
+ 247   1          y=y1/8+1;
+ 248   1        for(y=y0;y<y1;y++)
+ 249   1        {
+ 250   2          OLED_Set_Pos(x0,y);
+ 251   2          for(x=x0;x<x1;x++)
+ 252   2          {  
+ 253   3            if(inverse)
+ 254   3              OLED_WR_Byte(BMP[j++]^0xFF,OLED_DATA);
+ 255   3            else
+ 256   3              OLED_WR_Byte(BMP[j++],OLED_DATA);
+ 257   3          }
+ 258   2        }
+ 259   1      }
+ 260          #endif
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    615    ----
+   CODE SIZE        =    760    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
-   PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----      22
+   PDATA SIZE       =   ----      23
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

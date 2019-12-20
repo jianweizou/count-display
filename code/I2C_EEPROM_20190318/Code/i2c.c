@@ -2,14 +2,14 @@
 #include "SFR_Macro.h"
 #include "Function_define.h"
 #include "i2c.h"
-
+#if (IIC_SELECT == 0)
 void I2C_Delay(void)
 {
 	int a=0;
 	while(a);
 }
 
-void Init_I2C(void)
+int Init_I2C(void)
 {
 	P12_PushPull_Mode;	//SCL PULL HIGH
 	SCL_MODE_OUT;	//SCL output
@@ -18,9 +18,10 @@ void Init_I2C(void)
 	P11_PushPull_Mode;	//SDA PULL HIGH		
 	SDA_MODE_OUT;	//SDA output	
 	SDA_DATA = 1;	//SDA 1	
+	return 0;
 }
 //启动信号 
-void I2C_Start()
+int I2C_Start(void)
 {
     //数据线下降沿
     SDA_DATA = 1;
@@ -30,6 +31,7 @@ void I2C_Start()
     I2C_Delay();
 	SCL_DATA = 0;
 	I2C_Delay();
+	return 0;
 }
 
 //停止信号 
@@ -153,3 +155,4 @@ unsigned char  I2C_Read_Byte()
 //    I2C_Stop();
 //	return ReciveData;
 //}
+#endif

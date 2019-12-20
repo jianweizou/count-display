@@ -185,7 +185,7 @@
         </Utilities>
         <Target51>
           <Target51Misc>
-            <MemoryModel>0</MemoryModel>
+            <MemoryModel>1</MemoryModel>
             <RTOS>0</RTOS>
             <RomSize>1</RomSize>
             <DataHold>0</DataHold>
@@ -392,6 +392,11 @@
               <FileName>i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Code\i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>I2C_Software_Master.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Code\I2C_Software_Master.c</FilePath>
             </File>
           </Files>
         </Group>

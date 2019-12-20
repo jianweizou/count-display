@@ -34,7 +34,6 @@ typedef enum
 	SELECT_NUMTYPE,
 	CNT_STAGE,
 	RST_CNT,
-	RST_SYS,
 	SYS_CHARGE,
 }SYSLOOP;
 
@@ -81,7 +80,7 @@ typedef enum
 #define BLINK_H		100
 #define BLINK_L		100
 
-#define POWER_CNT1	1000
+#define POWER_CNT1	6000
 #define POWER_CNT2	12000
 
 void main_loop(void);

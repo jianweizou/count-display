@@ -4,6 +4,7 @@
 ".\Output\count.obj",
 ".\Output\dataflash.obj",
 ".\Output\i2c.obj",
+".\Output\I2C_Software_Master.obj",
 ".\Output\STARTUP.obj" 
 TO ".\Output\I2C_EEPROM" 
 PRINT(".\LST\I2C_EEPROM.m51") RAMSIZE(256) 
